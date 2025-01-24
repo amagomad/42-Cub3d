@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/22 17:50:31 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/24 13:22:13 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ bool	stock_map(t_parsing *parse)
 		line = get_next_line(parse->file_fd);
 		if (!line)
 			break ;
+		if (parse->map == NULL && line[0] == '\n')
+			continue ;
 		if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
         	line[ft_strlen(line) - 1] = '\0';
 		if (max_width < (int)ft_strlen(line))
 			max_width = ft_strlen(line);
-		if (ft_strlen(line) < max_width)
-			continue ;
 		parse->map = ft_add_str_tab(parse->map, line);
 		if (!parse->map)
 			return (false);
@@ -57,6 +57,7 @@ bool	stock_description(t_parsing *parse)
 		|| ft_strncmp(line, "WE", 2) == 0 || ft_strncmp(line, "EA", 2) == 0
 		|| ft_strncmp(line, "F", 1) == 0 || ft_strncmp(line, "C", 1) == 0)
 		{
+			line[ft_strlen(line) - 1] = '\0';
 			parse->description = ft_add_str_tab(parse->description, line);
 			if (!parse->description)
 				return (false);
@@ -77,18 +78,6 @@ void	delete_texture(mlx_texture_t **texture)
 	while (++i < 4)
 		if (texture[i])
 			mlx_delete_texture(texture[i]);
-}
-
-void delete_png(mlx_texture_t **texture)
-{
-	if (texture[0])
-		free(texture[0]);
-	if (texture[1])
-		free(texture[1]);
-	if (texture[2])
-		free(texture[2]);
-	if (texture[3])
-		free(texture[3]);
 }
 
 bool	load_texture(t_data *data, t_parsing *parse)
@@ -118,7 +107,7 @@ bool	transform_map(t_data *data)
 	int		i;
 	int		j;
 
-	data->map = ft_calloc(sizeof(int), data->parse->map_height * data->parse->map_width);
+	data->map = malloc(sizeof(int) * (data->parse->map_height * data->parse->map_width));
 	if (!data->map)
 		return (false);
 	i = -1;
@@ -127,16 +116,18 @@ bool	transform_map(t_data *data)
 		j = -1;
 		while (++j < data->parse->map_width)
 		{
-			if (data->parse->map[i][j] == '1')
-				data->map[i * data->parse->map_width + j] = 1;
-			else if (data->parse->map[i][j] == ' ')
+			if (j >= (int)ft_strlen(data->parse->map[i]) || ft_isspace(data->parse->map[i][j]))
 				data->map[i * data->parse->map_width + j] = 2;
+			else if (data->parse->map[i][j] == '1')
+				data->map[i * data->parse->map_width + j] = 1;
 			else if (data->parse->map[i][j] == '0')
 				data->map[i * data->parse->map_width + j] = 0;
 			else if (ft_strchr("NSWE", data->parse->map[i][j]))
+			{
 				data->map[i * data->parse->map_width + j] = 0;
-			printf("parse -> %c ", data->parse->map[i][j]);
-			printf("map -> %d\n", data->map[i * data->parse->map_width + j]);
+				data->player->px = j * 64 + 32;
+				data->player->py = i * 64 + 32;
+			}
 		}
 	}
 	return (true);
@@ -180,15 +171,17 @@ void print_map(t_data *data)
 bool	parsing(char *file, t_data *data)
 {
 	if (!file_validity(file))
-		return_error("Invalid file");
+		return_error("Invalid file extension");
 	if (!open_file(file, data->parse))
 		return_error("Can't open file");
 	if (!stock_description(data->parse))
-		return_error("Invalid description");
+		return_error("Failed to stock description due to invalid format.");
 	if (!validity_description(data->parse))
 		return_error("Invalid description");
 	//if (!load_texture(data, parse))
 	//	exit(1);
+	if (!valid_color(data->parse))
+		return_error("Invalid color");
 	if (!stock_map(data->parse))
 		return_error("Invalid map");
 	if (!validity_map(data->parse->map))

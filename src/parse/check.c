@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/21 00:35:20 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/24 14:56:06 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,77 @@ bool	file_validity(char *file)
 	file_name_len = ft_strlen(file);
 	if (file_name_len <= 4 || ft_strcmp(&file[file_name_len - 4], ".cub"))
 		return (false);
+	return (true);
+}
+
+bool ft_isdigit_str(char *str)
+{
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (false);
+		str++;
+	}
+	return (true);
+}
+
+bool validate_color(const char *color)
+{
+    char **components;
+	int count_sep = 0;
+    int r, g, b;
+
+    printf("Validating color: '%s'\n", color);
+
+    while (ft_isspace(*color))
+        color++;
+	for (int i = 0; color[i]; i++)
+	{
+		if (color[i] == ',')
+			count_sep++;
+	}
+	if (count_sep != 2)
+		return (false);
+			
+    components = ft_split(color, ',');
+    if (!components)
+        return (false);
+    if (!components[0] || !components[1] || !components[2] || components[3])
+    {
+       // ft_free_str_tab(components);
+        return (false);
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        if (components[i][0] == '\0' || !ft_isdigit_str(components[i]))
+        {
+            //ft_free_str_tab(components);
+            return (false);
+        }
+    }
+    r = ft_atoi(components[0]);
+    g = ft_atoi(components[1]);
+    b = ft_atoi(components[2]);
+    // Free memory for components
+    //ft_free_str_tab(components);
+
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+    {
+        printf("Error: Color values out of range. R=%d, G=%d, B=%d\n", r, g, b);
+        return (false);
+    }
+
+    return (true);
+}
+
+bool	valid_color(t_parsing *parsing)
+{
+	if (parsing->floor_color == NULL || parsing->ceiling_color == NULL)
+		return (false);
+	if (!validate_color(parsing->floor_color))
+		return_error("Invalid floor color format (must be F R,G,B with values between 0 and 255)");
+	if (!validate_color(parsing->ceiling_color))
+		return_error("Invalid ceiling color format (must be C R,G,B with values between 0 and 255)");
 	return (true);
 }

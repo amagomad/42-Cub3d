@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/22 16:49:01 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/23 13:58:28 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	init_data(t_data *data, char **av)
 	data->player_y = 0;
 	data->player_dir = 0;
 	data->map = NULL;
+	data->parse->map = NULL;
 	data->parse->description = NULL;
 	if (!parsing(av[1], data))
 		return_error("Parsing error");

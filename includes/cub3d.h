@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/22 16:29:23 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/23 16:41:12 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ bool	validity_description(t_parsing *parse);
 bool	validity_map(char **map);
 bool	open_file(char *file, t_parsing *parse);
 bool	file_validity(char *file);
+bool	valid_color(t_parsing *parsing);
 
 #endif
