@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/24 14:56:06 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/25 14:29:43 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 bool	validity_description(t_parsing *parse)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	if (parse->description == NULL)
 		return (false);
@@ -53,40 +53,6 @@ bool	validity_description(t_parsing *parse)
 	return (true);
 }
 
-bool validity_map(char **map)
-{
-	size_t i;
-	size_t j;
-	size_t start;
-
-	if (map == NULL)
-		return_error("No map");
-	i = -1;
-	start = 0;
-	while (map[++i])
-	{
-		if (map[i][0] == '\0')
-			return_error("Invalid map : empty line");
-		j = -1;
-		while (map[i][++j] && map[i][j] != '\n')
-		{
-			if (ft_strrchr("NSEW", map[i][j]))
-				start++;
-			else if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != ' ')
-				return_error("Invalid map : invalid character");
-			while (ft_isspace(map[i][j]))
-				j++;
-			if (map[i][j] == '0' && (i == 0 || ft_isspace(map[i][j - 1])
-				|| ft_isspace(map[i][j + 1]) || j == 0 || j == ft_strlen(map[i]) - 1))
-				return_error("Invalid map : invalid wall");
-		}
-	}
-	if (start == 0)
-		return_error("Invalid map : no player");
-	else if (start > 1)
-		return_error("Invalid map : too many players");
-	return (true);
-}
 
 bool	open_file(char *file, t_parsing *parse)
 {
@@ -106,7 +72,7 @@ bool	file_validity(char *file)
 	return (true);
 }
 
-bool ft_isdigit_str(char *str)
+bool	ft_isdigit_str(char *str)
 {
 	while (*str)
 	{
@@ -117,54 +83,63 @@ bool ft_isdigit_str(char *str)
 	return (true);
 }
 
-bool validate_color(const char *color)
+void	ft_free_str_tab(char **tab_str)
 {
-    char **components;
-	int count_sep = 0;
-    int r, g, b;
+	int	i;
 
-    printf("Validating color: '%s'\n", color);
+	i = -1;
+	while (tab_str[++i])
+		free(tab_str[i]);
+	free(tab_str);
+}
 
-    while (ft_isspace(*color))
-        color++;
-	for (int i = 0; color[i]; i++)
+bool	validate_color(const char *color)
+{
+	char	**components;
+	int		count_sep;
+	int		r;
+	int		g;
+	int		b;
+	int		i;
+
+	count_sep = 0;
+	while (ft_isspace(*color))
+		color++;
+	i = -1;
+	while (color[++i])
 	{
 		if (color[i] == ',')
 			count_sep++;
 	}
 	if (count_sep != 2)
+		return (false);		
+	components = ft_split(color, ',');
+	if (!components)
 		return (false);
-			
-    components = ft_split(color, ',');
-    if (!components)
-        return (false);
-    if (!components[0] || !components[1] || !components[2] || components[3])
-    {
-       // ft_free_str_tab(components);
-        return (false);
-    }
-
-    for (int i = 0; i < 3; i++)
-    {
-        if (components[i][0] == '\0' || !ft_isdigit_str(components[i]))
-        {
-            //ft_free_str_tab(components);
-            return (false);
-        }
-    }
-    r = ft_atoi(components[0]);
-    g = ft_atoi(components[1]);
-    b = ft_atoi(components[2]);
-    // Free memory for components
-    //ft_free_str_tab(components);
-
-    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-    {
-        printf("Error: Color values out of range. R=%d, G=%d, B=%d\n", r, g, b);
-        return (false);
-    }
-
-    return (true);
+	if (!components[0] || !components[1] || !components[2] || components[3])
+	{
+		ft_free_str_tab(components);
+		return (false);
+	}
+	i = -1;
+	while (++i < 3)
+	{
+		if (components[i][0] == '\0' || !ft_isdigit_str(components[i]))
+		{
+			ft_free_str_tab(components);
+			return (false);
+		}
+	}
+	r = ft_atoi(components[0]);
+	g = ft_atoi(components[1]);
+	b = ft_atoi(components[2]);
+	ft_free_str_tab(components);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
+		printf("Error: Color values out of range. R=%d, G=%d, B=%d\n", r, g, b);
+		return (false);
+	}
+	return (true);
 }
 
 bool	valid_color(t_parsing *parsing)

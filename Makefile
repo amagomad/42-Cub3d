@@ -25,6 +25,7 @@ LST_SRCS        := cub3d.c \
 					parse/utils.c \
 					parse/parsing.c \
 					parse/check.c \
+					parse/map.c \
 
 LST_OBJS        := $(LST_SRCS:.c=.o)
 

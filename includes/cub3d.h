@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/23 16:41:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/28 18:37:14 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <errno.h>
 # include <curses.h>
 # include <term.h>
+# include <math.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -41,7 +42,7 @@
 
 # define mapX  8      //map width
 # define mapY  8      //map height
-# define mapS 64      //map cube size
+# define mapS 10      //map cube size
 
 	// structs
 
@@ -100,7 +101,7 @@ typedef struct s_data
 			/*PARSING*/
 			
 bool	parsing(char *file, t_data *data);
-bool	stock_map(t_parsing *parse);
+bool	stock_map(t_data *data);
 bool	stock_description(t_parsing *parse);
 
 /*UTILS_PARSING*/
@@ -112,5 +113,8 @@ bool	validity_map(char **map);
 bool	open_file(char *file, t_parsing *parse);
 bool	file_validity(char *file);
 bool	valid_color(t_parsing *parsing);
+
+bool	transform_map(t_data *data);
+bool	validity_map_wall(t_data *data);
 
 #endif
