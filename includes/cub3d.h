@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/28 18:37:14 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:17:39 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,15 @@
 # include <readline/history.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "../libft/includes/libft.h"
+
 # define WIDTH 2048
 # define HEIGHT 1020
+# define FOV 60
+# define TILE_SIZE 30;
+# define MOVE_SPEED 0.0045
+# define PLAYER_SPEED 4
 
-
-# define mapX  8      //map width
-# define mapY  8      //map height
+# define M_PI 3.14159265358979323846
 # define mapS 10      //map cube size
 
 	// structs
@@ -93,7 +96,7 @@ typedef struct s_data
 	int		player_x;
 	int		player_y;
 	int		player_dir;
-	int		*map;
+	int		**map;
 }	t_data;
 
 	// functions
@@ -116,5 +119,14 @@ bool	valid_color(t_parsing *parsing);
 
 bool	transform_map(t_data *data);
 bool	validity_map_wall(t_data *data);
+
+void	display_map(t_data *data);
+void drawPlayer2D(t_data *data);
+void draw_line(t_data *data, int x1, int y1, int x2, int y2, uint32_t color);
+float degToRad(int a);
+int FixAng(int a);
+void clear_image(mlx_image_t *image, uint32_t color);
+
+void	handle_keypress(mlx_key_data_t keydata, void *param);
 
 #endif

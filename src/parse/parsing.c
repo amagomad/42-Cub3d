@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/28 17:46:06 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:43:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	print_map(t_data *data)
 {
 	int	row;
 	int	col;
-	int	idx;
 
 	printf("map1\n");
 	printf("map_height = %d\n", data->map_height);
@@ -104,8 +103,7 @@ void	print_map(t_data *data)
 		col = -1;
 		while (++col < data->map_width)
 		{
-			idx = row * data->map_width + col;
-			printf("%d", data->map[idx]);
+			printf("%d", data->map[row][col]);
 		}
 		printf("\n");
 	}
@@ -132,10 +130,11 @@ bool	parsing(char *file, t_data *data)
 		return_error("Invalid map");
 	if (!transform_map(data))
 		return_error("Invalid map");
+	printf("map\n");
 	print_map_str(data);
+	print_map(data);
 	if (!validity_map_wall(data))
 		return_error("Invalid map");
 	printf("map\n");
-	print_map(data);
 	return (true);
 }

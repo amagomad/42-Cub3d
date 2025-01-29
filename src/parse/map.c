@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/28 17:55:23 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:48:46 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ bool	validity_map_wall(t_data *data)
 {
 	int	i;
 	int	j;
-	int	index;
 
 	i = -1;
 	while (++i < data->map_height)
@@ -56,14 +55,15 @@ bool	validity_map_wall(t_data *data)
 		j = -1;
 		while (++j < data->map_width)
 		{
-			index = i * data->map_width + j;
-			if (data->map[index] == 0)
+			if (data->map[i][j] == 0)
 			{
-				if ((i > 0 && data->map[index - data->map_width] == 2)
-					|| (i < data->map_height - 1 
-					&& data->map[index + data->map_width] == 2)
-					|| (j > 0 && data->map[index - 1] == 2)
-					|| (j < data->map_width - 1 && data->map[index + 1] == 2))
+				if (i > 0 && data->map[i - 1][j] == 2)
+					return_error("Invalid map: `0` in contact with `2` first line");
+				else if (i < data->map_height - 1 && data->map[i + 1][j] == 2)
+					return_error("Invalid map: `0` in contact with `2` last line");
+				else if (j > 0 && data->map[i][j - 1] == 2)
+					return_error("Invalid map: `0` in contact with `2`");
+				else if (j < data->map_width - 1 && data->map[i][j + 1] == 2)
 					return_error("Invalid map: `0` in contact with `2`");
 			}
 		}
@@ -77,24 +77,27 @@ bool	transform_map(t_data *data)
 	int	i;
 	int	j;
 
-	data->map = malloc(sizeof(int) * (data->map_height * data->map_width));
+	data->map = malloc(sizeof(int *) * data->map_height);
 	if (!data->map)
 		return (false);
 	i = -1;
 	while (++i < data->map_height)
 	{
+		data->map[i] = malloc(sizeof(int) * data->map_width);
 		j = -1;
 		while (++j < data->map_width)
 		{
 			if (j >= (int)ft_strlen(data->parse->map[i]) || ft_isspace(data->parse->map[i][j]))
-				data->map[i * data->map_width + j] = 2;
+			{
+				data->map[i][j] = 2;
+			}
 			else if (data->parse->map[i][j] == '1')
-				data->map[i * data->map_width + j] = 1;
+				data->map[i][j] = 1;
 			else if (data->parse->map[i][j] == '0')
-				data->map[i * data->map_width + j] = 0;
+				data->map[i][j] = 0;
 			else if (ft_strchr("NSWE", data->parse->map[i][j]))
 			{
-				data->map[i * data->map_width + j] = 0;
+				data->map[i][j] = 0;
 				data->player_x = j;
 				data->player_y = i;
 				data->player_dir = ((int)data->parse->map[i][j] - 69) / 5;

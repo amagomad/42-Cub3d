@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/28 18:41:01 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:51:31 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,103 +67,10 @@ bool	initialize_game(t_data *data)
 	return (true);
 }
 
-void	handle_keypress(mlx_key_data_t keydata, void *param)
-{
-	t_data	*data;
-
-	data = (t_data *)param;
-	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-	{
-		if (keydata.key == MLX_KEY_ESCAPE)
-			return (mlx_close_window(data->mlx));
-	}
-}
-
-void	display_map(t_data *data)
-{
-	uint32_t	color;
-	int			x;
-	int			y;
-	int			xo;
-	int			yo;
-	int			i;
-	int			j;
-
-	y = -1;
-	while (++y < data->map_height)
-	{
-		x = -1;
-		while (++x < data->map_width)
-		{
-			xo = x * mapS;
-			yo = y * mapS;
-			if (data->map[y * data->map_width + x] == 0)
-				color = 0x000000FF;
-			else
-				color = 0xFFFFFFFF;
-			i = 0;
-			while (++i < mapS - 1)
-			{
-				j = 0;
-				while (++j < mapS - 1)
-					mlx_put_pixel(data->img, xo + i, yo + j, color);
-			}
-		}
-	}
-}
-
-void drawPlayer2D(t_data *data)
-{
-    mlx_put_pixel(data->img, (int)data->player->px, (int)data->player->py, 0xFFFF00FF);
-}
-
-void draw_line(t_data *data, int x1, int y1, int x2, int y2, uint32_t color)
-{
-    int dx = abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
-    int dy = -abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
-    int err = dx + dy, e2;
-
-    while (1) {
-		if (x1 >= 0 && x1 < (int)data->img->width && y1 >= 0 && y1 < (int)data->img->height)
-        	mlx_put_pixel(data->img, x1, y1, color);
-		else
-			fprintf(stderr, "Error: Pixel out of bounds: x=%d, y=%d\n", x1, y1);
-        if (x1 == x2 && y1 == y2) break;
-        e2 = 2 * err;
-        if (e2 >= dy) { err += dy; x1 += sx; }
-        if (e2 <= dx) { err += dx; y1 += sy; }
-    }
-}
-float degToRad(int a)
-{
-    return a * M_PI / 180.0;
-}
-
-int FixAng(int a) {
-    if (a > 359) {
-        a -= 360;
-    }
-    if (a < 0) {
-        a += 360;
-    }
-    return a;
-}
-
-void init_player(t_data *data)
-{
-	data->player->px = 0;
-	data->player->py = 0;
-	data->player->pdx = 0;
-	data->player->pdy = 0;
-	data->player->pa = 0;
-    data->player->pa = 0; // Initial angle in degrees
-    data->player->pdx = cos(degToRad(data->player->pa)); // Initial x-direction
-    data->player->pdy = -sin(degToRad(data->player->pa)); // Initial y-direction
-}
-
 int	main(int ac, char **av)
 {
 	t_data	*data;
+	mlx_texture_t	*icon;
 
 	if (ac != 2)
 		return_error("Invalid number of arguments");
@@ -171,24 +78,15 @@ int	main(int ac, char **av)
 	if (!data)
 		return_error("Malloc error");
 	init_data(data, av);
+	icon = mlx_load_png("src/img/icon.png");
+	if (!icon)
+		return_error("Can't load icon");
 	if (!initialize_game(data))
 		return_error("Can't initialize game");
-	init_player(data);
-	display_map(data);
-	drawPlayer2D(data);
+	mlx_set_icon(data->mlx, icon);
+	// init_player(data);
+	// display_map(data);
+	// drawPlayer2D(data);
 	mlx_key_hook(data->mlx, handle_keypress, data);
 	mlx_loop(data->mlx);
 }
-
-//exemple de map 
-/* int map[]
-{
- 1,1,1,1,1,1,1,1,
- 1,0,1,0,0,0,0,1,
- 1,0,1,0,0,0,0,1,
- 1,0,1,0,0,0,0,1,
- 1,0,0,0,0,0,0,1,
- 1,0,0,0,0,1,0,1,
- 1,0,0,0,0,0,0,1,
- 1,1,1,1,1,1,1,1,	
-}; */

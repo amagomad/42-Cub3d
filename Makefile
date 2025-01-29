@@ -22,6 +22,7 @@ DIR_OBJS        := .objs
 DIR_INCS        := includes
 
 LST_SRCS        := cub3d.c \
+					handle_keypress.c \
 					parse/utils.c \
 					parse/parsing.c \
 					parse/check.c \
