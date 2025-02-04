@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/29 13:48:46 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:13:36 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ bool	stock_map(t_data *data)
 	return (true);
 }
 
-
 bool	validity_map_wall(t_data *data)
 {
 	int	i;
@@ -57,14 +56,14 @@ bool	validity_map_wall(t_data *data)
 		{
 			if (data->map[i][j] == 0)
 			{
-				if (i > 0 && data->map[i - 1][j] == 2)
-					return_error("Invalid map: `0` in contact with `2` first line");
-				else if (i < data->map_height - 1 && data->map[i + 1][j] == 2)
-					return_error("Invalid map: `0` in contact with `2` last line");
-				else if (j > 0 && data->map[i][j - 1] == 2)
-					return_error("Invalid map: `0` in contact with `2`");
-				else if (j < data->map_width - 1 && data->map[i][j + 1] == 2)
-					return_error("Invalid map: `0` in contact with `2`");
+				if (i > 0 && data->map[i - 1][j] == -1)
+					return_error("Invalid map: `0` in contact with `-1` first line");
+				else if (i < data->map_height - 1 && data->map[i + 1][j] == -1)
+					return_error("Invalid map: `0` in contact with `-1` last line");
+				else if (j > 0 && data->map[i][j - 1] == -1)
+					return_error("Invalid map: `0` in contact with `-1`");
+				else if (j < data->map_width - 1 && data->map[i][j + 1] == -1)
+					return_error("Invalid map: `0` in contact with `-1`");
 			}
 		}
 	}
@@ -89,7 +88,7 @@ bool	transform_map(t_data *data)
 		{
 			if (j >= (int)ft_strlen(data->parse->map[i]) || ft_isspace(data->parse->map[i][j]))
 			{
-				data->map[i][j] = 2;
+				data->map[i][j] = -1;
 			}
 			else if (data->parse->map[i][j] == '1')
 				data->map[i][j] = 1;
@@ -100,8 +99,12 @@ bool	transform_map(t_data *data)
 				data->map[i][j] = 0;
 				data->player_x = j;
 				data->player_y = i;
-				data->player_dir = ((int)data->parse->map[i][j] - 69) / 5;
+				data->player_dir = data->parse->map[i][j];
 			}
+			else if (data->parse->map[i][j] == 'D') // 'D' pour les portes
+				data->map[i][j] = 2;
+			else if (data->parse->map[i][j] == 'O') // 'O' pour une porte ouverte
+				data->map[i][j] = 0;
 		}
 	}
 	return (true);
@@ -126,7 +129,7 @@ bool	validity_map(char **map)
 				j++;
 			if (ft_strrchr("NSEW", map[i][j]))
 				start++;
-			else if (map[i][j] != '1' && map[i][j] != '0')
+			else if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'D')
 				return_error("Invalid map : invalid character");
 		}
 	}

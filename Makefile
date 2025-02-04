@@ -1,6 +1,6 @@
 NAME            := cub3d
 CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g #-fsanitize=address
+CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -fsanitize=address
 
 
 # OS detection
@@ -22,6 +22,9 @@ DIR_OBJS        := .objs
 DIR_INCS        := includes
 
 LST_SRCS        := cub3d.c \
+					move.c \
+					display_minimap.c \
+					utils.c \
 					handle_keypress.c \
 					parse/utils.c \
 					parse/parsing.c \

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/25 14:29:43 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:16:08 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ bool	validity_description(t_parsing *parse)
 		return (false);
 	return (true);
 }
-
 
 bool	open_file(char *file, t_parsing *parse)
 {

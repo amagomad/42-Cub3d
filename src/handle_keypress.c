@@ -6,76 +6,66 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/29 13:25:17 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:31:14 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	handle_keypress(mlx_key_data_t keydata, void *param)
+void handle_mouse_move(double xpos, double ypos, void *param)
+{
+	t_data *data;
+	static double last_x = -1;
+	double delta_x;
+	double sensitivity;
+    
+	(void)ypos;
+    data = (t_data *)param;
+	if (last_x == -1) // Première détection de mouvement
+    {
+        last_x = xpos;
+        return;
+    }
+    sensitivity = 0.01;  // Ajuste la sensibilité de la souris
+    delta_x = xpos - last_x;
+    last_x = xpos;
+    // Appliquer la rotation en fonction du mouvement de la souris
+    data->player->player_angle += delta_x * sensitivity;
+}
+
+void	movement_key(mlx_key_data_t key, t_data *data)
+{
+	if (key.key == MLX_KEY_LEFT_SHIFT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		data->player->move_speed = SPRINT_SPEED;
+	else if (key.key == MLX_KEY_LEFT_SHIFT && key.action == MLX_RELEASE)
+		data->player->move_speed = WALK_SPEED;
+	if (key.key == MLX_KEY_LEFT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		rotate_player(data, 5);  // Rotation à gauche
+	else if (key.key == MLX_KEY_RIGHT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		rotate_player(data, -5); // Rotation à droite
+	if (key.key == MLX_KEY_W && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		move_player(data, data->player->player_dir_x, data->player->player_dir_y); // Avancer
+	else if (key.key == MLX_KEY_S && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		move_player(data, -data->player->player_dir_x, -data->player->player_dir_y); // Reculer
+	else if (key.key == MLX_KEY_A && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		move_player(data, -data->player->player_dir_y, data->player->player_dir_x); // Strafe gauche
+	else if (key.key == MLX_KEY_D && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		move_player(data, data->player->player_dir_y, -data->player->player_dir_x); // Strafe droite
+}
+
+void	handle_keypress(mlx_key_data_t key, void *param)
 {
 	t_data	*data;
 
 	data = (t_data *)param;
-	// Movement step size
-	//float move_step = 5.0;
-
-	// Future position
-	//float next_px, next_py;
-	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT) {
-		if (keydata.key == MLX_KEY_ESCAPE)
-		{
-			mlx_close_window(data->mlx);
-			return ;
-		}
-		/* else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_LEFT)
-		{
-			data->player->pa += 5;
-			data->player->pa = FixAng(data->player->pa);
-			data->player->pdx = cos(degToRad(data->player->pa));
-			data->player->pdy = -sin(degToRad(data->player->pa));
-		} else if (keydata.key == MLX_KEY_D || keydata.key == MLX_KEY_RIGHT)
-		{
-			data->player->pa -= 5;
-			data->player->pa = FixAng(data->player->pa);
-			data->player->pdx = cos(degToRad(data->player->pa));
-			data->player->pdy = -sin(degToRad(data->player->pa));
-		} else if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_UP)
-		{
-			// Calculate potential new position
-			next_px = data->player->px + data->player->pdx * move_step;
-			next_py = data->player->py + data->player->pdy * move_step;
-
-			// Check for collision before moving
-			if (data->map[(int)(next_py / mapS) * data->map_width + (int)(next_px / mapS)] == 0)
-			{
-				data->player->px = next_px;
-				data->player->py = next_py;
-				data->player_x = (int)(data->player->px / mapS);
-				data->player_y = (int)(data->player->py / mapS);
-			}
-		}
-		else if (keydata.key == MLX_KEY_S || keydata.key == MLX_KEY_DOWN)
-		{
-			// Calculate potential new position
-			next_px = data->player->px - data->player->pdx * move_step;
-			next_py = data->player->py - data->player->pdy * move_step;
-
-			// Check for collision before moving
-			if (data->map[(int)(next_py / mapS) * data->map_width + (int)(next_px / mapS)] == 0)
-			{
-				data->player->px = next_px;
-				data->player->py = next_py;
-				data->player_x = (int)(data->player->px / mapS);
-				data->player_y = (int)(data->player->py / mapS);
-			}  
-		}*/
-
-		// Clear the screen and redraw the player
-		//clear_image(data->img, 0x333333FF); // Clear the screen with my color (mac)
-		//clear_image(data->img, 0x000000FF); // Clear the screen with black color
-		//display_map(data);
-		//drawPlayer2D(data);
-		//drawRays2D(image, data);
+	if (key.key == MLX_KEY_SPACE && key.action == MLX_PRESS)
+		data->show_minimap = !data->show_minimap; // 🔹 Bascule l'affichage de la minimap
+	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+	{
+		mlx_close_window(data->mlx);
+		return ;
 	}
+	/* else if (key.key == MLX_KEY_E && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		manage_door(data); */
+	movement_key(key, data);
 }

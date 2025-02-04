@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/01/29 13:43:29 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:15:33 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ bool	stock_description(t_parsing *parse)
 	while (count < 6 && line)
 	{
 		line = get_next_line(parse->file_fd);
+		if (!line)
+			return (false);
 		while (ft_isspace(*line))
 			line++;
 		if (ft_strncmp(line, "NO", 2) == 0 || ft_strncmp(line, "SO", 2) == 0
@@ -51,28 +53,21 @@ void	delete_texture(mlx_texture_t **texture)
 			mlx_delete_texture(texture[i]);
 }
 
-bool	load_texture(t_data *data, t_parsing *parse)
+bool	load_texture(t_data *data)
 {
-	mlx_texture_t	*texture[4];
-
 	data->icon = mlx_load_png("src/img/icon.png");
-	if (!(texture[0] = mlx_load_png(parse->no_texture))
-		|| !(texture[1] = mlx_load_png(parse->so_texture))
-		|| !(texture[2] = mlx_load_png(parse->ea_texture))
-		|| !(texture[3] = mlx_load_png(parse->we_texture)))
-		return (false);
-	if (!(data->no_texture = mlx_texture_to_image(data->mlx, texture[0]))
-		|| !(data->so_texture = mlx_texture_to_image(data->mlx, texture[1]))
-		|| !(data->ea_texture = mlx_texture_to_image(data->mlx, texture[2]))
-		|| !(data->we_texture = mlx_texture_to_image(data->mlx, texture[3])))
+	data->no_texture = mlx_load_png(data->parse->no_texture);
+	data->so_texture = mlx_load_png(data->parse->so_texture);
+	data->ea_texture = mlx_load_png(data->parse->ea_texture);
+	data->we_texture = mlx_load_png(data->parse->we_texture);
+	if (!data->no_texture || !data->so_texture
+		|| !data->ea_texture || !data->we_texture)
 	{
-		delete_texture(texture);
-		return (false);
+		printf("Erreur : Impossible de charger les textures.\n");
+		exit(EXIT_FAILURE);
 	}
-	delete_texture(texture);
 	return (true);
 }
-
 
 void	print_map_str(t_data *data)
 {
@@ -109,6 +104,23 @@ void	print_map(t_data *data)
 	}
 }
 
+void	set_player_starting_direction(t_data *data)
+{
+	if (data->player_dir == 'N')
+		data->player->player_angle = 90;
+	else if (data->player_dir == 'S')
+		data->player->player_angle = 270;
+	else if (data->player_dir == 'W')
+		data->player->player_angle = 0;
+	else if (data->player->player_angle == 'E')
+		data->player->player_angle = 180;
+	data->player->player_dir_x
+		= cos(degrees_to_radians(data->player->player_angle));
+	data->player->player_dir_y
+		= -sin(degrees_to_radians(data->player->player_angle));
+	data->player->player_pos_x = (data->player_x + 0.5) * TILE_SIZE;
+	data->player->player_pos_y = (data->player_y + 0.5) * TILE_SIZE;
+}
 
 bool	parsing(char *file, t_data *data)
 {
@@ -120,8 +132,8 @@ bool	parsing(char *file, t_data *data)
 		return_error("Failed to stock description due to invalid format.");
 	if (!validity_description(data->parse))
 		return_error("Invalid description");
-	//if (!load_texture(data, parse))
-	//	exit(1);
+	if (!load_texture(data))
+		exit(1);
 	if (!valid_color(data->parse))
 		return_error("Invalid color");
 	if (!stock_map(data))
@@ -130,11 +142,10 @@ bool	parsing(char *file, t_data *data)
 		return_error("Invalid map");
 	if (!transform_map(data))
 		return_error("Invalid map");
-	printf("map\n");
 	print_map_str(data);
 	print_map(data);
 	if (!validity_map_wall(data))
 		return_error("Invalid map");
-	printf("map\n");
+	set_player_starting_direction(data);
 	return (true);
 }
