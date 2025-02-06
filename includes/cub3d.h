@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/04 18:34:06 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/06 04:19:36 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_data
 	int				map_height;
 	bool			show_minimap;
 	bool			debug_mode;
+	int				minimap_tile_size;
 	char	player_dir;// a enlever
 	int		player_x;  // a enlever
 	int		player_y; // a enlever
@@ -136,5 +137,5 @@ float	degrees_to_radians(float degrees);
 void	manage_door(t_data *data);
 void	free_data(t_data *data);
 void	clear_image(mlx_image_t *image, uint32_t color);
-
+void	render_frame(void *param);
 #endif

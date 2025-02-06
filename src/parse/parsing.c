@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/04 18:15:33 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/06 04:00:04 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ void	delete_texture(mlx_texture_t **texture)
 bool	load_texture(t_data *data)
 {
 	data->icon = mlx_load_png("src/img/icon.png");
+	if (!data->icon)
+	{
+		printf("Erreur : Impossible de charger l'icone.\n");
+		exit(EXIT_FAILURE);
+	}
 	data->no_texture = mlx_load_png(data->parse->no_texture);
 	data->so_texture = mlx_load_png(data->parse->so_texture);
 	data->ea_texture = mlx_load_png(data->parse->ea_texture);

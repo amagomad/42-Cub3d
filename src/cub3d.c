@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/04 18:30:15 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/06 04:20:55 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_data(t_data *data, char **av)
 	data->ea_texture = NULL;
 	data->icon = NULL;
 	data->show_minimap = true;
+	data->minimap_tile_size = TILE_SIZE / 4;
 	data->map_width = 0;
 	data->map_height = 0;
 	data->player_x = 0;
@@ -76,10 +77,14 @@ void	render_frame(void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
+	printf("render_frame\n");
 	clear_image(data->img, 0x000000FF);
+	printf("clear_image\n");
 	if (data->show_minimap)
 		draw_minimap(data);
+	printf("draw_minimap\n");
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
+	printf("mlx_image_to_window\n");
 }
 
 int	main(int ac, char **av)

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/04 18:29:18 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/06 04:31:38 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	draw_player(t_data *data)
 	int	px;
 	int	py;
 
-	px = MAP_OFFSET_X + (int)(data->player->player_pos_x / TILE_SIZE * MINIMAP_TILE_SIZE);
-	py = MAP_OFFSET_Y + (int)(data->player->player_pos_y / TILE_SIZE * MINIMAP_TILE_SIZE);
+	px = MAP_OFFSET_X + (int)(data->player->player_pos_x / TILE_SIZE * data->minimap_tile_size);
+	py = MAP_OFFSET_Y + (int)(data->player->player_pos_y / TILE_SIZE * data->minimap_tile_size);
 	i = -2;
 	while (++i <= 2)
 	{
@@ -77,13 +77,13 @@ void	draw_direction(t_data *data)
 	float	end_y;
 
 	player_x = MAP_OFFSET_X + (data->player->player_pos_x / TILE_SIZE)
-		* MINIMAP_TILE_SIZE + 0.5;
+		* data->minimap_tile_size + 0.5;
 	player_y = MAP_OFFSET_Y + (data->player->player_pos_y / TILE_SIZE)
-		* MINIMAP_TILE_SIZE;
+		* data->minimap_tile_size;
 	dir_x = cos(degrees_to_radians(data->player->player_angle));
 	dir_y = -sin(degrees_to_radians(data->player->player_angle));
-	end_x = player_x + dir_x * MINIMAP_TILE_SIZE;
-	end_y = player_y + dir_y * MINIMAP_TILE_SIZE;
+	end_x = player_x + dir_x * data->minimap_tile_size;
+	end_y = player_y + dir_y * data->minimap_tile_size;
 	draw_line(data, (int)player_x, (int)player_y, (int)end_x, (int)end_y,
 		0xFF0000FF);
 }
@@ -129,8 +129,9 @@ void	draw_minimap_background(t_data *data, t_minimap mini)
 	{
 		x = -5;
 		while (++x <= mini.map_width_px + 4)
-			mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y + y,
-				MINIMAP_BG_COLOR);
+			if (MAP_OFFSET_X + x <= WIDTH && MAP_OFFSET_Y + y <= HEIGHT)
+				mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y + y,
+					MINIMAP_BG_COLOR);
 	}
 }
 
@@ -161,13 +162,13 @@ void	draw_minimap_interior(t_data *data)
 		{
 			color = get_minimap_color(data->map[y][x]);
 			i = -1;
-			while (++i < MINIMAP_TILE_SIZE)
+			while (++i < data->minimap_tile_size)
 			{
 				j = -1;
-				while (++j < MINIMAP_TILE_SIZE)
+				while (++j < data->minimap_tile_size)
 					mlx_put_pixel(data->img, MAP_OFFSET_X + x
-						* MINIMAP_TILE_SIZE + i, MAP_OFFSET_Y + y
-						* MINIMAP_TILE_SIZE + j, color);
+						* data->minimap_tile_size + i, MAP_OFFSET_Y + y
+						* data->minimap_tile_size + j, color);
 			}
 		}
 	}
@@ -177,11 +178,16 @@ void	draw_minimap(t_data *data)
 {
 	t_minimap	minimap;
 
-	minimap.map_width_px = data->map_width * MINIMAP_TILE_SIZE;
-	minimap.map_height_px = data->map_height * MINIMAP_TILE_SIZE;
+	minimap.map_width_px = data->map_width * data->minimap_tile_size;
+	minimap.map_height_px = data->map_height * data->minimap_tile_size;
+	printf("minimap.map_width_px = %d\n", minimap.map_width_px);
 	draw_minimap_background(data, minimap);
+	printf("draw_minimap_background\n");
 	draw_minimap_interior(data);
+	printf("draw_minimap_interior\n");
 	draw_direction(data);
+	printf("draw_direction\n");
 	draw_player(data);
+	printf("draw_player\n");
 	draw_minimap_border(data, minimap);
 }
