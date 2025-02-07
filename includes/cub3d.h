@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/07 11:58:42 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:50:30 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_data
 	int				player_x;  // a enlever
 	int				player_y; // a enlever
 	t_state			state;
+	int				selected_option;
 }	t_data;
 
 typedef struct  s_minimap

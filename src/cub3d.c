@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/07 12:21:29 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:52:11 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_data(t_data *data, char **av)
 	data->ea_texture = NULL;
 	data->icon = NULL;
 	data->state = STATE_MENU;
+	data->selected_option = 0;
 	data->show_minimap = false;
 	data->minimap_tile_size = TILE_SIZE / 4;
 	data->map_width = 0;
@@ -75,15 +76,20 @@ bool	initialize_game(t_data *data)
 
 void	draw_menu(t_data *data)
 {
-	mlx_put_string(data->mlx, "Press SPACE to start the game", 810, 400);
-	mlx_image_to_window(data->mlx, data->img, 0, 0);
-	mlx_put_string(data->mlx, "Press ESC to quit", 800, 450);
+	if (data->selected_option == 0)
+		mlx_put_string(data->mlx, "> PLAY", 800, 300);
+	else
+		mlx_put_string(data->mlx, "PLAY", 800, 300);
+	if (data->selected_option == 1)
+		mlx_put_string(data->mlx, "> QUIT", 800, 350);
+	else
+		mlx_put_string(data->mlx, "QUIT", 800, 350);
 }
 
 void	draw_pause(t_data *data)
 {
 	mlx_put_string(data->mlx, "PAUSE", 940, 400);
-	mlx_put_string(data->mlx, "Press ESC to quit", WIDTH / 2 - 40, HEIGHT / 2 + 20);
+	mlx_put_string(data->mlx, "QUIT", WIDTH / 2 - 40, HEIGHT / 2 + 20);
 }
 
 void	render_frame(void *param)
