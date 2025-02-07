@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/06 04:31:38 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 10:59:43 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,14 +180,9 @@ void	draw_minimap(t_data *data)
 
 	minimap.map_width_px = data->map_width * data->minimap_tile_size;
 	minimap.map_height_px = data->map_height * data->minimap_tile_size;
-	printf("minimap.map_width_px = %d\n", minimap.map_width_px);
 	draw_minimap_background(data, minimap);
-	printf("draw_minimap_background\n");
 	draw_minimap_interior(data);
-	printf("draw_minimap_interior\n");
 	draw_direction(data);
-	printf("draw_direction\n");
 	draw_player(data);
-	printf("draw_player\n");
 	draw_minimap_border(data, minimap);
 }

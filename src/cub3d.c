@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/06 04:20:55 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:21:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	init_data(t_data *data, char **av)
 	data->we_texture = NULL;
 	data->ea_texture = NULL;
 	data->icon = NULL;
-	data->show_minimap = true;
+	data->state = STATE_MENU;
+	data->show_minimap = false;
 	data->minimap_tile_size = TILE_SIZE / 4;
 	data->map_width = 0;
 	data->map_height = 0;
@@ -68,8 +69,21 @@ bool	initialize_game(t_data *data)
 	}
 	if (data->icon)
 		mlx_set_icon(data->mlx, data->icon);
-	//mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
 	return (true);
+}
+
+void	draw_menu(t_data *data)
+{
+	mlx_put_string(data->mlx, "Press SPACE to start the game", 810, 400);
+	mlx_image_to_window(data->mlx, data->img, 0, 0);
+	mlx_put_string(data->mlx, "Press ESC to quit", 800, 450);
+}
+
+void	draw_pause(t_data *data)
+{
+	mlx_put_string(data->mlx, "PAUSE", 940, 400);
+	mlx_put_string(data->mlx, "Press ESC to quit", WIDTH / 2 - 40, HEIGHT / 2 + 20);
 }
 
 void	render_frame(void *param)
@@ -77,14 +91,17 @@ void	render_frame(void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
-	printf("render_frame\n");
 	clear_image(data->img, 0x000000FF);
-	printf("clear_image\n");
-	if (data->show_minimap)
-		draw_minimap(data);
-	printf("draw_minimap\n");
+	if (data->state == STATE_GAME)
+	{
+		if (data->show_minimap)
+			draw_minimap(data);
+	}
+	else if (data->state == STATE_MENU)
+		draw_menu(data);
+	else if (data->state == STATE_PAUSE)
+		draw_pause(data);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
-	printf("mlx_image_to_window\n");
 }
 
 int	main(int ac, char **av)
@@ -103,8 +120,9 @@ int	main(int ac, char **av)
 		return_error("Can't load icon");
 	if (!initialize_game(data))
 		return_error("Can't initialize game");
+	printf("Start game\n");
 	mlx_key_hook(data->mlx, handle_keypress, data);
 	mlx_loop_hook(data->mlx, (void (*)(void *))render_frame, data);
-	//mlx_cursor_hook(data->mlx, handle_mouse_move, data);
+	mlx_cursor_hook(data->mlx, handle_mouse_move, data);
 	mlx_loop(data->mlx);
 }

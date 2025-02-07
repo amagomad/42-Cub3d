@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/06 04:19:36 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 11:58:42 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define MINIMAP_INNER_BORDER_COLOR 0x606060FF
 # define MINIMAP_BG_COLOR 0x00000080
 
+# define MOUSE_SENSITIVITY 0.01
 
 # define PI 3.14159265358979323846
 
@@ -74,6 +75,14 @@ typedef struct s_player
 	float	velocity; // a voir si on garde
 }	t_player;
 
+typedef enum e_state
+{
+	STATE_MENU,
+	STATE_GAME,
+	STATE_PAUSE
+}	t_state;
+
+
 typedef struct s_data
 {
 	t_player		 *player;
@@ -91,20 +100,21 @@ typedef struct s_data
 	bool			show_minimap;
 	bool			debug_mode;
 	int				minimap_tile_size;
-	char	player_dir;// a enlever
-	int		player_x;  // a enlever
-	int		player_y; // a enlever
-	int in_menu;
+	char			player_dir;// a enlever
+	int				player_x;  // a enlever
+	int				player_y; // a enlever
+	t_state			state;
 }	t_data;
 
 typedef struct  s_minimap
 {
-	int     map_width_px;
-	int     map_height_px;
-	uint32_t    border_color;
-	uint32_t    inner_border_color;
-	uint32_t    bg_color;
-}   t_minimap;
+	int			map_width_px;
+	int			map_height_px;
+	uint32_t	border_color;
+	uint32_t	inner_border_color;
+	uint32_t	bg_color;
+}	t_minimap;
+
 
 // ================== PARSING ==================
 bool	parsing(char *file, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/06 04:42:00 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:19:44 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,24 @@ void handle_mouse_move(double xpos, double ypos, void *param)
 	t_data *data;
 	static double last_x = -1;
 	double delta_x;
-	double sensitivity;
 	
 	(void)ypos;
 	data = (t_data *)param;
-	if (last_x == -1) // Première détection de mouvement
+	if (last_x == -1)
 	{
 		last_x = xpos;
 		return;
 	}
-	sensitivity = 0.01;  // Ajuste la sensibilité de la souris
-	delta_x = xpos - last_x;
+	delta_x =  last_x - xpos;
 	last_x = xpos;
 	// Appliquer la rotation en fonction du mouvement de la souris
-	data->player->player_angle += delta_x * sensitivity;
+	data->player->player_angle += delta_x * MOUSE_SENSITIVITY;
+	if (data->player->player_angle >= 360)
+		data->player->player_angle -= 360;
+	else if (data->player->player_angle < 0)
+		data->player->player_angle += 360;
+	data->player->player_dir_x = cos(degrees_to_radians(data->player->player_angle));
+	data->player->player_dir_y = -sin(degrees_to_radians(data->player->player_angle));
 }
 
 void	movement_key(mlx_key_data_t key, t_data *data)
@@ -59,6 +63,26 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	int save_size;
 
 	data = (t_data *)param;
+	if (key.key == MLX_KEY_P && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+	{
+		if (data->state == STATE_PAUSE)
+			data->state = STATE_GAME;
+		else if (data->state == STATE_GAME)
+			data->state = STATE_PAUSE;
+		return ;
+	}
+	if (key.key == MLX_KEY_SPACE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+	{
+		if (data->state == STATE_MENU)
+			data->state = STATE_GAME;
+		data->show_minimap = true;
+		return ;
+	}
+	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		if (data->state == STATE_MENU || data->state == STATE_PAUSE)
+			mlx_close_window(data->mlx);
+	if (data->state == STATE_PAUSE || data->state == STATE_MENU)
+		return ;
 	if (key.key == MLX_KEY_SPACE && key.action == MLX_PRESS)
 		data->show_minimap = !data->show_minimap; // 🔹 Bascule l'affichage de la minimap
 	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
@@ -66,23 +90,24 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 		mlx_close_window(data->mlx);
 		return ;
 	}
-	if (key.key == MLX_KEY_KP_ADD && key.action == MLX_PRESS)
+	if (key.key == MLX_KEY_KP_ADD && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
 		data->minimap_tile_size++;
-		if (data->minimap_tile_size >= 50)
-			data->minimap_tile_size = 50;
+		printf("data->minimap_tile_size = %d\n", data->minimap_tile_size);
+		if (data->minimap_tile_size >= 40)
+			data->minimap_tile_size = 40;
 	}
-	if (key.key == MLX_KEY_KP_SUBTRACT && key.action == MLX_PRESS)
+	if (key.key == MLX_KEY_KP_SUBTRACT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
 		data->minimap_tile_size--;
 		if (data->minimap_tile_size <= 1)
 			data->minimap_tile_size = 1;
 	}
-	if (key.key == MLX_KEY_TAB && key.action == MLX_REPEAT)
+	if (key.key == MLX_KEY_TAB && (key.action == MLX_REPEAT))
 	{
 		printf("	🔹 BIG MAP MODE 🔹\n");
 		save_size = data->minimap_tile_size;
-		data->minimap_tile_size = 45;
+		data->minimap_tile_size = 40;
 		clear_image(data->img, 0x000000FF);
 		draw_minimap(data);
 		//render_frame(data);
