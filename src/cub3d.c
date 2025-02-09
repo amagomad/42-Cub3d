@@ -6,11 +6,31 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/07 12:52:11 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/08 23:53:42 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	init_menu(t_data *data)
+{
+	mlx_texture_t	*image_menu;
+	printf("Init menu\n");
+	image_menu = mlx_load_png("src/img/menu.png");
+	if (!image_menu)
+	{
+		free_data(data);
+		return_error("Can't load menu image");
+	}
+	data->img_menu = mlx_texture_to_image(data->mlx, image_menu);
+	if (!data->img_menu)
+	{
+		free_data(data);
+		return_error("Can't load menu image");
+	}
+	//mlx_image_to_window(data->mlx, data->img_menu, 0, 0);
+	mlx_delete_texture(image_menu);
+}
 
 void	init_data(t_data *data, char **av)
 {
@@ -71,25 +91,45 @@ bool	initialize_game(t_data *data)
 	if (data->icon)
 		mlx_set_icon(data->mlx, data->icon);
 	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+	init_menu(data);
 	return (true);
 }
 
+
 void	draw_menu(t_data *data)
 {
+	int	x;
+	int	y;
+	int	i;
+	mlx_image_to_window(data->mlx, data->img_menu, 0, 0);
+	
 	if (data->selected_option == 0)
-		mlx_put_string(data->mlx, "> PLAY", 800, 300);
+	{
+		x = 0;
+		y = 0;
+	}
 	else
-		mlx_put_string(data->mlx, "PLAY", 800, 300);
-	if (data->selected_option == 1)
-		mlx_put_string(data->mlx, "> QUIT", 800, 350);
-	else
-		mlx_put_string(data->mlx, "QUIT", 800, 350);
+	{
+		x = 0;
+		y = 100;
+	}
+	i = x + 10;
+	while (++x <= i)
+	{
+		my_put_pixel(data, x, y, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, x, y + 10, MINIMAP_BORDER_COLOR);
+	}
+	i = y + 10;
+	while (++y <= i)
+	{
+		my_put_pixel(data, x, y, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, x + 10, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
+	}
 }
 
 void	draw_pause(t_data *data)
 {
 	mlx_put_string(data->mlx, "PAUSE", 940, 400);
-	mlx_put_string(data->mlx, "QUIT", WIDTH / 2 - 40, HEIGHT / 2 + 20);
 }
 
 void	render_frame(void *param)
@@ -97,14 +137,21 @@ void	render_frame(void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
-	clear_image(data->img, 0x000000FF);
+	clear_image(data, 0x00000FF);
 	if (data->state == STATE_GAME)
 	{
+		if (data->img_menu)
+		{
+			mlx_delete_image(data->mlx, data->img_menu);
+			data->img_menu = NULL;
+		}
 		if (data->show_minimap)
 			draw_minimap(data);
 	}
 	else if (data->state == STATE_MENU)
+	{
 		draw_menu(data);
+	}
 	else if (data->state == STATE_PAUSE)
 		draw_pause(data);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);

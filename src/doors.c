@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/08 11:51:13 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/07 14:10:43 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	free_data(t_data *data)
+static void manage_door_state(t_data *data, int x, int y)
 {
-	if (data->parse)
-	{
-		free(data->parse->map);
-		free(data->parse->description);
-		free(data->parse);
-	}
-	if (data->player)
-		free(data->player);
-	free(data);
+	if (data->map[y][x] == 2)
+		data->map[y][x] = 0; // Ouvrir la porte
+	else if (data->map[y][x] == 0 && data->parse->map[y][x] == 'D')
+		data->map[y][x] = 2; // Fermer la porte
 }
 
-void clear_image(t_data *data, uint32_t color)
+void manage_door(t_data *data)
 {
-	unsigned int x;
-	unsigned int y;
+	int px;
+	int py;
 
-	y = -1;
-	while (++y < data->img->height)
-	{
-		x = -1;
-		while (++x < data->img->width)
-			my_put_pixel(data, x, y, color);
-	}
+	px = (int)(data->player->player_pos_x / TILE_SIZE);
+	py = (int)(data->player->player_pos_y / TILE_SIZE);
+	manage_door_state(data, px + 1, py);
+	manage_door_state(data, px - 1, py);
+	manage_door_state(data, px, py + 1);
+	manage_door_state(data, px, py - 1);
 }

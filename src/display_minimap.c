@@ -6,11 +6,24 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/07 10:59:43 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/09 00:02:24 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	my_put_pixel(t_data *data, int x, int y, int color)
+{
+	uint32_t	*pixels;
+
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT || color < 0 )
+	{
+		pixels = (uint32_t *)data->img->pixels;
+		pixels[y * WIDTH + x] = color;
+	}
+}
+
+
 
 void	draw_player(t_data *data)
 {
@@ -26,7 +39,7 @@ void	draw_player(t_data *data)
 	{
 		j = -2;
 		while (++j <= 2)
-			mlx_put_pixel(data->img, px + i, py + j, 0xFFFFFFF);
+			my_put_pixel(data, px + i, py + j, 0xFF0000FF);
 	}
 }
 
@@ -52,7 +65,7 @@ void	draw_line(t_data *data, int x1, int y1, int x2, int y2, uint32_t color)
 	err = dx - dy;
 	while (x1 != x2 || y1 != y2)
 	{
-		mlx_put_pixel(data->img, x1, y1, color);
+		my_put_pixel(data, x1, y1, color);
 		e2 = err * 2;
 		if (e2 > -dy)
 		{
@@ -96,54 +109,58 @@ void	draw_minimap_border(t_data *data, t_minimap mini)
 	x = -4;
 	while (++x <= mini.map_width_px + 2)
 	{
-		mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y - 3, MINIMAP_BORDER_COLOR);
-		mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y + mini.map_height_px + 2, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + x, MAP_OFFSET_Y - 3, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + x, MAP_OFFSET_Y + mini.map_height_px + 2, MINIMAP_BORDER_COLOR);
 	}
 	y = -4;
 	while (++y <= mini.map_height_px + 2)
 	{
-		mlx_put_pixel(data->img, MAP_OFFSET_X - 3, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
-		mlx_put_pixel(data->img, MAP_OFFSET_X + mini.map_width_px + 2, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X - 3, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + mini.map_width_px + 2, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
 	}
 	x = -2;
 	while (++x <= mini.map_width_px)
 	{
-		mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y - 1, MINIMAP_INNER_BORDER_COLOR);
-		mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y + mini.map_height_px, MINIMAP_INNER_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + x, MAP_OFFSET_Y - 1, MINIMAP_INNER_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + x, MAP_OFFSET_Y + mini.map_height_px, MINIMAP_INNER_BORDER_COLOR);
 	}
 	y = -2;
 	while (++y <= mini.map_height_px)
 	{
-		mlx_put_pixel(data->img, MAP_OFFSET_X - 1, MAP_OFFSET_Y + y, MINIMAP_INNER_BORDER_COLOR);
-		mlx_put_pixel(data->img, MAP_OFFSET_X + mini.map_width_px, MAP_OFFSET_Y + y, MINIMAP_INNER_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X - 1, MAP_OFFSET_Y + y, MINIMAP_INNER_BORDER_COLOR);
+		my_put_pixel(data, MAP_OFFSET_X + mini.map_width_px, MAP_OFFSET_Y + y, MINIMAP_INNER_BORDER_COLOR);
 	}
 }
 
-void	draw_minimap_background(t_data *data, t_minimap mini)
+void draw_minimap_background(t_data *data, t_minimap mini)
 {
-	int	y;
-	int	x;
+    int y;
+	int x;
 
-	y = -5;
-	while (++y <= mini.map_height_px + 4)
-	{
-		x = -5;
-		while (++x <= mini.map_width_px + 4)
-			if (MAP_OFFSET_X + x <= WIDTH && MAP_OFFSET_Y + y <= HEIGHT)
-				mlx_put_pixel(data->img, MAP_OFFSET_X + x, MAP_OFFSET_Y + y,
-					MINIMAP_BG_COLOR);
-	}
+    y = -5;
+    while (++y <= mini.map_height_px + 4)
+    {
+        x = -5;
+        while (++x <= mini.map_width_px + 4)
+        {
+            if (MAP_OFFSET_X + x <= WIDTH && MAP_OFFSET_Y + y <= HEIGHT)
+                my_put_pixel(data, MAP_OFFSET_X + x,
+				MAP_OFFSET_Y + y, 0x00000000);  // Fond transparent ou noir
+        }
+    }
 }
 
 uint32_t	get_minimap_color(int tile)
 {
 	if (tile == 1)
-		return (0x808080FF); // Mur (Gris)
+		return (0xFFFFFFFF); // Mur (Gris)
 	if (tile == 0)
 		return (0x000000FF); // Sol (Noir)
 	if (tile == 2)
 		return (0xFFD700FF); // Porte (Jaune)
-	return (0xFFFFFF00); // Autres (Blanc)
+	if (tile == -1)
+		return (0x00FF00FF); // Objet (Vert)
+	return (0xFFFFFFFF); // Autres (Blanc)
 }
 
 void	draw_minimap_interior(t_data *data)
@@ -161,12 +178,13 @@ void	draw_minimap_interior(t_data *data)
 		while (++x < data->map_width)
 		{
 			color = get_minimap_color(data->map[y][x]);
+			printf("data->map[%d][%d]: %d = %X\n", y, x, data->map[y][x], color);
 			i = -1;
 			while (++i < data->minimap_tile_size)
 			{
 				j = -1;
 				while (++j < data->minimap_tile_size)
-					mlx_put_pixel(data->img, MAP_OFFSET_X + x
+					my_put_pixel(data, MAP_OFFSET_X + x
 						* data->minimap_tile_size + i, MAP_OFFSET_Y + y
 						* data->minimap_tile_size + j, color);
 			}
@@ -182,7 +200,7 @@ void	draw_minimap(t_data *data)
 	minimap.map_height_px = data->map_height * data->minimap_tile_size;
 	draw_minimap_background(data, minimap);
 	draw_minimap_interior(data);
+	draw_minimap_border(data, minimap);
 	draw_direction(data);
 	draw_player(data);
-	draw_minimap_border(data, minimap);
 }

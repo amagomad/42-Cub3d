@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/07 12:50:30 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/08 23:22:21 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,31 @@
 # define MINIMAP_TILE_SIZE (TILE_SIZE / 4)
 # define MINIMAP_BORDER_COLOR 0xA0A0A0FF
 # define MINIMAP_INNER_BORDER_COLOR 0x606060FF
-# define MINIMAP_BG_COLOR 0x00000080
+# define MINIMAP_BG_COLOR 0x00000000
 
 # define MOUSE_SENSITIVITY 0.01
 
 # define PI 3.14159265358979323846
 
+#define Black           0x0000      /*   0,   0,   0 */
+#define Navy            0x000F      /*   0,   0, 128 */
+#define DarkGreen       0x03E0      /*   0, 128,   0 */
+#define DarkCyan        0x03EF      /*   0, 128, 128 */
+#define Maroon          0x7800      /* 128,   0,   0 */
+#define Purple          0x780F      /* 128,   0, 128 */
+#define Olive           0x7BE0      /* 128, 128,   0 */
+#define LightGrey       0xC618      /* 192, 192, 192 */
+#define DarkGrey        0x7BEF      /* 128, 128, 128 */
+#define Blue            0x001F      /*   0,   0, 255 */
+#define Green           0x07E0      /*   0, 255,   0 */
+#define Cyan            0x07FF      /*   0, 255, 255 */
+#define Red             0xF800      /* 255,   0,   0 */
+#define Magenta         0xF81F      /* 255,   0, 255 */
+#define Yellow          0xFFE0      /* 255, 255,   0 */
+#define White           0xFFFF      /* 255, 255, 255 */
+#define Orange          0xFD20      /* 255, 165,   0 */
+#define GreenYellow     0xAFE5      /* 173, 255,  47 */
+#define Pink                        0xF81F
 
 typedef struct s_parsing
 {
@@ -105,6 +124,7 @@ typedef struct s_data
 	int				player_y; // a enlever
 	t_state			state;
 	int				selected_option;
+	mlx_image_t		*img_menu;
 }	t_data;
 
 typedef struct  s_minimap
@@ -147,6 +167,8 @@ void	draw_line(t_data *data, int x1, int y1, int x2, int y2, uint32_t color);
 float	degrees_to_radians(float degrees);
 void	manage_door(t_data *data);
 void	free_data(t_data *data);
-void	clear_image(mlx_image_t *image, uint32_t color);
+void	clear_image(t_data *data, uint32_t color);
 void	render_frame(void *param);
+void	my_put_pixel(t_data *data, int x, int y, uint32_t color);
+
 #endif

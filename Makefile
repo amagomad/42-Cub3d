@@ -25,6 +25,7 @@ LST_SRCS        := cub3d.c \
 					move.c \
 					display_minimap.c \
 					utils.c \
+					doors.c \
 					handle_keypress.c \
 					parse/utils.c \
 					parse/parsing.c \

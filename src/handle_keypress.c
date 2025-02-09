@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/07 12:57:36 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/08 11:52:27 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,41 +60,22 @@ void	movement_key(mlx_key_data_t key, t_data *data)
 void	handle_keypress(mlx_key_data_t key, void *param)
 {
 	t_data	*data;
-	int save_size;
 
 	data = (t_data *)param;
-	if (key.key == MLX_KEY_P && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-	{
-		if (data->state == STATE_PAUSE)
-			data->state = STATE_GAME;
-		else if (data->state == STATE_GAME)
-			data->state = STATE_PAUSE;
-		return ;
-	}
 	if (data->state == STATE_MENU)
 	{
-		if (key.key == MLX_KEY_DOWN)
-			data->selected_option = (data->selected_option + 1) % 2;
-		else if (key.key == MLX_KEY_UP)
-			data->selected_option = (data->selected_option - 1) % 2;
-		else if (key.key == MLX_KEY_ENTER)
+		if (key.key == MLX_KEY_ENTER)
 		{
-			if (data->selected_option == 0)
-				data->state = STATE_GAME;
-			else
-				mlx_close_window(data->mlx);
+			data->state = STATE_GAME;
+			data->show_minimap = true;
 		}
 	}
-	if (key.key == MLX_KEY_SPACE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-	{
-		if (data->state == STATE_MENU)
-			data->state = STATE_GAME;
-		data->show_minimap = true;
-		return ;
-	}
+	if (data->state == STATE_PAUSE && key.key == MLX_KEY_P && key.action == MLX_PRESS)
+		data->state = STATE_GAME;
+	else if (data->state == STATE_GAME && key.key == MLX_KEY_P && key.action == MLX_PRESS)
+		data->state = STATE_PAUSE;
 	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		if (data->state == STATE_MENU || data->state == STATE_PAUSE)
-			mlx_close_window(data->mlx);
+		mlx_close_window(data->mlx);
 	if (data->state == STATE_PAUSE || data->state == STATE_MENU)
 		return ;
 	if (key.key == MLX_KEY_SPACE && key.action == MLX_PRESS)
@@ -107,7 +88,6 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	if (key.key == MLX_KEY_KP_ADD && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
 		data->minimap_tile_size++;
-		printf("data->minimap_tile_size = %d\n", data->minimap_tile_size);
 		if (data->minimap_tile_size >= 40)
 			data->minimap_tile_size = 40;
 	}
@@ -119,25 +99,17 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	}
 	if (key.key == MLX_KEY_TAB && (key.action == MLX_REPEAT))
 	{
-		printf("	🔹 BIG MAP MODE 🔹\n");
-		save_size = data->minimap_tile_size;
 		data->minimap_tile_size = 40;
-		clear_image(data->img, 0x000000FF);
+		clear_image(data, 0x000000FF);
 		draw_minimap(data);
-		//render_frame(data);
-		printf("	🔹 END BIG MAP MODE 🔹\n");
 	}
 	if (key.key == MLX_KEY_TAB && key.action == MLX_RELEASE)
 	{
-		printf("	🔹 NORMAL MAP MODE 🔹\n");
 		data->minimap_tile_size = MINIMAP_TILE_SIZE;
-		clear_image(data->img, 0x000000FF);
+		clear_image(data, 0x000000FF);
 		draw_minimap(data);
-		//render_frame(data);
-		printf("	🔹 END NORMAL MAP MODE 🔹\n");
 	}
-	/* if (key.key == MLX_KEY_E && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		manage_door(data); */
-	printf("key = %d\n", key.key);
+	if (key.key == MLX_KEY_E && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		manage_door(data);
 	movement_key(key, data);
 }
