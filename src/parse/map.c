@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/04 18:13:36 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/09 09:18:22 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ bool	stock_map(t_data *data)
 
 	height = 0;
 	max_width = 0;
-	while (1)
+	line = ft_strdup("");
+	while (line)
 	{
+		free(line);
 		line = get_next_line(data->parse->file_fd);
 		if (!line)
 			break ;

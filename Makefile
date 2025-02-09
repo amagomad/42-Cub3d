@@ -1,6 +1,6 @@
 NAME            := cub3d
 CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -fsanitize=address
+CFLAGS          := -Wall -Werror -Wextra -Iinclude -g #-fsanitize=address
 
 
 # OS detection
@@ -11,8 +11,6 @@ else ifeq ($(UNAME_S), Darwin)
     MLX_FLAGS  := -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
 
-#MLX_FLAGS      := -ldl -lglfw -pthread -lm
-#MLX_FLAGS		:=  -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 MLX42_PATH = MLX42
 
 DIR_LIBFT       := libft

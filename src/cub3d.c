@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/08 23:53:42 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/09 10:38:47 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,35 @@
 
 void	init_menu(t_data *data)
 {
-	mlx_texture_t	*image_menu;
+	mlx_texture_t	*image_menu[5];
+
+	data->img_menu = malloc(sizeof(mlx_image_t *) * 5);
 	printf("Init menu\n");
-	image_menu = mlx_load_png("src/img/menu.png");
-	if (!image_menu)
+	image_menu[0] = mlx_load_png("src/img/menu.png");
+	image_menu[1] = mlx_load_png("src/img/menu1.png");
+	image_menu[2] = mlx_load_png("src/img/menu2.png");
+	image_menu[3] = mlx_load_png("src/img/menu3.png");
+	image_menu[4] = mlx_load_png("src/img/menu4.png");
+	if (!image_menu[0] || !image_menu[1] || !image_menu[2] || !image_menu[3] || !image_menu[4])
 	{
 		free_data(data);
 		return_error("Can't load menu image");
 	}
-	data->img_menu = mlx_texture_to_image(data->mlx, image_menu);
-	if (!data->img_menu)
+	data->img_menu[0] = mlx_texture_to_image(data->mlx, image_menu[0]);
+	data->img_menu[1] = mlx_texture_to_image(data->mlx, image_menu[1]);
+	data->img_menu[2] = mlx_texture_to_image(data->mlx, image_menu[2]);
+	data->img_menu[3] = mlx_texture_to_image(data->mlx, image_menu[3]);
+	data->img_menu[4] = mlx_texture_to_image(data->mlx, image_menu[4]);
+	if (!data->img_menu[0] || !data->img_menu[1] || !data->img_menu[2] || !data->img_menu[3] || !data->img_menu[4])
 	{
 		free_data(data);
 		return_error("Can't load menu image");
 	}
-	//mlx_image_to_window(data->mlx, data->img_menu, 0, 0);
-	mlx_delete_texture(image_menu);
+	mlx_delete_texture(image_menu[0]);
+	mlx_delete_texture(image_menu[1]);
+	mlx_delete_texture(image_menu[2]);
+	mlx_delete_texture(image_menu[3]);
+	mlx_delete_texture(image_menu[4]);
 }
 
 void	init_data(t_data *data, char **av)
@@ -95,36 +108,26 @@ bool	initialize_game(t_data *data)
 	return (true);
 }
 
+void anim_cube(t_data *data)
+{
+	static int current_frame = 0;
+	int i = 0;
+	
+	while (++i < 3)
+		data->img_menu[i]->enabled = false;
+	data->img_menu[current_frame]->enabled = true;
+	current_frame = (current_frame + 1) % 3;
+}
 
 void	draw_menu(t_data *data)
 {
-	int	x;
-	int	y;
-	int	i;
-	mlx_image_to_window(data->mlx, data->img_menu, 0, 0);
-	
+	mlx_image_to_window(data->mlx, data->img_menu[1], 558, 796);
 	if (data->selected_option == 0)
-	{
-		x = 0;
-		y = 0;
-	}
+		anim_cube(data);
 	else
-	{
-		x = 0;
-		y = 100;
-	}
-	i = x + 10;
-	while (++x <= i)
-	{
-		my_put_pixel(data, x, y, MINIMAP_BORDER_COLOR);
-		my_put_pixel(data, x, y + 10, MINIMAP_BORDER_COLOR);
-	}
-	i = y + 10;
-	while (++y <= i)
-	{
-		my_put_pixel(data, x, y, MINIMAP_BORDER_COLOR);
-		my_put_pixel(data, x + 10, MAP_OFFSET_Y + y, MINIMAP_BORDER_COLOR);
-	}
+		mlx_image_to_window(data->mlx, data->img_menu[1], 1160, 796);
+		
+	mlx_image_to_window(data->mlx, data->img_menu[0], 0, 0);
 }
 
 void	draw_pause(t_data *data)
@@ -142,7 +145,8 @@ void	render_frame(void *param)
 	{
 		if (data->img_menu)
 		{
-			mlx_delete_image(data->mlx, data->img_menu);
+			mlx_delete_image(data->mlx, data->img_menu[0]);
+			mlx_delete_image(data->mlx, data->img_menu[1]);
 			data->img_menu = NULL;
 		}
 		if (data->show_minimap)

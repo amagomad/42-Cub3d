@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/08 11:52:27 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/09 10:05:54 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,27 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	data = (t_data *)param;
 	if (data->state == STATE_MENU)
 	{
+		if (key.key == MLX_KEY_LEFT && key.action == MLX_PRESS)
+		{
+			data->selected_option--;
+			if (data->selected_option < 0)
+				data->selected_option = 1;
+		}
+		else if (key.key == MLX_KEY_RIGHT && key.action == MLX_PRESS)
+		{
+			data->selected_option++;
+			if (data->selected_option > 1)
+				data->selected_option = 0;
+		}
 		if (key.key == MLX_KEY_ENTER)
 		{
-			data->state = STATE_GAME;
-			data->show_minimap = true;
+			if (data->selected_option == 0)
+			{
+				data->state = STATE_GAME;
+				data->show_minimap = true;
+			}
+			else if (data->selected_option == 1)
+				mlx_close_window(data->mlx);
 		}
 	}
 	if (data->state == STATE_PAUSE && key.key == MLX_KEY_P && key.action == MLX_PRESS)

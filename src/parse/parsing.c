@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/06 04:00:04 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/09 09:19:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ bool	stock_description(t_parsing *parse)
 	count = 0;
 	while (count < 6 && line)
 	{
+		free(line);
 		line = get_next_line(parse->file_fd);
 		if (!line)
 			return (false);
@@ -38,7 +39,10 @@ bool	stock_description(t_parsing *parse)
 			continue ;
 		}
 		else if (ft_isalnum(*line))
+		{
+			free(line);
 			return (false);
+		}
 	}
 	return (true);
 }
