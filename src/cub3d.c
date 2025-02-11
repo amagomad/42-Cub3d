@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/09 10:38:47 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/11 15:22:54 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,22 @@
 
 void	init_menu(t_data *data)
 {
-	mlx_texture_t	*image_menu[5];
-
-	data->img_menu = malloc(sizeof(mlx_image_t *) * 5);
+	mlx_texture_t	*image_menu[3];
+	
+	data->img_menu = malloc(sizeof(mlx_image_t *) * 2);
 	printf("Init menu\n");
-	image_menu[0] = mlx_load_png("src/img/menu.png");
-	image_menu[1] = mlx_load_png("src/img/menu1.png");
-	image_menu[2] = mlx_load_png("src/img/menu2.png");
-	image_menu[3] = mlx_load_png("src/img/menu3.png");
-	image_menu[4] = mlx_load_png("src/img/menu4.png");
-	if (!image_menu[0] || !image_menu[1] || !image_menu[2] || !image_menu[3] || !image_menu[4])
+	image_menu[0] = mlx_load_png("src/img/menu_start.png");
+	image_menu[1] = mlx_load_png("src/img/menu_quit.png");
+	image_menu[2] = mlx_load_png("src/img/hud.png");
+	if (!image_menu[0] || !image_menu[1] || !image_menu[2])
 	{
 		free_data(data);
 		return_error("Can't load menu image");
 	}
 	data->img_menu[0] = mlx_texture_to_image(data->mlx, image_menu[0]);
 	data->img_menu[1] = mlx_texture_to_image(data->mlx, image_menu[1]);
-	data->img_menu[2] = mlx_texture_to_image(data->mlx, image_menu[2]);
-	data->img_menu[3] = mlx_texture_to_image(data->mlx, image_menu[3]);
-	data->img_menu[4] = mlx_texture_to_image(data->mlx, image_menu[4]);
-	if (!data->img_menu[0] || !data->img_menu[1] || !data->img_menu[2] || !data->img_menu[3] || !data->img_menu[4])
+	data->hud = mlx_texture_to_image(data->mlx, image_menu[2]);
+	if (!data->img_menu[0] || !data->img_menu[1] || !data->hud)
 	{
 		free_data(data);
 		return_error("Can't load menu image");
@@ -41,14 +37,12 @@ void	init_menu(t_data *data)
 	mlx_delete_texture(image_menu[0]);
 	mlx_delete_texture(image_menu[1]);
 	mlx_delete_texture(image_menu[2]);
-	mlx_delete_texture(image_menu[3]);
-	mlx_delete_texture(image_menu[4]);
 }
 
 void	init_data(t_data *data, char **av)
 {
-	data->parse = malloc(sizeof(t_parsing));
-	data->player = malloc(sizeof(t_player));
+	data->parse = ft_calloc(sizeof(t_parsing), 1);
+	data->player = ft_calloc(sizeof(t_player), 1);
 	if (!data->parse || !data->player)
 	{
 		free_data(data);
@@ -73,6 +67,7 @@ void	init_data(t_data *data, char **av)
 	data->parse->map = NULL;
 	data->parse->description = NULL;
 	data->player->move_speed = WALK_SPEED;
+	data->mouse_shown = false;
 	if (!parsing(av[1], data))
 	{
 		free_data(data);
@@ -101,33 +96,31 @@ bool	initialize_game(t_data *data)
 		return_error((char *)mlx_strerror(mlx_errno));
 		return (false);
 	}
+	mlx_set_setting(MLX_FULLSCREEN, true);
+	mlx_set_setting(MLX_DECORATED, false);
 	if (data->icon)
 		mlx_set_icon(data->mlx, data->icon);
 	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+	
 	init_menu(data);
 	return (true);
 }
 
-void anim_cube(t_data *data)
-{
-	static int current_frame = 0;
-	int i = 0;
-	
-	while (++i < 3)
-		data->img_menu[i]->enabled = false;
-	data->img_menu[current_frame]->enabled = true;
-	current_frame = (current_frame + 1) % 3;
-}
-
 void	draw_menu(t_data *data)
 {
-	mlx_image_to_window(data->mlx, data->img_menu[1], 558, 796);
+	mlx_image_to_window(data->mlx, data->img_menu[0], 0 , 0);
+	mlx_image_to_window(data->mlx, data->img_menu[1], 0, 0);
+	
 	if (data->selected_option == 0)
-		anim_cube(data);
+	{
+		data->img_menu[0]->enabled = true;
+		data->img_menu[1]->enabled = false;
+	}
 	else
-		mlx_image_to_window(data->mlx, data->img_menu[1], 1160, 796);
-		
-	mlx_image_to_window(data->mlx, data->img_menu[0], 0, 0);
+	{
+		data->img_menu[0]->enabled = false;
+		data->img_menu[1]->enabled = true;
+	}
 }
 
 void	draw_pause(t_data *data)
@@ -143,22 +136,49 @@ void	render_frame(void *param)
 	clear_image(data, 0x00000FF);
 	if (data->state == STATE_GAME)
 	{
+	//	mlx_image_to_window(data->mlx, data->hud, 0, 0);
+		render(data);
 		if (data->img_menu)
 		{
 			mlx_delete_image(data->mlx, data->img_menu[0]);
 			mlx_delete_image(data->mlx, data->img_menu[1]);
-			data->img_menu = NULL;
 		}
 		if (data->show_minimap)
 			draw_minimap(data);
 	}
 	else if (data->state == STATE_MENU)
-	{
 		draw_menu(data);
-	}
 	else if (data->state == STATE_PAUSE)
 		draw_pause(data);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
+}
+
+void free_all(t_data *data)
+{
+	free(data->parse->map);
+	free(data->parse->description);
+	free(data->parse);
+	free(data->player);
+	/* if (data->img_menu)
+	{
+		mlx_delete_image(data->mlx, data->img_menu[0]);
+		mlx_delete_image(data->mlx, data->img_menu[1]);
+	} */
+	/* if (data->hud)
+		mlx_delete_image(data->mlx, data->hud);
+	if (data->mlx)
+		mlx_close_window(data->mlx);
+	if (data->icon)
+		mlx_delete_texture(data->icon);if (data->hud)
+		mlx_delete_image(data->mlx, data->hud);
+	if (data->mlx)
+		mlx_close_window(data->mlx);
+	if (data->icon)
+		mlx_delete_texture(data->icon);
+		mlx_delete_texture(data->we_texture);
+	if (data->ea_texture)
+		mlx_delete_texture(data->ea_texture); */
+	free(data);
 }
 
 int	main(int ac, char **av)
@@ -182,4 +202,5 @@ int	main(int ac, char **av)
 	mlx_loop_hook(data->mlx, (void (*)(void *))render_frame, data);
 	mlx_cursor_hook(data->mlx, handle_mouse_move, data);
 	mlx_loop(data->mlx);
+	free_all(data);
 }

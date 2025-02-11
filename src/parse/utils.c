@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:50:21 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/04 18:17:35 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/11 14:30:09 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@ void	return_error(char *str)
 
 float	degrees_to_radians(float degrees)
 {
-    return (degrees * (PI / 180.0));
+	return (degrees * (PI / 180.0));
 }

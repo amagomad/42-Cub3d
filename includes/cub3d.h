@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/09 09:44:03 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/11 15:23:20 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # define FOV 60  // Champ de vision
 
+//# define TILE_SIZE 64  // Taille d'une case
 # define TILE_SIZE 30  // Taille d'une case
 
 # define MOVE_SPEED 4.0  // Vitesse de déplacement
@@ -90,6 +91,12 @@ typedef enum e_state
 	STATE_PAUSE
 }	t_state;
 
+typedef struct s_intersect
+{
+	float	rx;
+	float	ry;
+	float	dist;
+}	t_intersect;
 
 typedef struct s_data
 {
@@ -102,6 +109,7 @@ typedef struct s_data
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
 	mlx_image_t		*img;
+	mlx_image_t		*hud;
 	int				**map;
 	int				map_width;
 	int				map_height;
@@ -114,6 +122,7 @@ typedef struct s_data
 	t_state			state;
 	int				selected_option;
 	mlx_image_t		**img_menu;
+	bool			mouse_shown;
 }	t_data;
 
 typedef struct  s_minimap
@@ -159,5 +168,18 @@ void	free_data(t_data *data);
 void	clear_image(t_data *data, uint32_t color);
 void	render_frame(void *param);
 void	my_put_pixel(t_data *data, int x, int y, uint32_t color);
+
+
+// ================== RAYCASTING ==================
+float		FixAng(float a);
+int			is_wall(t_data *data, float x, float y);
+void		draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color);
+void		drawMap2D(t_data *data);
+void		drawPlayer2D(t_data *data, t_player *p);
+void		render(void *param);
+t_intersect	get_vertical_intersection(t_player *p, t_data *data, float ra);
+t_intersect	get_horizontal_intersection(t_player *p, t_data *data, float ra);
+void		drawRays2D(t_player *p, t_data *data);
+bool		transform_map(t_data *data);
 
 #endif

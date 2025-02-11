@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/09 10:05:54 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/10 17:45:48 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void handle_mouse_move(double xpos, double ypos, void *param)
 	
 	(void)ypos;
 	data = (t_data *)param;
+	if (data->state == STATE_MENU || data->state == STATE_PAUSE)
+		return ;
 	if (last_x == -1)
 	{
 		last_x = xpos;
@@ -51,9 +53,9 @@ void	movement_key(mlx_key_data_t key, t_data *data)
 		move_player(data, data->player->player_dir_x, data->player->player_dir_y); // Avancer
 	else if (key.key == MLX_KEY_S && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		move_player(data, -data->player->player_dir_x, -data->player->player_dir_y); // Reculer
-	else if (key.key == MLX_KEY_A && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		move_player(data, -data->player->player_dir_y, data->player->player_dir_x); // Strafe gauche
 	else if (key.key == MLX_KEY_D && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
+		move_player(data, -data->player->player_dir_y, data->player->player_dir_x); // Strafe gauche
+	else if (key.key == MLX_KEY_A && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		move_player(data, data->player->player_dir_y, -data->player->player_dir_x); // Strafe droite
 }
 
@@ -62,6 +64,19 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
+	if (key.key == MLX_KEY_LEFT_CONTROL && key.action == MLX_PRESS)
+	{
+		if (!data->mouse_shown)
+		{
+			mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+			data->mouse_shown = true;
+		}
+		else
+		{
+			data->mouse_shown = false;
+			mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
+		}
+	}
 	if (data->state == STATE_MENU)
 	{
 		if (key.key == MLX_KEY_LEFT && key.action == MLX_PRESS)

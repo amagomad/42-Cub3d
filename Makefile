@@ -1,6 +1,6 @@
 NAME            := cub3d
 CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g #-fsanitize=address
+CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -fsanitize=address
 
 
 # OS detection
@@ -29,6 +29,9 @@ LST_SRCS        := cub3d.c \
 					parse/parsing.c \
 					parse/check.c \
 					parse/map.c \
+					raycasting/raycasting.c \
+					raycasting/draw.c \
+					raycasting/utils.c
 
 LST_OBJS        := $(LST_SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/09 03:54:20 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/11 15:22:25 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 {
 	uint32_t	*pixels;
 
-	if (data->img == NULL || x < 0 || x > (int)data->img->width || y < 0 || y > (int)data->img->height)
+	if (data->img == NULL || x < 0 || x > (int)data->img->width || y < 0 || y > (int)data->img->height || x >= WIDTH || y >= HEIGHT)
+		return;
+	if (data->img->pixels == NULL)
+		return;
+	if (data->img->pixels + (y * data->img->width + x) * sizeof(uint32_t) == NULL)
 		return;
 	pixels = (uint32_t *)(data->img->pixels + (y * data->img->width + x) * sizeof(uint32_t));
 	*pixels = color;
