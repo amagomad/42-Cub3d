@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 17:06:57 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 22:34:19 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,43 +114,42 @@ void	print_map(t_data *data)
 	}
 }
 
-
 void	set_player_starting_direction(t_data *data)
 {
 	if (data->player_dir == 'N')
 	{
-		data->player->player_angle = 90;
+		data->player->angle = 90;
 		data->player->plane_x = PLANE_SIZE;
 		data->player->plane_y = 0;
-		data->player->player_dir_x = 0;
-		data->player->player_dir_y = -1;
+		data->player->dir_x = 0;
+		data->player->dir_y = -1;
 	}
 	else if (data->player_dir == 'S')
 	{
-		data->player->player_angle = 270;
+		data->player->angle = 270;
 		data->player->plane_x = -PLANE_SIZE;
 		data->player->plane_y = 0;
-		data->player->player_dir_x = 0;
-		data->player->player_dir_y = 1;
+		data->player->dir_x = 0;
+		data->player->dir_y = 1;
 	}
 	else if (data->player_dir == 'W')
 	{
-		data->player->player_angle = 0;
+		data->player->angle = 0;
 		data->player->plane_x = 0;
 		data->player->plane_y = -PLANE_SIZE;
-		data->player->player_dir_x = -1;
-		data->player->player_dir_y = 0;
+		data->player->dir_x = -1;
+		data->player->dir_y = 0;
 	}
-	else if (data->player->player_angle == 'E')
+	else if (data->player->angle == 'E')
 	{
-		data->player->player_angle = 180;
+		data->player->angle = 180;
 		data->player->plane_x = 0;
 		data->player->plane_y = PLANE_SIZE;
-		data->player->player_dir_x = 1;
-		data->player->player_dir_y = 0;
+		data->player->dir_x = 1;
+		data->player->dir_y = 0;
 	}
-	data->player->player_pos_x = (data->player_x + 0.5) * TILE_SIZE;
-	data->player->player_pos_y = (data->player_y + 0.5) * TILE_SIZE;
+	data->player->pos_x = (data->player_x + 0.5) * T_SIZE;
+	data->player->pos_y = (data->player_y + 0.5) * T_SIZE;
 }
 
 bool	parsing(char *file, t_data *data)

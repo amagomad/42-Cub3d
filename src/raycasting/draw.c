@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/12 22:25:16 by cgorin            #+#    #+#             */
+/*   Updated: 2025/02/12 22:33:24 by cgorin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 /**
@@ -9,16 +21,16 @@
  * @param height The height of the rectangle.
  * @param color The color of the rectangle.
  */
-void draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color)
+void	draw_rect(t_data *data, int x, int y, uint32_t color)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
-	while (i < width)
+	while (i < WIDTH)
 	{
 		j = 0;
-		while (j < height)
+		while (j < HEIGHT)
 		{
 			my_put_pixel(data, x + i, y + j, color);
 			j++;
@@ -26,4 +38,3 @@ void draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color
 		i++;
 	}
 }
-

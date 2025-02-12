@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 15:50:14 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 22:35:23 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,18 +133,11 @@ bool	validate_color(const char *color, uint32_t *f_color)
 	g = ft_atoi(components[1]);
 	b = ft_atoi(components[2]);
 	ft_free_str_tab(components);
-	printf("Parsed RGB values: r=%d, g=%d, b=%d\n", r, g, b);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 	{
 		return (false);
 	}
-	// Try ARGB format (common in MLX42)
-	printf("Input values: r=%d, g=%d, b=%d\n", r, g, b);  // Print input values
-
 	*f_color = (0xFF << 24) | ((uint32_t)b << 16) | ((uint32_t)g << 8) | (uint32_t)r;
-	printf("Created color: 0x%08X\n", *f_color);  // Print created color
-
-// And in my_put_pixel, add:// Print color at pixel
 	return (true);
 }
 

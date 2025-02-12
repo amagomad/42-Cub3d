@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 17:06:34 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 22:39:31 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@
 # define FOV 60  // Champ de vision
 # define PLANE_SIZE 0.66 // Taille du plan
 
-//# define TILE_SIZE 64  // Taille d'une case
-# define TILE_SIZE 30  // Taille d'une case
+//# define T_SIZE 64  // Taille d'une case
+# define T_SIZE 30  // Taille d'une case
 
 # define MOVE_SPEED 4.0  // Vitesse de déplacement
 # define WALK_SPEED 2.0
 # define SPRINT_SPEED 4.0
-# define ROTATION_SPEED 0.03 // Vitesse de rotation
-# define MOUSE_SENSITIVITY 0.02
+# define ROTATION_SPEED 0.02 // Vitesse de rotation
+# define MOUSE_SENSITIVITY 0.007
 
 
 # define PLAYER_RADIUS 5 // Marge pour éviter de coller aux murs
 # define MAP_OFFSET_X 20 // Décalage horizontal (gauche) (minimap)
 # define MAP_OFFSET_Y 20 // Décalage vertical (haut) (minimap)
-# define MINIMAP_TILE_SIZE (TILE_SIZE / 4)
+# define MINIMAP_T_SIZE (T_SIZE / 4)
 # define MINIMAP_BORDER_COLOR 0xFFA0A0A0
 # define MINIMAP_INNER_BORDER_COLOR 0xFF606060
 # define MINIMAP_BG_COLOR 0x00000000
@@ -66,6 +66,7 @@
 # define BLUE 0xFFF0FF00
 # define PINK 0xFFFF0FFF
 # define BLACK 0xFF000000
+# define LIGHT_GREY 0xFFD3D3D3
 # define GREY 0xFFAAABAB
 # define RED 0xFF0000FF
 
@@ -88,11 +89,11 @@ typedef struct s_parsing
 
 typedef struct s_player
 {
-	float player_pos_x;
-	float player_pos_y;
-	float player_dir_x;
-	float player_dir_y;
-	float player_angle;
+	float pos_x;
+	float pos_y;
+	float dir_x;
+	float dir_y;
+	float angle;
 	float move_speed;
 	float	velocity; // a voir si on garde
 	float 	plane_x;
@@ -113,22 +114,38 @@ typedef struct s_intersect
 	float	dist;
 }	t_intersect;
 
+typedef struct s_color
+{
+	uint8_t		r;
+	uint8_t		g;
+	uint8_t		b;
+	uint8_t		a;
+	uint32_t	abgr;
+}	t_color;
+
 typedef struct s_ray
 {
-	double		ray_dir_x;
-	double		ray_dir_y;
-	double		delta_dist_x;
-	double		delta_dist_y;
-	double		side_dist_x;
-	double		side_dist_y;
-	double		camera_x;
-	int			map_x;
-	int			map_y;
-	int			step_x;
-	int			step_y;
-	int			hit;
-	int			side;
-	int 		x;
+	double			dir_x;
+	double			dir_y;
+	double			delta_dist_x;
+	double			delta_dist_y;
+	double			side_dist_x;
+	double			side_dist_y;
+	double			camera_x;
+	int				map_x;
+	int				map_y;
+	int				step_x;
+	int				step_y;
+	int				hit;
+	int				side;
+	int 			x;
+	int				line_height;
+	int				draw_start;
+	int				draw_end;
+	int				tex_x;
+	double			perp_wall_dist;
+	uint32_t		*pixel_buffer;
+	mlx_texture_t	*texture;
 }	t_ray;
 
 typedef struct s_data
@@ -151,7 +168,7 @@ typedef struct s_data
 	int				map_height;
 	bool			show_minimap;
 	bool			debug_mode;
-	int				minimap_tile_size;
+	int				minimap_T_SIZE;
 	char			player_dir;// a enlever
 	int				player_x;  // a enlever
 	int				player_y; // a enlever
@@ -189,7 +206,6 @@ void	display_map(t_data *data);
 void	handle_keypress(mlx_key_data_t keydata, void *param);
 void	handle_keyrelease(mlx_key_data_t keydata, void *param);
 void	handle_mouse_move(double xpos, double ypos, void *param);
-void	rotate_player(t_data *data, float angle);
 void	move_player(t_data *data, float move_x, float move_y);
 
 // ================== MINIMAP & AFFICHAGE ==================
@@ -207,7 +223,7 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color);
 
 
 // ================== RAYCASTING ==================
-void raycasting(t_data *data);
-void draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color);
+void	raycasting(t_data *data);
+void	draw_rect(t_data *data, int x, int y, uint32_t color);
 
 #endif

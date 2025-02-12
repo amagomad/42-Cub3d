@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 03:09:05 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 22:37:41 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 void rotate_right(t_data *data, double rotation_speed)
 {
-    double old_dir_x = data->player->player_dir_x;
-    data->player->player_dir_x = data->player->player_dir_x * cos(rotation_speed) - data->player->player_dir_y * sin(rotation_speed);
-    data->player->player_dir_y = old_dir_x * sin(rotation_speed) + data->player->player_dir_y * cos(rotation_speed);
-    
-    double old_plane_x = data->player->plane_x;
-    data->player->plane_x = data->player->plane_x * cos(rotation_speed) - data->player->plane_y * sin(rotation_speed);
-    data->player->plane_y = old_plane_x * sin(rotation_speed) + data->player->plane_y * cos(rotation_speed);
+	double old_dir_x = data->player->dir_x;
+	data->player->dir_x = data->player->dir_x * cos(rotation_speed) - data->player->dir_y * sin(rotation_speed);
+	data->player->dir_y = old_dir_x * sin(rotation_speed) + data->player->dir_y * cos(rotation_speed);
+	
+	double old_plane_x = data->player->plane_x;
+	data->player->plane_x = data->player->plane_x * cos(rotation_speed) - data->player->plane_y * sin(rotation_speed);
+	data->player->plane_y = old_plane_x * sin(rotation_speed) + data->player->plane_y * cos(rotation_speed);
 }
 
 // For rotating left
 void rotate_left(t_data *data, double rotation_speed)
 {
-    double old_dir_x = data->player->player_dir_x;
-    data->player->player_dir_x = data->player->player_dir_x * cos(-rotation_speed) - data->player->player_dir_y * sin(-rotation_speed);
-    data->player->player_dir_y = old_dir_x * sin(-rotation_speed) + data->player->player_dir_y * cos(-rotation_speed);
-    
-    double old_plane_x = data->player->plane_x;
-    data->player->plane_x = data->player->plane_x * cos(-rotation_speed) - data->player->plane_y * sin(-rotation_speed);
-    data->player->plane_y = old_plane_x * sin(-rotation_speed) + data->player->plane_y * cos(-rotation_speed);
+	double old_dir_x = data->player->dir_x;
+	data->player->dir_x = data->player->dir_x * cos(-rotation_speed) - data->player->dir_y * sin(-rotation_speed);
+	data->player->dir_y = old_dir_x * sin(-rotation_speed) + data->player->dir_y * cos(-rotation_speed);
+	
+	double old_plane_x = data->player->plane_x;
+	data->player->plane_x = data->player->plane_x * cos(-rotation_speed) - data->player->plane_y * sin(-rotation_speed);
+	data->player->plane_y = old_plane_x * sin(-rotation_speed) + data->player->plane_y * cos(-rotation_speed);
 }
 
 void handle_mouse_move(double xpos, double ypos, void *param)
@@ -54,8 +54,6 @@ void handle_mouse_move(double xpos, double ypos, void *param)
 	else if (last_x > xpos)
 		rotate_left(data, MOUSE_SENSITIVITY);
 	last_x = xpos;
-	// Appliquer la rotation en fonction du mouvement de la souris
-	
 }
 
 void	movement_key(mlx_key_data_t key, t_data *data)
@@ -69,13 +67,13 @@ void	movement_key(mlx_key_data_t key, t_data *data)
 	else if (key.key == MLX_KEY_RIGHT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		rotate_right(data, ROTATION_SPEED); // Rotation à droite
 	if (key.key == MLX_KEY_W && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		move_player(data, data->player->player_dir_x, data->player->player_dir_y); // Avancer
+		move_player(data, data->player->dir_x, data->player->dir_y); // Avancer
 	else if (key.key == MLX_KEY_S && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		move_player(data, -data->player->player_dir_x, -data->player->player_dir_y); // Reculer
+		move_player(data, -data->player->dir_x, -data->player->dir_y); // Reculer
 	else if (key.key == MLX_KEY_D && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		move_player(data, -data->player->player_dir_y, data->player->player_dir_x); // Strafe gauche
+		move_player(data, -data->player->dir_y, data->player->dir_x); // Strafe gauche
 	else if (key.key == MLX_KEY_A && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		move_player(data, data->player->player_dir_y, -data->player->player_dir_x); // Strafe droite
+		move_player(data, data->player->dir_y, -data->player->dir_x); // Strafe droite
 }
 
 void	handle_keypress(mlx_key_data_t key, void *param)
@@ -138,25 +136,25 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	}
 	if (key.key == MLX_KEY_KP_ADD && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
-		data->minimap_tile_size++;
-		if (data->minimap_tile_size >= 40)
-			data->minimap_tile_size = 40;
+		data->minimap_T_SIZE++;
+		if (data->minimap_T_SIZE >= 40)
+			data->minimap_T_SIZE = 40;
 	}
 	if (key.key == MLX_KEY_KP_SUBTRACT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
-		data->minimap_tile_size--;
-		if (data->minimap_tile_size <= 1)
-			data->minimap_tile_size = 1;
+		data->minimap_T_SIZE--;
+		if (data->minimap_T_SIZE <= 1)
+			data->minimap_T_SIZE = 1;
 	}
 	if (key.key == MLX_KEY_TAB && (key.action == MLX_REPEAT))
 	{
-		data->minimap_tile_size = 40;
+		data->minimap_T_SIZE = 40;
 		clear_image(data, 0x000000FF);
 		draw_minimap(data);
 	}
 	if (key.key == MLX_KEY_TAB && key.action == MLX_RELEASE)
 	{
-		data->minimap_tile_size = MINIMAP_TILE_SIZE;
+		data->minimap_T_SIZE = MINIMAP_T_SIZE;
 		clear_image(data, 0x000000FF);
 		draw_minimap(data);
 	}

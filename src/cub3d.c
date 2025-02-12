@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 15:52:29 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 22:23:51 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	init_data(t_data *data, char **av)
 	data->state = STATE_MENU;
 	data->selected_option = 0;
 	data->show_minimap = false;
-	data->minimap_tile_size = TILE_SIZE / 4;
+	data->minimap_T_SIZE = T_SIZE / 4;
 	data->map_width = 0;
 	data->map_height = 0;
 	data->player_x = 0;
