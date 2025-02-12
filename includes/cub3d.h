@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/11 15:23:20 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 17:06:34 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define HEIGHT 1080
 
 # define FOV 60  // Champ de vision
+# define PLANE_SIZE 0.66 // Taille du plan
 
 //# define TILE_SIZE 64  // Taille d'une case
 # define TILE_SIZE 30  // Taille d'une case
@@ -34,7 +35,8 @@
 # define MOVE_SPEED 4.0  // Vitesse de déplacement
 # define WALK_SPEED 2.0
 # define SPRINT_SPEED 4.0
-# define ROTATION_SPEED 5 // Vitesse de rotation
+# define ROTATION_SPEED 0.03 // Vitesse de rotation
+# define MOUSE_SENSITIVITY 0.02
 
 
 # define PLAYER_RADIUS 5 // Marge pour éviter de coller aux murs
@@ -45,10 +47,19 @@
 # define MINIMAP_INNER_BORDER_COLOR 0xFF606060
 # define MINIMAP_BG_COLOR 0x00000000
 
-# define MOUSE_SENSITIVITY 0.01
 
 # define PI 3.14159265358979323846
 
+	//*f_color = 0xFFEBCE87;
+/* 	FF87CEEB
+	rgb 
+	b g r  */
+
+# define PINKY 0xFFEAC2FF
+# define BLUEY 0xFFF7FFC2
+# define GREENY 0xFFA5D493
+# define YELLOWY 0xFF82EDFF
+# define REDY 0xFFC2C2FF
 # define WHITE 0xFFFFFFFF
 # define YELLOW 0xFF0FFFFF
 # define GREEN 0xFF789C7B
@@ -67,6 +78,8 @@ typedef struct s_parsing
 	char 	*so_texture;
 	char 	*we_texture;
 	char 	*ea_texture;
+	char 	**f_color;
+	char 	**c_color;
 	char 	*floor_color;
 	char 	*ceiling_color;
 	int		map_width;
@@ -82,6 +95,8 @@ typedef struct s_player
 	float player_angle;
 	float move_speed;
 	float	velocity; // a voir si on garde
+	float 	plane_x;
+	float 	plane_y;
 }	t_player;
 
 typedef enum e_state
@@ -98,6 +113,24 @@ typedef struct s_intersect
 	float	dist;
 }	t_intersect;
 
+typedef struct s_ray
+{
+	double		ray_dir_x;
+	double		ray_dir_y;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		side_dist_x;
+	double		side_dist_y;
+	double		camera_x;
+	int			map_x;
+	int			map_y;
+	int			step_x;
+	int			step_y;
+	int			hit;
+	int			side;
+	int 		x;
+}	t_ray;
+
 typedef struct s_data
 {
 	t_player		 *player;
@@ -108,6 +141,9 @@ typedef struct s_data
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
+	mlx_texture_t	*door_texture;
+	uint32_t 		floor_color;
+	uint32_t	 	ceiling_color;
 	mlx_image_t		*img;
 	mlx_image_t		*hud;
 	int				**map;
@@ -144,7 +180,7 @@ bool	validity_description(t_parsing *parse);
 bool	validity_map(char **map);
 bool	open_file(char *file, t_parsing *parse);
 bool	file_validity(char *file);
-bool	valid_color(t_parsing *parsing);
+bool	valid_color(t_parsing *parsing, t_data *data);
 bool	transform_map(t_data *data);
 bool	validity_map_wall(t_data *data);
 void	display_map(t_data *data);
@@ -171,15 +207,7 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color);
 
 
 // ================== RAYCASTING ==================
-float		FixAng(float a);
-int			is_wall(t_data *data, float x, float y);
-void		draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color);
-void		drawMap2D(t_data *data);
-void		drawPlayer2D(t_data *data, t_player *p);
-void		render(void *param);
-t_intersect	get_vertical_intersection(t_player *p, t_data *data, float ra);
-t_intersect	get_horizontal_intersection(t_player *p, t_data *data, float ra);
-void		drawRays2D(t_player *p, t_data *data);
-bool		transform_map(t_data *data);
+void raycasting(t_data *data);
+void draw_rect(t_data *data, int x, int y, int width, int height, uint32_t color);
 
 #endif

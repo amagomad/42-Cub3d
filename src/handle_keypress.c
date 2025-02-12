@@ -6,17 +6,39 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/10 17:45:48 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 03:09:05 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+void rotate_right(t_data *data, double rotation_speed)
+{
+    double old_dir_x = data->player->player_dir_x;
+    data->player->player_dir_x = data->player->player_dir_x * cos(rotation_speed) - data->player->player_dir_y * sin(rotation_speed);
+    data->player->player_dir_y = old_dir_x * sin(rotation_speed) + data->player->player_dir_y * cos(rotation_speed);
+    
+    double old_plane_x = data->player->plane_x;
+    data->player->plane_x = data->player->plane_x * cos(rotation_speed) - data->player->plane_y * sin(rotation_speed);
+    data->player->plane_y = old_plane_x * sin(rotation_speed) + data->player->plane_y * cos(rotation_speed);
+}
+
+// For rotating left
+void rotate_left(t_data *data, double rotation_speed)
+{
+    double old_dir_x = data->player->player_dir_x;
+    data->player->player_dir_x = data->player->player_dir_x * cos(-rotation_speed) - data->player->player_dir_y * sin(-rotation_speed);
+    data->player->player_dir_y = old_dir_x * sin(-rotation_speed) + data->player->player_dir_y * cos(-rotation_speed);
+    
+    double old_plane_x = data->player->plane_x;
+    data->player->plane_x = data->player->plane_x * cos(-rotation_speed) - data->player->plane_y * sin(-rotation_speed);
+    data->player->plane_y = old_plane_x * sin(-rotation_speed) + data->player->plane_y * cos(-rotation_speed);
+}
+
 void handle_mouse_move(double xpos, double ypos, void *param)
 {
 	t_data *data;
 	static double last_x = -1;
-	double delta_x;
 	
 	(void)ypos;
 	data = (t_data *)param;
@@ -27,16 +49,13 @@ void handle_mouse_move(double xpos, double ypos, void *param)
 		last_x = xpos;
 		return;
 	}
-	delta_x =  last_x - xpos;
+	if (last_x < xpos)
+		rotate_right(data, MOUSE_SENSITIVITY);
+	else if (last_x > xpos)
+		rotate_left(data, MOUSE_SENSITIVITY);
 	last_x = xpos;
 	// Appliquer la rotation en fonction du mouvement de la souris
-	data->player->player_angle += delta_x * MOUSE_SENSITIVITY;
-	if (data->player->player_angle >= 360)
-		data->player->player_angle -= 360;
-	else if (data->player->player_angle < 0)
-		data->player->player_angle += 360;
-	data->player->player_dir_x = cos(degrees_to_radians(data->player->player_angle));
-	data->player->player_dir_y = -sin(degrees_to_radians(data->player->player_angle));
+	
 }
 
 void	movement_key(mlx_key_data_t key, t_data *data)
@@ -46,9 +65,9 @@ void	movement_key(mlx_key_data_t key, t_data *data)
 	else if (key.key == MLX_KEY_LEFT_SHIFT && key.action == MLX_RELEASE)
 		data->player->move_speed = WALK_SPEED;
 	if (key.key == MLX_KEY_LEFT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		rotate_player(data, 5);  // Rotation à gauche
+		rotate_left(data, ROTATION_SPEED);  // Rotation à gauche
 	else if (key.key == MLX_KEY_RIGHT && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		rotate_player(data, -5); // Rotation à droite
+		rotate_right(data, ROTATION_SPEED); // Rotation à droite
 	if (key.key == MLX_KEY_W && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		move_player(data, data->player->player_dir_x, data->player->player_dir_y); // Avancer
 	else if (key.key == MLX_KEY_S && (key.action == MLX_PRESS || key.action == MLX_REPEAT))

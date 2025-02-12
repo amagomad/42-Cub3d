@@ -31,7 +31,7 @@ LST_SRCS        := cub3d.c \
 					parse/map.c \
 					raycasting/raycasting.c \
 					raycasting/draw.c \
-					raycasting/utils.c
+					#raycasting/utils.c
 
 LST_OBJS        := $(LST_SRCS:.c=.o)
 

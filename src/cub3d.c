@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/11 15:22:54 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 15:52:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ void	render_frame(void *param)
 	clear_image(data, 0x00000FF);
 	if (data->state == STATE_GAME)
 	{
-	//	mlx_image_to_window(data->mlx, data->hud, 0, 0);
-		render(data);
+		//mlx_image_to_window(data->mlx, data->hud, 0, 0);
+		raycasting(data);
 		if (data->img_menu)
 		{
 			mlx_delete_image(data->mlx, data->img_menu[0]);

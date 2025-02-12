@@ -6,24 +6,27 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/11 15:22:25 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 15:42:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
+void my_put_pixel(t_data *data, int x, int y, uint32_t color)
 {
-	uint32_t	*pixels;
+    uint32_t *pixels;
+    
+    // Bounds checking
+    if (data->img == NULL || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+        return;
+    if (data->img->pixels == NULL)
+        return;
 
-	if (data->img == NULL || x < 0 || x > (int)data->img->width || y < 0 || y > (int)data->img->height || x >= WIDTH || y >= HEIGHT)
-		return;
-	if (data->img->pixels == NULL)
-		return;
-	if (data->img->pixels + (y * data->img->width + x) * sizeof(uint32_t) == NULL)
-		return;
-	pixels = (uint32_t *)(data->img->pixels + (y * data->img->width + x) * sizeof(uint32_t));
-	*pixels = color;
+    // Get the pixel array as uint32_t*
+    pixels = (uint32_t *)data->img->pixels;
+    
+    // Calculate the offset directly (no need to multiply by sizeof)
+    pixels[y * data->img->width + x] = color;
 }
 
 void	draw_player(t_data *data)
@@ -85,8 +88,6 @@ void	draw_direction(t_data *data)
 {
 	float	player_x;
 	float	player_y;
-	float	dir_x;
-	float	dir_y;
 	float	end_x;
 	float	end_y;
 
@@ -94,10 +95,8 @@ void	draw_direction(t_data *data)
 		* data->minimap_tile_size + 0.5;
 	player_y = MAP_OFFSET_Y + (data->player->player_pos_y / TILE_SIZE)
 		* data->minimap_tile_size;
-	dir_x = cos(degrees_to_radians(data->player->player_angle));
-	dir_y = -sin(degrees_to_radians(data->player->player_angle));
-	end_x = player_x + dir_x * data->minimap_tile_size;
-	end_y = player_y + dir_y * data->minimap_tile_size;
+	end_x = player_x + data->player->player_dir_x * data->minimap_tile_size;
+	end_y = player_y + data->player->player_dir_y * data->minimap_tile_size;
 	draw_line(data, (int)player_x, (int)player_y, (int)end_x, (int)end_y,
 		RED);
 }

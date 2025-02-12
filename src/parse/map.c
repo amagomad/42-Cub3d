@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/09 09:18:22 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 01:29:17 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ bool	validity_map_wall(t_data *data)
 		{
 			if (data->map[i][j] == 0)
 			{
-				if (i > 0 && data->map[i - 1][j] == -1)
-					return_error("Invalid map: `0` in contact with `-1` first line");
-				else if (i < data->map_height - 1 && data->map[i + 1][j] == -1)
-					return_error("Invalid map: `0` in contact with `-1` last line");
-				else if (j > 0 && data->map[i][j - 1] == -1)
-					return_error("Invalid map: `0` in contact with `-1`");
-				else if (j < data->map_width - 1 && data->map[i][j + 1] == -1)
-					return_error("Invalid map: `0` in contact with `-1`");
+				if (i > 0 && data->map[i - 1][j] == 4)
+					return_error("Invalid map: `0` in contact with `4` first line");
+				else if (i < data->map_height - 1 && data->map[i + 1][j] == 4)
+					return_error("Invalid map: `0` in contact with `4` last line");
+				else if (j > 0 && data->map[i][j - 1] == 4)
+					return_error("Invalid map: `0` in contact with `4`");
+				else if (j < data->map_width - 1 && data->map[i][j + 1] == 4)
+					return_error("Invalid map: `0` in contact with `4`");
 			}
 		}
 	}
@@ -84,13 +84,13 @@ bool	transform_map(t_data *data)
 	i = -1;
 	while (++i < data->map_height)
 	{
-		data->map[i] = malloc(sizeof(int) * data->map_width);
+		data->map[i] = malloc(sizeof(int) * (data->map_width + 1));
 		j = -1;
 		while (++j < data->map_width)
 		{
 			if (j >= (int)ft_strlen(data->parse->map[i]) || ft_isspace(data->parse->map[i][j]))
 			{
-				data->map[i][j] = -1;
+				data->map[i][j] = 4;
 			}
 			else if (data->parse->map[i][j] == '1')
 				data->map[i][j] = 1;
@@ -108,6 +108,7 @@ bool	transform_map(t_data *data)
 			else if (data->parse->map[i][j] == 'O') // 'O' pour une porte ouverte
 				data->map[i][j] = 0;
 		}
+		data->map[i][j] = -1;
 	}
 	return (true);
 }

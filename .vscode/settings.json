@@ -7,6 +7,7 @@
 		"ranges": "c",
 		"span": "c",
 		"initializer_list": "c",
-		"utility": "c"
+		"utility": "c",
+		"cub3d.h": "c"
 	}
 }
