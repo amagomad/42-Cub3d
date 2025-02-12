@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 01:29:17 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 23:01:23 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ bool	validity_map_wall(t_data *data)
 		j = -1;
 		while (++j < data->map_width)
 		{
-			if (data->map[i][j] == 0)
+			if (data->map[i][j] == 0 || data->map[i][j] == 2)
 			{
 				if (i > 0 && data->map[i - 1][j] == 4)
 					return_error("Invalid map: `0` in contact with `4` first line");

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 22:39:31 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 23:02:00 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@
 # define LIGHT_GREY 0xFFD3D3D3
 # define GREY 0xFFAAABAB
 # define RED 0xFF0000FF
+
+
+#define TILE_EMPTY 0
+#define TILE_WALL 1
+#define TILE_DOOR 2
 
 typedef struct s_parsing
 {

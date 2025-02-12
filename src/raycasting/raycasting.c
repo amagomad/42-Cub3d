@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 22:30:33 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/12 23:05:48 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	calcul_ray_pos(t_ray *ray, t_data *data)
 	ray->camera_x = 2 * ray->x / (double)WIDTH - 1;
 	ray->dir_x = data->player->dir_x + data->player->plane_x * ray->camera_x;
 	ray->dir_y = data->player->dir_y + data->player->plane_y * ray->camera_x;
-	ray->map_x = (int)(data->player->pos_x / T_SIZE);
-	ray->map_y = (int)(data->player->pos_y / T_SIZE);
+	ray->map_x = (int)floor(data->player->pos_x / T_SIZE);
+	ray->map_y = (int)floor(data->player->pos_y / T_SIZE);
 	if (ray->dir_x == 0)
 		ray->delta_dist_x = 1e30;
 	else
@@ -142,13 +142,13 @@ void	print_wall(t_ray *ray)
 	y = ray->draw_start;
 	while (y < ray->draw_end)
 	{
-		tex_pos = (y - (-(ray->line_height) / 2 + HEIGHT / 2 - 100))
-			* ray->texture->height / ray->line_height;
-		tex_y = (int)tex_pos & (ray->texture->height - 1);
+		tex_pos = (y - ((HEIGHT / 2 - 100) - ray->line_height / 2)) * 
+				(ray->texture->height / (float)ray->line_height);
+		tex_y = (int)tex_pos % ray->texture->height;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= (int)ray->texture->height) 
-			tex_y = ray->texture->height - 1;
+			tex_y = ray->texture->height;
 		if (ray->tex_x < 0)
 			ray->tex_x = 0;
 		if (ray->tex_x >= (int)ray->texture->width)
