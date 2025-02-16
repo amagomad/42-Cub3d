@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 23:02:00 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/13 21:09:01 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@
 //# define T_SIZE 64  // Taille d'une case
 # define T_SIZE 30  // Taille d'une case
 
-# define MOVE_SPEED 4.0  // Vitesse de déplacement
-# define WALK_SPEED 2.0
+# define MOVE_SPEED 6.0  // Vitesse de déplacement
+# define WALK_SPEED 4.0
 # define SPRINT_SPEED 4.0
 # define ROTATION_SPEED 0.02 // Vitesse de rotation
-# define MOUSE_SENSITIVITY 0.007
+# define MOUSE_SENSITIVITY 0.02
 
 
 # define PLAYER_RADIUS 5 // Marge pour éviter de coller aux murs
@@ -163,7 +163,7 @@ typedef struct s_data
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
-	mlx_texture_t	*door_texture;
+	mlx_texture_t	**door_texture;
 	uint32_t 		floor_color;
 	uint32_t	 	ceiling_color;
 	mlx_image_t		*img;

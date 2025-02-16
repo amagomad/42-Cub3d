@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 22:34:19 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/16 13:58:03 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,30 @@ bool	load_texture(t_data *data)
 	data->so_texture = mlx_load_png(data->parse->so_texture);
 	data->ea_texture = mlx_load_png(data->parse->ea_texture);
 	data->we_texture = mlx_load_png(data->parse->we_texture);
-	data->door_texture = mlx_load_png("src/img/P.png");
+	data->door_texture = malloc(sizeof(mlx_texture_t *) * 16);
+	data->door_texture[0] = mlx_load_png("src/img/P.png");
+ 	data->door_texture[1] = mlx_load_png("src/img/P1.png");
+	data->door_texture[2] = mlx_load_png("src/img/P2.png");
+	data->door_texture[3] = mlx_load_png("src/img/P3.png");
+	data->door_texture[4] = mlx_load_png("src/img/P4.png");
+	data->door_texture[5] = mlx_load_png("src/img/P5.png");
+	data->door_texture[6] = mlx_load_png("src/img/P6.png");
+	data->door_texture[7] = mlx_load_png("src/img/P7.png");
+	data->door_texture[8] = mlx_load_png("src/img/P8.png");
+	data->door_texture[9] = mlx_load_png("src/img/P9.png");
+	data->door_texture[10] = mlx_load_png("src/img/P10.png");
+	data->door_texture[11] = mlx_load_png("src/img/P11.png");
+	data->door_texture[12] = mlx_load_png("src/img/P12.png");
+	data->door_texture[13] = mlx_load_png("src/img/P13.png");
+	data->door_texture[14] = mlx_load_png("src/img/P14.png");
+	data->door_texture[15] = mlx_load_png("src/img/P15.png"); 
+	
 	if (!data->no_texture || !data->so_texture
-		|| !data->ea_texture || !data->we_texture || !data->door_texture)
+		|| !data->ea_texture || !data->we_texture || !data->door_texture[0]  || !data->door_texture[1]
+		|| !data->door_texture[2] || !data->door_texture[3] || !data->door_texture[4] || !data->door_texture[5]
+		|| !data->door_texture[6] || !data->door_texture[7] || !data->door_texture[8] || !data->door_texture[9]
+		|| !data->door_texture[10] || !data->door_texture[11] || !data->door_texture[12] || !data->door_texture[13]
+		|| !data->door_texture[14] || !data->door_texture[15])
 	{
 		printf("Erreur : Impossible de charger les textures.\n");
 		exit(EXIT_FAILURE);

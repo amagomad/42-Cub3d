@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 22:38:42 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/13 23:11:40 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ uint32_t	get_minimap_color(int tile)
 		return (BLACK);
 	if (tile == 2)
 		return (WHITE);
+	if (tile >= 3)
+		return (LIGHT_GREY);
 	else
 		return (GREY);
 }

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/12 22:23:51 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/16 13:59:29 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,21 @@ void	init_menu(t_data *data)
 	printf("Init menu\n");
 	image_menu[0] = mlx_load_png("src/img/menu_start.png");
 	image_menu[1] = mlx_load_png("src/img/menu_quit.png");
-	image_menu[2] = mlx_load_png("src/img/hud.png");
-	if (!image_menu[0] || !image_menu[1] || !image_menu[2])
+	
+	if (!image_menu[0] || !image_menu[1])
 	{
 		free_data(data);
 		return_error("Can't load menu image");
 	}
 	data->img_menu[0] = mlx_texture_to_image(data->mlx, image_menu[0]);
 	data->img_menu[1] = mlx_texture_to_image(data->mlx, image_menu[1]);
-	data->hud = mlx_texture_to_image(data->mlx, image_menu[2]);
-	if (!data->img_menu[0] || !data->img_menu[1] || !data->hud)
+	if (!data->img_menu[0] || !data->img_menu[1])
 	{
 		free_data(data);
 		return_error("Can't load menu image");
 	}
 	mlx_delete_texture(image_menu[0]);
 	mlx_delete_texture(image_menu[1]);
-	mlx_delete_texture(image_menu[2]);
 }
 
 void	init_data(t_data *data, char **av)
@@ -98,6 +96,7 @@ bool	initialize_game(t_data *data)
 	}
 	mlx_set_setting(MLX_FULLSCREEN, true);
 	mlx_set_setting(MLX_DECORATED, false);
+	
 	if (data->icon)
 		mlx_set_icon(data->mlx, data->icon);
 	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
@@ -128,6 +127,25 @@ void	draw_pause(t_data *data)
 	mlx_put_string(data->mlx, "PAUSE", 940, 400);
 }
 
+void update_doors(t_data *data)
+{
+	int	x;
+	int	y;
+
+	y = -1;
+	while (++y < data->map_height)
+	{
+		x = -1;
+		while (++x < data->map_width)
+		{
+			if (data->map[y][x] > 2 && data->map[y][x] < 17)
+				data->map[y][x]++; // Animation progressive
+			else if (data->map[y][x] == 17)
+				data->map[y][x] = 0;
+		}
+	}
+}
+
 void	render_frame(void *param)
 {
 	t_data	*data;
@@ -136,6 +154,7 @@ void	render_frame(void *param)
 	clear_image(data, 0x00000FF);
 	if (data->state == STATE_GAME)
 	{
+		update_doors(data);
 		//mlx_image_to_window(data->mlx, data->hud, 0, 0);
 		raycasting(data);
 		if (data->img_menu)
