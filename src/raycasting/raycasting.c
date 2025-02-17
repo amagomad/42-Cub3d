@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/16 13:36:28 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/17 02:56:32 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	calcul_wall_distance(t_ray *ray)
 void	calcul_texture(t_ray *ray, t_data *data)
 {
 	if (data->map[ray->map_y][ray->map_x] > 1)
-		ray->texture = data->door_texture[data->map[ray->map_y][ray->map_x] - 2];
+		ray->texture = data->door_texture[0];
 	else if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
@@ -131,40 +131,6 @@ void	calcul_wall_x(t_ray *ray, t_data *data)
 		ray->tex_x = ray->texture->width - ray->tex_x - 1;
 }
 
-void	print_wall(t_ray *ray)
-{
-	int		y;
-	double	tex_pos;
-	int		tex_y;
-	int		pixel_pos;
-	t_color	color;
-
-	y = ray->draw_start;
-	while (y < ray->draw_end)
-	{
-		tex_pos = (y - ((HEIGHT / 2 - 100) - ray->line_height / 2)) * 
-				(ray->texture->height / (float)ray->line_height);
-		tex_y = (int)tex_pos % ray->texture->height;
-		if (tex_y < 0)
-			tex_y = 0;
-		if (tex_y >= (int)ray->texture->height) 
-			tex_y = ray->texture->height;
-		if (ray->tex_x < 0)
-			ray->tex_x = 0;
-		if (ray->tex_x >= (int)ray->texture->width)
-			ray->tex_x = ray->texture->width - 1;
-		pixel_pos = (tex_y * ray->texture->width + ray->tex_x) * 4;
-		color.r = ray->texture->pixels[pixel_pos + 0];
-		color.g = ray->texture->pixels[pixel_pos + 1];
-		color.b = ray->texture->pixels[pixel_pos + 2];
-		color.a = ray->texture->pixels[pixel_pos + 3];
-		color.abgr = (color.a << 24) | (color.b << 16)
-			| (color.g << 8) | color.r;
-		ray->pixel_buffer[y * WIDTH + ray->x] = color.abgr;
-		y++;
-	}
-}
-
 void	raycasting(t_data *data)
 {
 	t_ray	ray;
@@ -181,7 +147,7 @@ void	raycasting(t_data *data)
 		calcul_wall_distance(&ray);
 		calcul_texture(&ray, data);
 		calcul_wall_x(&ray, data);
-		print_wall(&ray);
+		draw_wall(&ray);
 		ray.x++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/08 11:51:13 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/17 02:58:10 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	free_data(t_data *data)
 	free(data);
 }
 
-void clear_image(t_data *data, uint32_t color)
+void	clear_image(t_data *data, uint32_t color)
 {
-	unsigned int x;
-	unsigned int y;
+	unsigned int	x;
+	unsigned int	y;
 
 	y = -1;
 	while (++y < data->img->height)

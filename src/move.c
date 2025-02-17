@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 22:39:28 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/17 01:45:16 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,8 @@ void	move_player(t_data *data, float move_x, float move_y)
 		data->player->pos_x = next_x;
 		data->player->pos_y = next_y;
 	}
+	else if (is_valid_position(data, data->player->pos_x + move_x * data->player->move_speed, data->player->pos_y))
+		data->player->pos_x += move_x * data->player->move_speed;
+	else if (is_valid_position(data, data->player->pos_x, data->player->pos_y + move_y * data->player->move_speed))
+		data->player->pos_y += move_y * data->player->move_speed;
 }
