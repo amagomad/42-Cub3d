@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/17 03:10:21 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:42:38 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ void	rotate_left(t_data *data, double rotation_speed)
 void handle_mouse_move(double xpos, double ypos, void *param)
 {
 	t_data			*data;
-	static double	last_x;
+	static double	last_x = -1;
 
-	last_x = -1;
 	(void)ypos;
 	data = (t_data *)param;
 	if (data->state == STATE_MENU || data->state == STATE_PAUSE)
@@ -177,15 +176,20 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 		data->state = STATE_PAUSE; */
 	menu_key(key, data);
 	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
-		mlx_close_window(data->mlx);
+	{
+		free_all(data);
+		//mlx_close_window(data->mlx);
+		exit(EXIT_SUCCESS);
+	}
 	if (data->state == STATE_PAUSE || data->state == STATE_MENU)
 		return ;
 	if (key.key == MLX_KEY_SPACE && key.action == MLX_PRESS)
 		data->show_minimap = !data->show_minimap;
 	if (key.key == MLX_KEY_ESCAPE && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{
-		mlx_close_window(data->mlx);
-		return ;
+		free_all(data);
+		//mlx_close_window(data->mlx);
+		exit(EXIT_SUCCESS);
 	}
 	if (key.key == MLX_KEY_KP_ADD && (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 	{

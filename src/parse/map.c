@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 23:01:23 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:12:27 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ bool	validity_map_wall(t_data *data)
 			if (data->map[i][j] == 0 || data->map[i][j] == 2)
 			{
 				if (i > 0 && data->map[i - 1][j] == 4)
-					return_error("Invalid map: `0` in contact with `4` first line");
+					return_error("Invalid map: `0` in contact with `4` first line", data);
 				else if (i < data->map_height - 1 && data->map[i + 1][j] == 4)
-					return_error("Invalid map: `0` in contact with `4` last line");
+					return_error("Invalid map: `0` in contact with `4` last line", data);
 				else if (j > 0 && data->map[i][j - 1] == 4)
-					return_error("Invalid map: `0` in contact with `4`");
+					return_error("Invalid map: `0` in contact with `4`", data);
 				else if (j < data->map_width - 1 && data->map[i][j + 1] == 4)
-					return_error("Invalid map: `0` in contact with `4`");
+					return_error("Invalid map: `0` in contact with `4`", data);
 			}
 		}
 	}
@@ -113,7 +113,7 @@ bool	transform_map(t_data *data)
 	return (true);
 }
 
-bool	validity_map(char **map)
+bool	validity_map(t_data *data)
 {
 	size_t	i;
 	size_t	j;
@@ -121,24 +121,24 @@ bool	validity_map(char **map)
 
 	i = -1;
 	start = 0;
-	while (map[++i])
+	while (data->parse->map[++i])
 	{
-		if (map[i][0] == '\0')
-			return_error("Invalid map : empty line");
+		if (data->parse->map[i][0] == '\0')
+			return_error("Invalid map : empty line", data);
 		j = -1;
-		while (map[i][++j] && map[i][j] != '\n')
+		while (data->parse->map[i][++j] && data->parse->map[i][j] != '\n')
 		{
-			while (ft_isspace(map[i][j]))
+			while (ft_isspace(data->parse->map[i][j]))
 				j++;
-			if (ft_strrchr("NSEW", map[i][j]))
+			if (ft_strrchr("NSEW", data->parse->map[i][j]))
 				start++;
-			else if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'D')
-				return_error("Invalid map : invalid character");
+			else if (data->parse->map[i][j] != '1' && data->parse->map[i][j] != '0' && data->parse->map[i][j] != 'D')
+				return_error("Invalid map : invalid character", data);
 		}
 	}
 	if (start == 0)
-		return_error("Invalid map : no player");
+		return_error("Invalid map : no player", data);
 	else if (start > 1)
-		return_error("Invalid map : too many players");
+		return_error("Invalid map : too many players", data);
 	return (true);
 }

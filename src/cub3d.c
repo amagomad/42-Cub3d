@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/16 13:59:29 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:47:45 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	init_menu(t_data *data)
 	if (!image_menu[0] || !image_menu[1])
 	{
 		free_data(data);
-		return_error("Can't load menu image");
+		return_error("Can't load menu image", data);
 	}
 	data->img_menu[0] = mlx_texture_to_image(data->mlx, image_menu[0]);
 	data->img_menu[1] = mlx_texture_to_image(data->mlx, image_menu[1]);
 	if (!data->img_menu[0] || !data->img_menu[1])
 	{
 		free_data(data);
-		return_error("Can't load menu image");
+		return_error("Can't load menu image", data);
 	}
 	mlx_delete_texture(image_menu[0]);
 	mlx_delete_texture(image_menu[1]);
@@ -44,7 +44,7 @@ void	init_data(t_data *data, char **av)
 	if (!data->parse || !data->player)
 	{
 		free_data(data);
-		return_error("Malloc error");
+		return_error("Malloc error", data);
 	}
 	data->mlx = NULL;
 	data->no_texture = NULL;
@@ -68,8 +68,8 @@ void	init_data(t_data *data, char **av)
 	data->mouse_shown = false;
 	if (!parsing(av[1], data))
 	{
-		free_data(data);
-		return_error("Parsing error");
+		free_all(data);
+		return_error("Parsing error", data);
 	}
 }
 
@@ -78,20 +78,20 @@ bool	initialize_game(t_data *data)
 	data->mlx = mlx_init(WIDTH, HEIGHT, "cub3d", true);
 	if (!data->mlx)
 	{
-		return_error((char *)mlx_strerror(mlx_errno));
+		return_error((char *)mlx_strerror(mlx_errno), data);
 		return (false);
 	}
 	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	if (!data->img)
 	{
 		mlx_close_window(data->mlx);
-		return_error((char *)mlx_strerror(mlx_errno));
+		return_error((char *)mlx_strerror(mlx_errno), data);
 		return (false);
 	}
 	if (mlx_image_to_window(data->mlx, data->img, 0, 0) == -1)
 	{
 		mlx_close_window(data->mlx);
-		return_error((char *)mlx_strerror(mlx_errno));
+		return_error((char *)mlx_strerror(mlx_errno), data);
 		return (false);
 	}
 	mlx_set_setting(MLX_FULLSCREEN, true);
@@ -172,32 +172,61 @@ void	render_frame(void *param)
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }
 
+void	free_map(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->map_height)
+	{
+		free(data->map[i]);
+	}
+	free(data->map);
+}
+
 void free_all(t_data *data)
 {
-	free(data->parse->map);
-	free(data->parse->description);
-	free(data->parse);
+//	free(data->parse->map);
 	free(data->player);
-	/* if (data->img_menu)
+	free_map(data);
+	ft_free_str_tab(data->parse->map);
+	ft_free_str_tab(data->parse->description);
+	if (data->img)
+		mlx_delete_image(data->mlx, data->img);
+	if (data->img_menu)
 	{
 		mlx_delete_image(data->mlx, data->img_menu[0]);
 		mlx_delete_image(data->mlx, data->img_menu[1]);
-	} */
-	/* if (data->hud)
-		mlx_delete_image(data->mlx, data->hud);
-	if (data->mlx)
-		mlx_close_window(data->mlx);
-	if (data->icon)
-		mlx_delete_texture(data->icon);if (data->hud)
-		mlx_delete_image(data->mlx, data->hud);
-	if (data->mlx)
-		mlx_close_window(data->mlx);
-	if (data->icon)
-		mlx_delete_texture(data->icon);
+	}
+	if (data->no_texture)
+		mlx_delete_texture(data->no_texture);
+	if (data->so_texture)
+		mlx_delete_texture(data->so_texture);
+	if (data->we_texture)
 		mlx_delete_texture(data->we_texture);
 	if (data->ea_texture)
-		mlx_delete_texture(data->ea_texture); */
+		mlx_delete_texture(data->ea_texture);
+	if (data->icon)
+		mlx_delete_texture(data->icon);
+	if (data->door_texture)
+		mlx_delete_texture(data->door_texture);
+	if (data->mlx)
+		mlx_close_window(data->mlx);
+	free(data->img_menu);
+	free(data->parse->no_texture);
+	free(data->parse->so_texture);
+	free(data->parse->we_texture);
+	free(data->parse->ea_texture);
+	free(data->parse->ceiling_color);
+	free(data->parse->floor_color);
+	free(data->parse);
+	
+	mlx_close_window(data->mlx);
+	mlx_terminate(data->mlx);
+	
+//	free(data->mlx);
 	free(data);
+	exit(EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av)
@@ -206,20 +235,20 @@ int	main(int ac, char **av)
 	mlx_texture_t	*icon;
 
 	if (ac != 2)
-		return_error("Invalid number of arguments");
+		return_error("Invalid number of arguments", NULL);
 	data = malloc(sizeof(t_data));
 	if (!data)
-		return_error("Malloc error");
+		return_error("Malloc error", data);
 	init_data(data, av);
 	icon = mlx_load_png("src/img/icon.png");
 	if (!icon)
-		return_error("Can't load icon");
+		return_error("Can't load icon", data);
 	if (!initialize_game(data))
-		return_error("Can't initialize game");
+		return_error("Can't initialize game", data);
 	printf("Start game\n");
 	mlx_key_hook(data->mlx, handle_keypress, data);
-	mlx_loop_hook(data->mlx, (void (*)(void *))render_frame, data);
 	mlx_cursor_hook(data->mlx, handle_mouse_move, data);
+	mlx_loop_hook(data->mlx, (void (*)(void *))render_frame, data);
 	mlx_loop(data->mlx);
 	free_all(data);
 }

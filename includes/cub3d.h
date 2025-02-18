@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/17 02:56:42 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:15:05 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ typedef struct s_data
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
-	mlx_texture_t	**door_texture;
+	mlx_texture_t	*door_texture;
 	uint32_t 		floor_color;
 	uint32_t	 	ceiling_color;
 	mlx_image_t		*img;
@@ -197,9 +197,9 @@ typedef struct  s_minimap
 bool	parsing(char *file, t_data *data);
 bool	stock_map(t_data *data);
 bool	stock_description(t_parsing *parse);
-void	return_error(char *str);
+void	return_error(char *str, t_data *data);
 bool	validity_description(t_parsing *parse);
-bool	validity_map(char **map);
+bool	validity_map(t_data *data);
 bool	open_file(char *file, t_parsing *parse);
 bool	file_validity(char *file);
 bool	valid_color(t_parsing *parsing, t_data *data);
@@ -231,5 +231,8 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color);
 void	raycasting(t_data *data);
 void	draw_rect(t_data *data, int x, int y, uint32_t color);
 void	draw_wall(t_ray *ray);
+
+void free_all(t_data *data);
+void	ft_free_str_tab(char **tab_str);
 
 #endif

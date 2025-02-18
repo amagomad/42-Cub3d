@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/12 22:35:23 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:10:54 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ bool	valid_color(t_parsing *parsing, t_data *data)
 	if (parsing->floor_color == NULL || parsing->ceiling_color == NULL)
 		return (false);
 	if (!validate_color(parsing->floor_color, &data->floor_color))
-		return_error("Invalid floor color format (must be F R,G,B with values between 0 and 255)");
+		return_error("Invalid floor color format (must be F R,G,B with values between 0 and 255)", data);
 	if (!validate_color(parsing->ceiling_color, &data->ceiling_color))
-		return_error("Invalid ceiling color format (must be C R,G,B with values between 0 and 255)");
+		return_error("Invalid ceiling color format (must be C R,G,B with values between 0 and 255)", data);
 	return (true);
 }

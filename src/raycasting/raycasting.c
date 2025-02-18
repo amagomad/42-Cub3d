@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/17 02:56:32 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:06:49 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	calcul_wall_distance(t_ray *ray)
 void	calcul_texture(t_ray *ray, t_data *data)
 {
 	if (data->map[ray->map_y][ray->map_x] > 1)
-		ray->texture = data->door_texture[0];
+		ray->texture = data->door_texture;
 	else if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)

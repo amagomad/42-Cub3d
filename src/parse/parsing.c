@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:30:06 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/16 13:58:03 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/18 21:24:30 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ bool	stock_description(t_parsing *parse)
 			return (false);
 		}
 	}
+	if (line)
+		free(line);
 	return (true);
 }
 
@@ -69,30 +71,10 @@ bool	load_texture(t_data *data)
 	data->so_texture = mlx_load_png(data->parse->so_texture);
 	data->ea_texture = mlx_load_png(data->parse->ea_texture);
 	data->we_texture = mlx_load_png(data->parse->we_texture);
-	data->door_texture = malloc(sizeof(mlx_texture_t *) * 16);
-	data->door_texture[0] = mlx_load_png("src/img/P.png");
- 	data->door_texture[1] = mlx_load_png("src/img/P1.png");
-	data->door_texture[2] = mlx_load_png("src/img/P2.png");
-	data->door_texture[3] = mlx_load_png("src/img/P3.png");
-	data->door_texture[4] = mlx_load_png("src/img/P4.png");
-	data->door_texture[5] = mlx_load_png("src/img/P5.png");
-	data->door_texture[6] = mlx_load_png("src/img/P6.png");
-	data->door_texture[7] = mlx_load_png("src/img/P7.png");
-	data->door_texture[8] = mlx_load_png("src/img/P8.png");
-	data->door_texture[9] = mlx_load_png("src/img/P9.png");
-	data->door_texture[10] = mlx_load_png("src/img/P10.png");
-	data->door_texture[11] = mlx_load_png("src/img/P11.png");
-	data->door_texture[12] = mlx_load_png("src/img/P12.png");
-	data->door_texture[13] = mlx_load_png("src/img/P13.png");
-	data->door_texture[14] = mlx_load_png("src/img/P14.png");
-	data->door_texture[15] = mlx_load_png("src/img/P15.png"); 
+	data->door_texture = mlx_load_png("src/img/P.png");
 	
 	if (!data->no_texture || !data->so_texture
-		|| !data->ea_texture || !data->we_texture || !data->door_texture[0]  || !data->door_texture[1]
-		|| !data->door_texture[2] || !data->door_texture[3] || !data->door_texture[4] || !data->door_texture[5]
-		|| !data->door_texture[6] || !data->door_texture[7] || !data->door_texture[8] || !data->door_texture[9]
-		|| !data->door_texture[10] || !data->door_texture[11] || !data->door_texture[12] || !data->door_texture[13]
-		|| !data->door_texture[14] || !data->door_texture[15])
+		|| !data->ea_texture || !data->we_texture || !data->door_texture)
 	{
 		printf("Erreur : Impossible de charger les textures.\n");
 		exit(EXIT_FAILURE);
@@ -176,27 +158,27 @@ void	set_player_starting_direction(t_data *data)
 bool	parsing(char *file, t_data *data)
 {
 	if (!file_validity(file))
-		return_error("Invalid file extension");
+		return_error("Invalid file extension", data);
 	if (!open_file(file, data->parse))
-		return_error("Can't open file");
+		return_error("Can't open file", data);
 	if (!stock_description(data->parse))
-		return_error("Failed to stock description due to invalid format.");
+		return_error("Failed to stock description due to invalid format.", data);
 	if (!validity_description(data->parse))
-		return_error("Invalid description");
+		return_error("Invalid description", data);
 	if (!load_texture(data))
-		exit(1);
+		return_error("Can't load texture", data);
 	if (!valid_color(data->parse, data))
-		return_error("Invalid color");
+		return_error("Invalid color", data);
 	printf("Floor color: 0x%08X\n", data->floor_color);
 	printf("Ceiling color: 0x%08X\n", data->ceiling_color);
 	if (!stock_map(data))
-		return_error("No map");
-	if (!validity_map(data->parse->map))
-		return_error("Invalid map");
+		return_error("No map", data);
+	if (!validity_map(data))
+		return_error("Invalid map", data);
 	if (!transform_map(data))
-		return_error("Invalid map");
+		return_error("Invalid map", data);
 	if (!validity_map_wall(data))
-		return_error("Invalid map");
+		return_error("Invalid map", data);
 	set_player_starting_direction(data);
 	return (true);
 }
