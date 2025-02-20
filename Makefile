@@ -1,6 +1,6 @@
 NAME            := cub3d
 CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g #-fsanitize=address
+CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -O3 -mtune=native -ffast-math #-fsanitize=address
 
 
 # OS detection
