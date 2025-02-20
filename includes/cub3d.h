@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/18 21:15:05 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/20 17:07:30 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define WALK_SPEED 1.0
 # define SPRINT_SPEED 4.0
 # define ROTATION_SPEED 0.008 // Vitesse de rotation
-# define MOUSE_SENSITIVITY 0.006
+# define MOUSE_SENSITIVITY 0.004
 
 
 # define PLAYER_RADIUS 5 // Marge pour éviter de coller aux murs
@@ -155,7 +155,7 @@ typedef struct s_ray
 
 typedef struct s_data
 {
-	t_player		 *player;
+	t_player		*player;
 	t_parsing		*parse;
 	mlx_t			*mlx;
 	mlx_texture_t	*icon;
@@ -232,7 +232,7 @@ void	raycasting(t_data *data);
 void	draw_rect(t_data *data, int x, int y, uint32_t color);
 void	draw_wall(t_ray *ray);
 
-void free_all(t_data *data);
+void	free_all(t_data *data);
 void	ft_free_str_tab(char **tab_str);
 
 #endif

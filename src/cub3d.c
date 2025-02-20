@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/18 21:47:45 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/20 17:06:16 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,10 @@ int	main(int ac, char **av)
 	mlx_texture_t	*icon;
 
 	if (ac != 2)
-		return_error("Invalid number of arguments", NULL);
+	{
+		printf("Invalid number of arguments\n");
+		return (0);
+	}
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return_error("Malloc error", data);
