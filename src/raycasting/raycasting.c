@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/18 21:06:49 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 17:48:12 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,43 +94,6 @@ void	calcul_wall_distance(t_ray *ray)
 		ray->draw_end = HEIGHT - 1;
 }
 
-void	calcul_texture(t_ray *ray, t_data *data)
-{
-	if (data->map[ray->map_y][ray->map_x] > 1)
-		ray->texture = data->door_texture;
-	else if (ray->side == 0)
-	{
-		if (ray->dir_x > 0)
-			ray->texture = data->ea_texture;
-		else
-			ray->texture = data->we_texture;
-	}
-	else
-	{
-		if (ray->dir_y > 0)
-			ray->texture = data->so_texture;
-		else
-			ray->texture = data->no_texture;
-	}
-}
-
-void	calcul_wall_x(t_ray *ray, t_data *data)
-{
-	float	wall_x;
-
-	if (ray->side == 0)
-		wall_x = data->player->pos_y / T_SIZE + ray->perp_wall_dist
-			* ray->dir_y;
-	else
-		wall_x = data->player->pos_x / T_SIZE + ray->perp_wall_dist
-			* ray->dir_x;
-	wall_x -= floor(wall_x);
-	ray->tex_x = (int)(wall_x * (double)ray->texture->width);
-	if ((ray->side == 0 && ray->dir_x > 0)
-		|| (ray->side == 1 && ray->dir_y < 0))
-		ray->tex_x = ray->texture->width - ray->tex_x - 1;
-}
-
 void	raycasting(t_data *data)
 {
 	t_ray	ray;
@@ -151,32 +114,3 @@ void	raycasting(t_data *data)
 		ray.x++;
 	}
 }
-
-//For flat_color
-/*int y = draw_start;
-// Inside your raycasting loop, replace the color part with:
-	uint32_t color;
-if (data->map[ray.map_y][ray.map_x] == 2)
-	color = YELLOWY;  // Yellow
-else if (side == 0)  // East-West walls (vertical walls)
-{
-	if (ray.dir_x > 0)  // East facing
-		color = REDY;  // Red
-	else                // West facing
-		color = GREENY;  // Green
-}
-else  // North-South walls (horizontal walls)
-{
-	if (ray.dir_y > 0)  // North facing
-		color = PINKY;  // Yellow
-	else                // South facing
-		color = BLUEY;  // Blue
-}
-
-// Then use this color in your drawing loop:
-while (y <= draw_end)
-{
-	my_put_pixel(data, ray.x, y, color);
-	y++;
-}
-ray.x++; */

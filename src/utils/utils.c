@@ -5,36 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/17 02:58:10 by cgorin           ###   ########.fr       */
+/*   Created: 2025/01/18 18:50:21 by cgorin            #+#    #+#             */
+/*   Updated: 2025/02/22 21:07:47 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
-void	free_data(t_data *data)
+void	return_error(char *str, t_data *data)
 {
-	if (data->parse)
-	{
-		free(data->parse->map);
-		free(data->parse->description);
-		free(data->parse);
-	}
-	if (data->player)
-		free(data->player);
-	free(data);
+	ft_fprintf(2, "Error: %s\n", str);
+	free_parsing(data);
+	free_all(data);
+	exit(EXIT_FAILURE);
 }
 
-void	clear_image(t_data *data, uint32_t color)
+void	ft_free_str_tab(char **tab_str)
 {
-	unsigned int	x;
-	unsigned int	y;
+	int	i;
 
-	y = -1;
-	while (++y < data->img->height)
-	{
-		x = -1;
-		while (++x < data->img->width)
-			my_put_pixel(data, x, y, color);
-	}
+	i = -1;
+	while (tab_str[++i])
+		free(tab_str[i]);
+	free(tab_str);
 }

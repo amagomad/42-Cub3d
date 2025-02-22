@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   doors.c                                            :+:      :+:    :+:   */
+/*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/16 23:37:22 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 19:48:08 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-static void manage_door_state(t_data *data, int x, int y)
+void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 {
-	if (data->map[y][x] == 2) 
-		data->map[y][x] = 0; // Porte totalement ouverte
-	else if (data->map[y][x] == 0 && data->parse->map[y][x] == 'D')
-		data->map[y][x] = 2;
+	uint32_t	*pixels;
+
+	if (data->img == NULL || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+		return ;
+	if (data->img->pixels == NULL)
+		return ;
+	pixels = (uint32_t *)data->img->pixels;
+	pixels[y * data->img->width + x] = color;
 }
 
-void manage_door(t_data *data)
+mlx_image_t	*mlx_load_image(t_data *data, char *path)
 {
-	int	px;
-	int	py;
+	mlx_image_t		*image;
+	mlx_texture_t	*texture;
 
-	px = (int)(data->player->pos_x / T_SIZE);
-	py = (int)(data->player->pos_y / T_SIZE);
-	manage_door_state(data, px + 1, py);
-	manage_door_state(data, px - 1, py);
-	manage_door_state(data, px, py + 1);
-	manage_door_state(data, px, py - 1);
+	texture = mlx_load_png(path);
+	if (!texture)
+		return (NULL);
+	image = mlx_texture_to_image(data->mlx, texture);
+	mlx_delete_texture(texture);
+	if (!image)
+		return (NULL);
+	return (image);
 }

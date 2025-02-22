@@ -1,7 +1,6 @@
 NAME            := cub3d
 CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -O3 -mtune=native -ffast-math #-fsanitize=address
-
+CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -O3 -mtune=native -ffast-math -fsanitize=address
 
 # OS detection
 UNAME_S         := $(shell uname -s)
@@ -11,7 +10,7 @@ else ifeq ($(UNAME_S), Darwin)
     MLX_FLAGS  := -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
 
-MLX42_PATH = MLX42
+MLX42_PATH = .MLX42
 
 DIR_LIBFT       := libft
 LIBFT_LIB       := $(DIR_LIBFT)/libft.a
@@ -20,18 +19,25 @@ DIR_OBJS        := .objs
 DIR_INCS        := includes
 
 LST_SRCS        := cub3d.c \
-					move.c \
-					display_minimap.c \
-					utils.c \
-					doors.c \
-					handle_keypress.c \
-					parse/utils.c \
+					init_game/init_game.c \
 					parse/parsing.c \
 					parse/check.c \
 					parse/map.c \
+					parse/texture.c \
+					parse/color.c \
+					parse/description.c \
+					parse/player.c \
+					menu/menu.c \
+					minimap/minimap.c \
+					minimap/draw_player.c \
+					doors/doors.c \
+					keypress/move.c \
+					keypress/handle_keypress.c \
 					raycasting/raycasting.c \
 					raycasting/draw.c \
-					#raycasting/utils.c
+					utils/free.c \
+					utils/utils.c \
+					utils/mlx_utils.c
 
 LST_OBJS        := $(LST_SRCS:.c=.o)
 

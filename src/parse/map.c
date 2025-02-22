@@ -6,20 +6,18 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/18 21:12:27 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 16:07:53 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-bool	stock_map(t_data *data)
+void	stock_map(t_data *data)
 {
 	char	*line;
-	int		max_width;
-	int		height;
 
-	height = 0;
-	max_width = 0;
+	data->map_width = 0;
+	data->map_height = 0;
 	line = ft_strdup("");
 	while (line)
 	{
@@ -31,21 +29,18 @@ bool	stock_map(t_data *data)
 			continue ;
 		if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		if (max_width < (int)ft_strlen(line))
-			max_width = ft_strlen(line);
+		if (data->map_width < (int)ft_strlen(line))
+			data->map_width = ft_strlen(line);
 		data->parse->map = ft_add_str_tab(data->parse->map, line);
 		if (!data->parse->map)
-			return (false);
-		height++;
+			return_error("Invalid map : malloc error", data);
+		data->map_height++;
 	}
 	if (data->parse->map == NULL)
-		return (false);
-	data->map_width = max_width;
-	data->map_height = height;
-	return (true);
+		return_error("Invalid map : no map", data);
 }
 
-bool	validity_map_wall(t_data *data)
+void	validity_map_wall(t_data *data)
 {
 	int	i;
 	int	j;
@@ -58,62 +53,59 @@ bool	validity_map_wall(t_data *data)
 		{
 			if (data->map[i][j] == 0 || data->map[i][j] == 2)
 			{
-				if (i > 0 && data->map[i - 1][j] == 4)
-					return_error("Invalid map: `0` in contact with `4` first line", data);
-				else if (i < data->map_height - 1 && data->map[i + 1][j] == 4)
-					return_error("Invalid map: `0` in contact with `4` last line", data);
-				else if (j > 0 && data->map[i][j - 1] == 4)
-					return_error("Invalid map: `0` in contact with `4`", data);
-				else if (j < data->map_width - 1 && data->map[i][j + 1] == 4)
-					return_error("Invalid map: `0` in contact with `4`", data);
+				if ((i > 0 && data->map[i - 1][j] == 4)
+					|| (i < data->map_height - 1 && data->map[i + 1][j] == 4)
+					|| (j > 0 && data->map[i][j - 1] == 4)
+					|| (j < data->map_width - 1 && data->map[i][j + 1] == 4))
+					return_error("Invalid map: not surrounded by wall", data);
 			}
+			if (data->map[i][j] == -2)
+				return_error("Invalid map: invalid character", data);
 		}
 	}
-	printf("Map is valid\n");
-	return (true);
 }
 
-bool	transform_map(t_data *data)
+int	type_map(int i, int j, t_data *data)
+{
+	if (j >= (int)ft_strlen(data->parse->map[i])
+		|| ft_isspace(data->parse->map[i][j]))
+		return (4);
+	else if (data->parse->map[i][j] == '1')
+		return (1);
+	else if (data->parse->map[i][j] == '0')
+		return (0);
+	else if (ft_strchr("NSWE", data->parse->map[i][j]))
+	{
+		data->player_x = j;
+		data->player_y = i;
+		data->player_dir = data->parse->map[i][j];
+		return (0);
+	}
+	else if (data->parse->map[i][j] == 'D')
+		return (2);
+	return (-2);
+}
+
+void	transform_map(t_data *data)
 {
 	int	i;
 	int	j;
 
 	data->map = malloc(sizeof(int *) * data->map_height);
 	if (!data->map)
-		return (false);
+		return_error("Invalid map : malloc error", data);
 	i = -1;
 	while (++i < data->map_height)
 	{
 		data->map[i] = malloc(sizeof(int) * (data->map_width + 1));
 		j = -1;
 		while (++j < data->map_width)
-		{
-			if (j >= (int)ft_strlen(data->parse->map[i]) || ft_isspace(data->parse->map[i][j]))
-			{
-				data->map[i][j] = 4;
-			}
-			else if (data->parse->map[i][j] == '1')
-				data->map[i][j] = 1;
-			else if (data->parse->map[i][j] == '0')
-				data->map[i][j] = 0;
-			else if (ft_strchr("NSWE", data->parse->map[i][j]))
-			{
-				data->map[i][j] = 0;
-				data->player_x = j;
-				data->player_y = i;
-				data->player_dir = data->parse->map[i][j];
-			}
-			else if (data->parse->map[i][j] == 'D') // 'D' pour les portes
-				data->map[i][j] = 2;
-			else if (data->parse->map[i][j] == 'O') // 'O' pour une porte ouverte
-				data->map[i][j] = 0;
-		}
+			data->map[i][j] = type_map(i, j, data);
 		data->map[i][j] = -1;
 	}
-	return (true);
 }
 
-bool	validity_map(t_data *data)
+void	validity_map(t_data *data)
 {
 	size_t	i;
 	size_t	j;
@@ -132,13 +124,10 @@ bool	validity_map(t_data *data)
 				j++;
 			if (ft_strrchr("NSEW", data->parse->map[i][j]))
 				start++;
-			else if (data->parse->map[i][j] != '1' && data->parse->map[i][j] != '0' && data->parse->map[i][j] != 'D')
-				return_error("Invalid map : invalid character", data);
 		}
 	}
 	if (start == 0)
 		return_error("Invalid map : no player", data);
 	else if (start > 1)
 		return_error("Invalid map : too many players", data);
-	return (true);
 }

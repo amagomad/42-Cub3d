@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 19:13:16 by cgorin            #+#    #+#             */
-/*   Updated: 2025/01/01 18:29:07 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 21:14:42 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,3 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 		}
 	}
 }
-
-/* Paramètres
-s: La chaîne de caractères sur laquelle itérer.
-f: La fonction à appliquer à chaque caractère.
-Fonctions ex- ternes autorisées
-Aucune
-Description
-Applique la fonction ’f’ à chaque caractère de la
-chaîne de caractères transmise comme argument,
-et en passant son index comme premier argument.
-Chaque caractère est transmis par adresse à ’f’
-afin d’être modifié si nécessaire. */
