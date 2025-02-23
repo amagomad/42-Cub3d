@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -94,6 +94,12 @@ typedef struct s_player
 	float	plane_y;
 }	t_player;
 
+typedef enum e_state
+{
+	STATE_MENU,
+	STATE_GAME
+}	t_state;
+
 typedef struct s_color
 {
 	uint8_t		r;
@@ -133,21 +139,47 @@ typedef struct s_data
 	t_player		*player;
 	t_parsing		*parse;
 	mlx_t			*mlx;
+	mlx_texture_t	*icon;
 	mlx_texture_t	*no_texture;
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
+	mlx_texture_t	*door_texture;
 	uint32_t		floor_color;
 	uint32_t		ceiling_color;
 	mlx_image_t		*img;
 	int				**map;
 	int				map_width;
 	int				map_height;
+	bool			show_minimap;
+	int				minimap_t_size;
 	char			player_dir;
 	int				player_x;
 	int				player_y;
+	t_state			state;
+	int				selected_option;
+	mlx_image_t		*img_menu[2];
+	bool			mouse_shown;
 	bool			keys[MLX_TOTAL_KEYS];
 }	t_data;
+
+typedef struct s_minimap
+{
+	int			map_width_px;
+	int			map_height_px;
+	int			x;
+	int			y;
+	int			player_x;
+	int			player_y;
+	int			end_x;
+	int			end_y;
+	int			dx;
+	int			dy;
+	int			sx;
+	int			sy;
+	int			e2;
+	int			err;
+}	t_minimap;
 
 // ================== PARSING ==================
 bool		parsing(char *file, t_data *data);
@@ -167,9 +199,17 @@ void		load_texture(t_data *data);
 
 // ================== MOUVEMENT ==================
 void		handle_keypress(mlx_key_data_t keydata, void *param);
+void		handle_keyrelease(mlx_key_data_t keydata, void *param);
+void		handle_mouse_move(double xpos, double ypos, void *param);
 void		move_player(t_data *data, float move_x, float move_y);
 
+// ================== MINIMAP & AFFICHAGE ==================
+void		draw_player(t_data *data, t_minimap minimap);
+void		draw_minimap(t_data *data);
+void		draw_line(t_data *data, t_minimap minimap, uint32_t color);
+
 // ================== UTILS ==================
+void		manage_door(t_data *data);
 void		free_data(t_data *data);
 void		render_frame(void *param);
 void		my_put_pixel(t_data *data, int x, int y, uint32_t color);
@@ -185,9 +225,15 @@ void		calcul_wall_x(t_ray *ray, t_data *data);
 void		free_all(t_data *data);
 void		ft_free_str_tab(char **tab_str);
 
+void		init_menu(t_data *data);
+void		draw_menu(t_data *data);
+
 void		process_keys(t_data *data);
+void		menu_key(t_data *data);
+void		change_minimap_size(t_data *data, int size);
 void		rotate_right(t_data *data, double rotation_speed);
 void		rotate_left(t_data *data, double rotation_speed);
+void		movement_key(t_data *data);
 void		init(t_data *data, char **av);
 
 void		free_parsing(t_data *data);

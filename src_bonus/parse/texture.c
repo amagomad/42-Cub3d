@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 void	delete_texture(mlx_texture_t **texture)
 {
@@ -24,11 +24,15 @@ void	delete_texture(mlx_texture_t **texture)
 
 void	load_texture(t_data *data)
 {
+	data->icon = mlx_load_png("src_bonus/img/icon.png");
+	if (!data->icon)
+		return_error("Error: Can't load icon", data, true);
 	data->no_texture = mlx_load_png(data->parse->no_texture);
 	data->so_texture = mlx_load_png(data->parse->so_texture);
 	data->ea_texture = mlx_load_png(data->parse->ea_texture);
 	data->we_texture = mlx_load_png(data->parse->we_texture);
+	data->door_texture = mlx_load_png("src_bonus/img/P.png");
 	if (!data->no_texture || !data->so_texture
-		|| !data->ea_texture || !data->we_texture)
+		|| !data->ea_texture || !data->we_texture || !data->door_texture)
 		return_error("Error: Can't load textures", data, true);
 }

@@ -39,6 +39,10 @@ void	free_map(t_data *data)
 
 void	free_texture(t_data *data)
 {
+	if (data->img_menu[0])
+		mlx_delete_image(data->mlx, data->img_menu[0]);
+	if (data->img_menu[1])
+		mlx_delete_image(data->mlx, data->img_menu[1]);
 	if (data->no_texture)
 		mlx_delete_texture(data->no_texture);
 	if (data->so_texture)
@@ -47,6 +51,12 @@ void	free_texture(t_data *data)
 		mlx_delete_texture(data->we_texture);
 	if (data->ea_texture)
 		mlx_delete_texture(data->ea_texture);
+	if (data->icon)
+		mlx_delete_texture(data->icon);
+	if (data->door_texture)
+		mlx_delete_texture(data->door_texture);
+	if (data->img)
+		mlx_delete_image(data->mlx, data->img);
 }
 
 void	free_parsing(t_data *data)
@@ -81,10 +91,6 @@ void	free_all(t_data *data)
 		ft_free_str_tab(data->parse->map);
 	if (data->parse)
 		free(data->parse);
-	if (data->mlx)
-		mlx_close_window(data->mlx);
-	if (data->img)
-		mlx_delete_image(data->mlx, data->img);
 	if (data->mlx)
 	{
 		mlx_close_window(data->mlx);

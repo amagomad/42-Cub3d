@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void	to_zero(t_data *data)
 {
@@ -23,16 +23,14 @@ void	to_zero(t_data *data)
 
 void	init_data(t_data *data, char **av)
 {
-	data->parse = malloc(sizeof(t_parsing));
-	data->player = malloc(sizeof(t_player));
-	if (!data->parse || !data->player)
-		return_error("Malloc error", data, true);
-	data->mlx = NULL;
 	data->no_texture = NULL;
 	data->so_texture = NULL;
 	data->we_texture = NULL;
 	data->ea_texture = NULL;
-	data->img = NULL;
+	data->img_menu[0] = NULL;
+	data->img_menu[1] = NULL;
+	data->door_texture = NULL;
+	data->minimap_t_size = T_SIZE / 4;
 	data->map = NULL;
 	data->parse->map = NULL;
 	data->parse->line = NULL;
@@ -44,6 +42,7 @@ void	init_data(t_data *data, char **av)
 	data->parse->we_texture = NULL;
 	data->parse->ea_texture = NULL;
 	data->player->move_speed = WALK_SPEED;
+	data->mouse_shown = false;
 	to_zero(data);
 	if (!parsing(av[1], data))
 		return_error("Parsing error", data, true);
@@ -53,28 +52,33 @@ bool	initialize_game(t_data *data)
 {
 	data->mlx = mlx_init(WIDTH, HEIGHT, "CUB3D", true);
 	if (!data->mlx)
-	{
 		return_error((char *)mlx_strerror(mlx_errno), data, false);
-		return (false);
-	}
+	init_menu(data);
 	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	if (!data->img)
 	{
 		mlx_close_window(data->mlx);
 		return_error((char *)mlx_strerror(mlx_errno), data, false);
-		return (false);
 	}
 	if (mlx_image_to_window(data->mlx, data->img, 0, 0) == -1)
 	{
 		mlx_close_window(data->mlx);
 		return_error((char *)mlx_strerror(mlx_errno), data, false);
-		return (false);
 	}
+	if (data->icon)
+		mlx_set_icon(data->mlx, data->icon);
 	return (true);
 }
 
 void	init(t_data *data, char **av)
 {
+	data->parse = malloc(sizeof(t_parsing));
+	data->player = malloc(sizeof(t_player));
+	if (!data->parse || !data->player)
+		return_error("Malloc error", data, true);
+	data->mlx = NULL;
+	data->img = NULL;
+	data->icon = NULL;
 	init_data(data, av);
 	if (!initialize_game(data))
 		return_error("Can't initialize game", data, false);

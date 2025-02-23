@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void	rotate_right(t_data *data, double rotation_speed)
 {
@@ -100,4 +100,8 @@ void	movement_key(t_data *data)
 		rotate_left(data, ROTATION_SPEED);
 	if (data->keys[MLX_KEY_RIGHT])
 		rotate_right(data, ROTATION_SPEED);
+	if (data->keys[MLX_KEY_LEFT_SHIFT])
+		data->player->move_speed = SPRINT_SPEED;
+	else
+		data->player->move_speed = WALK_SPEED;
 }

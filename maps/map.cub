@@ -1,7 +1,7 @@
-NO ./src/img/icon.png
-SO ./src/img/icon.png
-WE ./src/img/icon.png
-EA ./src/img/icon.png
+NO ./../img/icon.png
+SO ./../img/icon.png
+WE ./../img/icon.png
+EA ./../img/icon.png
 F 220,100,0
 C 225,30,0
         1111111111111111111111111

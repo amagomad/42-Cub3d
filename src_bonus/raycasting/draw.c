@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 void	draw_rect(t_data *data, int x, int y, uint32_t color)
 {
@@ -28,7 +28,9 @@ void	draw_rect(t_data *data, int x, int y, uint32_t color)
 
 void	calcul_texture(t_ray *ray, t_data *data)
 {
-	if (ray->side == 0)
+	if (data->map[ray->map_y][ray->map_x] > 1)
+		ray->texture = data->door_texture;
+	else if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
 			ray->texture = data->ea_texture;

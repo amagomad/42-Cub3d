@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 18:50:21 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 21:07:47 by cgorin           ###   ########.fr       */
+/*   Created: 2025/01/18 18:57:58 by cgorin            #+#    #+#             */
+/*   Updated: 2025/02/22 17:01:44 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
-void	return_error(char *str, t_data *data, bool free_parse)
+bool	open_file(char *file, t_parsing *parse)
 {
-	ft_fprintf(2, "Error: %s\n", str);
-	if (free_parse)
-		free_parsing(data);
-	free_all(data);
-	exit(EXIT_FAILURE);
+	parse->file_fd = open(file, O_RDONLY);
+	if (parse->file_fd < 0)
+		return (false);
+	return (true);
 }
 
-void	ft_free_str_tab(char **tab_str)
+bool	file_validity(char *file)
 {
-	int	i;
+	size_t	file_name_len;
 
-	i = -1;
-	while (tab_str[++i])
-		free(tab_str[i]);
-	free(tab_str);
+	file_name_len = ft_strlen(file);
+	if (file_name_len <= 4 || ft_strcmp(&file[file_name_len - 4], ".cub"))
+		return (false);
+	return (true);
 }

@@ -1,87 +1,102 @@
-NAME            := cub3d
-CC              := cc
-CFLAGS          := -Wall -Werror -Wextra -Iinclude -g -O3 -mtune=native -ffast-math -fsanitize=address
+# Compiler and flags
+CC              = cc
+CFLAGS          = -Wall -Werror -Wextra -g -fsanitize=address
+OPTIM_FLAGS     = -O3 -march=native -mtune=native -flto -ffast-math -funroll-loops -fomit-frame-pointer -malign-double
+INCLUDE_FLAGS   = -I$(DIR_INCS) -I$(MLX42_PATH)/include
+
+CFLAGS			+= $(OPTIM_FLAGS)
 
 # OS detection
-UNAME_S         := $(shell uname -s)
+UNAME_S         = $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
-    MLX_FLAGS  := -ldl -lglfw -pthread -lm
+    MLX_FLAGS   = -ldl -lglfw -pthread -lm
 else ifeq ($(UNAME_S), Darwin)
-    MLX_FLAGS  := -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+    MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
 
-MLX42_PATH = .MLX42
+# Project structure
+NAME            = cub3d
+MLX42_PATH      = .MLX42
+DIR_LIBFT       = libft
+LIBFT_LIB       = $(DIR_LIBFT)/libft.a
+DIR_SRCS        = src
+DIR_SRCS_BONUS  = src_bonus
+DIR_OBJS        = .objs
+DIR_OBJS_BONUS  = .objs_bonus
+DIR_INCS        = includes
 
-DIR_LIBFT       := libft
-LIBFT_LIB       := $(DIR_LIBFT)/libft.a
-DIR_SRCS        := src
-DIR_OBJS        := .objs
-DIR_INCS        := includes
+# Source groupings
+INIT_GAME       = cub3d.c init_game/init_game.c
+PARSING         = parse/parsing.c parse/check.c parse/map.c parse/texture.c parse/color.c parse/description.c parse/player.c
+MENU            = menu/menu.c
+MINIMAP         = minimap/minimap.c minimap/draw_player.c
+DOORS           = doors/doors.c
+KEYPRESS        = keypress/move.c keypress/handle_keypress.c
+RAYCASTING      = raycasting/raycasting.c raycasting/draw.c
+UTILS           = utils/free.c utils/utils.c utils/mlx_utils.c
 
-LST_SRCS        := cub3d.c \
-					init_game/init_game.c \
-					parse/parsing.c \
-					parse/check.c \
-					parse/map.c \
-					parse/texture.c \
-					parse/color.c \
-					parse/description.c \
-					parse/player.c \
-					menu/menu.c \
-					minimap/minimap.c \
-					minimap/draw_player.c \
-					doors/doors.c \
-					keypress/move.c \
-					keypress/handle_keypress.c \
-					raycasting/raycasting.c \
-					raycasting/draw.c \
-					utils/free.c \
-					utils/utils.c \
-					utils/mlx_utils.c
+# File lists
+LST_SRCS        = $(INIT_GAME) $(PARSING) $(KEYPRESS) $(RAYCASTING) $(UTILS)
+LST_SRCS_BONUS  = $(INIT_GAME) $(PARSING) $(MENU) $(MINIMAP) $(DOORS) $(KEYPRESS) $(RAYCASTING) $(UTILS)
 
-LST_OBJS        := $(LST_SRCS:.c=.o)
+OBJS            = $(addprefix $(DIR_OBJS)/,$(LST_SRCS:.c=.o))
+OBJS_BONUS      = $(addprefix $(DIR_OBJS_BONUS)/,$(LST_SRCS_BONUS:.c=.o))
 
-LST_INCS        := cub3d.h
-SRCS            := $(addprefix $(DIR_SRCS)/,$(LST_SRCS))
-OBJS            := $(addprefix $(DIR_OBJS)/,$(LST_OBJS))
-INCS            := $(addprefix $(DIR_INCS)/,$(LST_INCS))
+# Color codes
+ERASE           = \033[2K\r
+BLUE            = \033[34m
+YELLOW          = \033[33m
+GREEN           = \033[32m
+END             = \033[0m
 
-ERASE           := \033[2K\r
-BLUE            := \033[34m
-YELLOW          := \033[33m
-GREEN           := \033[32m
-END             := \033[0m
-
-$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c $(INCS) Makefile
-	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(DIR_INCS) -c $< -o $@
-	printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
-
+# Main targets
 all: $(LIBFT_LIB) $(NAME)
 
+bonus: $(LIBFT_LIB) $(OBJS_BONUS)
+	$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(NAME) $(LIBFT_LIB) $(MLX42_PATH)/build/libmlx42.a $(MLX_FLAGS)
+	printf "$(ERASE)$(GREEN)Bonus version built\n$(END)"
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBFT_LIB) $(MLX42_PATH)/build/libmlx42.a $(MLX_FLAGS)
+	printf "$(ERASE)$(GREEN)Main version built\n$(END)"
+
+# Compilation rules
+$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
+	printf "$(ERASE)$(BLUE)Compiling:$(END) %s" "$<"
+
+$(DIR_OBJS_BONUS)/%.o: $(DIR_SRCS_BONUS)/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
+	printf "$(ERASE)$(BLUE)Compiling bonus:$(END) %s" "$<"
+
+# Dependencies
 $(LIBFT_LIB):
 	$(MAKE) -C $(DIR_LIBFT) --no-print-directory
 
-mlx : 
-	@git clone https://github.com/codam-coding-college/MLX42.git
-	cmake $(MLX42_PATH) -B $(MLX42_PATH)/build
+mlx:
+	if [ -d "MLX42" ]; then \
+		rm -rf MLX42; \
+	fi
+	if [ ! -d "$(MLX42_PATH)" ]; then \
+		git clone https://github.com/codam-coding-college/MLX42.git $(MLX42_PATH); \
+	fi
+	cmake -S $(MLX42_PATH) -B $(MLX42_PATH)/build
 	cmake --build $(MLX42_PATH)/build -j4
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBFT_LIB) $(MLX42_PATH)/build/libmlx42.a $(MLX_FLAGS)
-	printf "$(ERASE)$(GREEN)$@ made\n$(END)"
-
+# Clean rules
 clean:
-	rm -rf $(DIR_OBJS)
-	printf "$(YELLOW)$(DIR_OBJS) removed$(END)\n"
+	rm -rf $(DIR_OBJS) $(DIR_OBJS_BONUS)
 	$(MAKE) -C $(DIR_LIBFT) clean --no-print-directory
+	printf "$(YELLOW)Object files removed\n$(END)"
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
 	$(MAKE) -C $(DIR_LIBFT) fclean --no-print-directory
-	printf "$(YELLOW)$(NAME) & libft.a removed$(END)\n"
+	printf "$(YELLOW)Executable and libraries removed\n$(END)"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re mlx
 .SILENT:
