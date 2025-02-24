@@ -6,29 +6,15 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 22:01:11 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:01:59 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	handle_mouse_move(double xpos, double ypos, void *param)
+void	process_keys(t_data *data)
 {
-	t_data			*data;
-	static double	last_x = -1;
-
-	(void)ypos;
-	data = (t_data *)param;
-	if (last_x == -1)
-	{
-		last_x = xpos;
-		return ;
-	}
-	if (last_x < xpos)
-		rotate_right(data, MOUSE_SENSITIVITY);
-	else if (last_x > xpos)
-		rotate_left(data, MOUSE_SENSITIVITY);
-	last_x = xpos;
+	movement_key(data);
 }
 
 void	handle_keypress(mlx_key_data_t key, void *param)

@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 17:48:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 17:59:18 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	calcul_wall_distance(t_ray *ray)
 
 void	raycasting(t_data *data)
 {
-	t_ray	ray;
+	t_ray				ray;
 
 	ray.pixel_buffer = (uint32_t *)data->img->pixels;
 	ray.x = 0;

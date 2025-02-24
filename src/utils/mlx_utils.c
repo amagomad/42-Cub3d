@@ -6,11 +6,11 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 19:48:08 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:09:43 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/cub3d.h"
 
 void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 {
@@ -22,19 +22,4 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 		return ;
 	pixels = (uint32_t *)data->img->pixels;
 	pixels[y * data->img->width + x] = color;
-}
-
-mlx_image_t	*mlx_load_image(t_data *data, char *path)
-{
-	mlx_image_t		*image;
-	mlx_texture_t	*texture;
-
-	texture = mlx_load_png(path);
-	if (!texture)
-		return (NULL);
-	image = mlx_texture_to_image(data->mlx, texture);
-	mlx_delete_texture(texture);
-	if (!image)
-		return (NULL);
-	return (image);
 }

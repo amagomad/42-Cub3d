@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 22:01:11 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 17:42:12 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 		return ;
 	if (data->keys[MLX_KEY_ESCAPE])
 		mlx_close_window(data->mlx);
-	if (key.key == MLX_KEY_SPACE
-		&& data->state == STATE_GAME && key.action == MLX_PRESS)
+	if (key.key == MLX_KEY_SPACE && data->state == STATE_GAME
+		&& (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		data->show_minimap = !data->show_minimap;
 	if (key.key == MLX_KEY_E && data->state == STATE_GAME
-		&& key.action == MLX_PRESS)
+		&& (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		manage_door(data);
 }

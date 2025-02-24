@@ -6,11 +6,11 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 21:15:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:00:28 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/cub3d.h"
 
 void	free_data(t_data *data)
 {
@@ -47,6 +47,8 @@ void	free_texture(t_data *data)
 		mlx_delete_texture(data->we_texture);
 	if (data->ea_texture)
 		mlx_delete_texture(data->ea_texture);
+	if (data->img)
+		mlx_delete_image(data->mlx, data->img);
 }
 
 void	free_parsing(t_data *data)
@@ -81,10 +83,6 @@ void	free_all(t_data *data)
 		ft_free_str_tab(data->parse->map);
 	if (data->parse)
 		free(data->parse);
-	if (data->mlx)
-		mlx_close_window(data->mlx);
-	if (data->img)
-		mlx_delete_image(data->mlx, data->img);
 	if (data->mlx)
 	{
 		mlx_close_window(data->mlx);

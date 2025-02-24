@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 19:44:14 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 17:58:23 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ void	movement_key(t_data *data)
 	if (data->keys[MLX_KEY_S])
 		move_player(data, -data->player->dir_x, -data->player->dir_y);
 	if (data->keys[MLX_KEY_A])
-		move_player(data, data->player->dir_y, -data->player->dir_x);
+		move_player(data, data->player->dir_y, data->player->dir_x);
 	if (data->keys[MLX_KEY_D])
-		move_player(data, -data->player->dir_y, data->player->dir_x);
+		move_player(data, -data->player->dir_y, -data->player->dir_x);
 	if (data->keys[MLX_KEY_LEFT])
 		rotate_left(data, ROTATION_SPEED);
 	if (data->keys[MLX_KEY_RIGHT])

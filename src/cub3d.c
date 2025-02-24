@@ -6,18 +6,18 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/22 22:03:01 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:01:24 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/cub3d.h"
 
 void	render_frame(void *param)
 {
 	t_data	*data;
 
 	data = (t_data *)param;
-	movement_key(data);
+	process_keys(data);
 	raycasting(data);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }

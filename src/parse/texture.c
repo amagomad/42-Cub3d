@@ -6,11 +6,11 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 12:08:32 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 17:11:37 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:02:19 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 void	delete_texture(mlx_texture_t **texture)
 {

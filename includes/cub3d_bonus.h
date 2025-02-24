@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/22 22:04:54 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:14:52 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,11 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
-# define TITLE "Cub3D"
 
-# define FOV 60
 # define PLANE_SIZE 0.66
 
 # define T_SIZE 30
 
-# define MOVE_SPEED 6.0
 # define WALK_SPEED 1.5
 # define SPRINT_SPEED 4.0
 # define ROTATION_SPEED 0.008
@@ -41,19 +38,10 @@
 # define PLAYER_RADIUS 5
 # define MAP_OFFSET_X 20
 # define MAP_OFFSET_Y 20
-# define MINIMAP_BORDER_COLOR 0xFFA0A0A0
-# define MINIMAP_INNER_BORDER_COLOR 0xFF606060
-# define MINIMAP_BG_COLOR 0x00000000
 
 # define MLX_TOTAL_KEYS 349
 
-# define PI 3.14159265358979323846
-
-# define PINKY 0xFFEAC2FF
-# define BLUEY 0xFFFFB463
 # define GREENY 0xFFA5D493
-# define YELLOWY 0xFF82EDFF
-# define REDY 0xFF6363FF
 # define WHITE 0xFFFFFFFF
 # define YELLOW 0xFF0FFFFF
 # define GREEN 0xFF789C7B
@@ -63,10 +51,6 @@
 # define LIGHT_GREY 0xFFD3D3D3
 # define GREY 0xFFAAABAB
 # define RED 0xFF0000FF
-
-# define TILE_EMPTY 0
-# define TILE_WALL 1
-# define TILE_DOOR 2
 
 typedef struct s_parsing
 {
@@ -199,7 +183,6 @@ void		load_texture(t_data *data);
 
 // ================== MOUVEMENT ==================
 void		handle_keypress(mlx_key_data_t keydata, void *param);
-void		handle_keyrelease(mlx_key_data_t keydata, void *param);
 void		handle_mouse_move(double xpos, double ypos, void *param);
 void		move_player(t_data *data, float move_x, float move_y);
 
