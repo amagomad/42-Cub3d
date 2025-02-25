@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/23 18:16:27 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:14:52 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -31,13 +31,26 @@
 # define T_SIZE 30
 
 # define WALK_SPEED 1.5
+# define SPRINT_SPEED 4.0
 # define ROTATION_SPEED 0.018
+# define MOUSE_SENSITIVITY 0.004
 
 # define PLAYER_RADIUS 5
 # define MAP_OFFSET_X 20
 # define MAP_OFFSET_Y 20
 
 # define MLX_TOTAL_KEYS 349
+
+# define GREENY 0xFFA5D493
+# define WHITE 0xFFFFFFFF
+# define YELLOW 0xFF0FFFFF
+# define GREEN 0xFF789C7B
+# define BLUE 0xFFF0FF00
+# define PINK 0xFFFF0FFF
+# define BLACK 0xFF000000
+# define LIGHT_GREY 0xFFD3D3D3
+# define GREY 0xFFAAABAB
+# define RED 0xFF0000FF
 
 typedef struct s_parsing
 {
@@ -64,6 +77,12 @@ typedef struct s_player
 	float	plane_x;
 	float	plane_y;
 }	t_player;
+
+typedef enum e_state
+{
+	STATE_MENU,
+	STATE_GAME
+}	t_state;
 
 typedef struct s_color
 {
@@ -116,11 +135,35 @@ typedef struct s_data
 	int				**map;
 	int				map_width;
 	int				map_height;
+	bool			show_minimap;
+	int				minimap_t_size;
 	char			player_dir;
 	int				player_x;
 	int				player_y;
+	t_state			state;
+	int				selected_option;
+	mlx_image_t		*img_menu[2];
+	bool			mouse_shown;
 	bool			keys[MLX_TOTAL_KEYS];
 }	t_data;
+
+typedef struct s_minimap
+{
+	int			map_width_px;
+	int			map_height_px;
+	int			x;
+	int			y;
+	int			player_x;
+	int			player_y;
+	int			end_x;
+	int			end_y;
+	int			dx;
+	int			dy;
+	int			sx;
+	int			sy;
+	int			e2;
+	int			err;
+}	t_minimap;
 
 // ================== PARSING ==================
 bool		parsing(char *file, t_data *data);
@@ -140,12 +183,20 @@ void		load_texture(t_data *data);
 
 // ================== MOUVEMENT ==================
 void		handle_keypress(mlx_key_data_t keydata, void *param);
+void		handle_mouse_move(double xpos, double ypos, void *param);
 void		move_player(t_data *data, float move_x, float move_y);
 
+// ================== MINIMAP & AFFICHAGE ==================
+void		draw_player(t_data *data, t_minimap minimap);
+void		draw_minimap(t_data *data);
+void		draw_line(t_data *data, t_minimap minimap, uint32_t color);
+
 // ================== UTILS ==================
+void		manage_door(t_data *data);
 void		free_data(t_data *data);
 void		render_frame(void *param);
 void		my_put_pixel(t_data *data, int x, int y, uint32_t color);
+mlx_image_t	*mlx_load_image(t_data *data, char *path);
 
 // ================== RAYCASTING ==================
 void		raycasting(t_data *data);
@@ -157,7 +208,12 @@ void		calcul_wall_x(t_ray *ray, t_data *data);
 void		free_all(t_data *data);
 void		ft_free_str_tab(char **tab_str);
 
+void		init_menu(t_data *data);
+void		draw_menu(t_data *data);
+
 void		process_keys(t_data *data);
+void		menu_key(t_data *data);
+void		change_minimap_size(t_data *data, int size);
 void		rotate_right(t_data *data, double rotation_speed);
 void		rotate_left(t_data *data, double rotation_speed);
 void		movement_key(t_data *data);

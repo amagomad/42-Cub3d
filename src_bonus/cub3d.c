@@ -6,19 +6,30 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/23 18:01:24 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 22:03:01 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void	render_frame(void *param)
 {
 	t_data	*data;
 
 	data = (t_data *)param;
-	process_keys(data);
-	raycasting(data);
+	if (data->mouse_shown)
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
+	else
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+	if (data->state == STATE_GAME)
+	{
+		process_keys(data);
+		raycasting(data);
+		if (data->show_minimap)
+			draw_minimap(data);
+	}
+	else if (data->state == STATE_MENU)
+		draw_menu(data);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }
 
@@ -33,6 +44,7 @@ int	main(int ac, char **av)
 	}
 	init(&data, av);
 	mlx_key_hook(data.mlx, handle_keypress, &data);
+	mlx_cursor_hook(data.mlx, handle_mouse_move, &data);
 	mlx_loop_hook(data.mlx, (void (*)(void *))render_frame, &data);
 	mlx_loop(data.mlx);
 	free_all(&data);
