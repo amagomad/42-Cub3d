@@ -69,6 +69,8 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
+	if (data->keys[MLX_KEY_ESCAPE])
+		mlx_close_window(data->mlx);
 	if (key.action == MLX_PRESS)
 		data->keys[key.key] = true;
 	else if (key.action == MLX_RELEASE)
@@ -77,8 +79,6 @@ void	handle_keypress(mlx_key_data_t key, void *param)
 		data->mouse_shown = !data->mouse_shown;
 	if (data->state == STATE_MENU)
 		return ;
-	if (data->keys[MLX_KEY_ESCAPE])
-		mlx_close_window(data->mlx);
 	if (key.key == MLX_KEY_SPACE && data->state == STATE_GAME
 		&& (key.action == MLX_PRESS || key.action == MLX_REPEAT))
 		data->show_minimap = !data->show_minimap;

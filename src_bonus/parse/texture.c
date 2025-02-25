@@ -34,5 +34,5 @@ void	load_texture(t_data *data)
 	data->door_texture = mlx_load_png("src_bonus/img/P.png");
 	if (!data->no_texture || !data->so_texture
 		|| !data->ea_texture || !data->we_texture || !data->door_texture)
-		return_error("Error: Can't load textures", data, true);
+		return_error("Can't load textures", data, true);
 }

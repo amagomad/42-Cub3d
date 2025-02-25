@@ -19,7 +19,9 @@ bool	parsing(char *file, t_data *data)
 	if (!open_file(file, data->parse))
 		return_error("Can't open file", data, true);
 	if (!stock_desc(data->parse))
-		return_error("Failed to stock desc, invalid format.", data, true);
+		return_error
+		("Failed to stock description(empty file or missing description)"
+		, data, true);
 	if (!validity_desc(data->parse))
 		return_error("Invalid desc", data, true);
 	load_texture(data);

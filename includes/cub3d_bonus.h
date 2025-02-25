@@ -32,7 +32,7 @@
 
 # define WALK_SPEED 1.5
 # define SPRINT_SPEED 4.0
-# define ROTATION_SPEED 0.008
+# define ROTATION_SPEED 0.018
 # define MOUSE_SENSITIVITY 0.004
 
 # define PLAYER_RADIUS 5

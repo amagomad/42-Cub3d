@@ -31,7 +31,7 @@
 # define T_SIZE 30
 
 # define WALK_SPEED 1.5
-# define ROTATION_SPEED 0.008
+# define ROTATION_SPEED 0.018
 
 # define PLAYER_RADIUS 5
 # define MAP_OFFSET_X 20

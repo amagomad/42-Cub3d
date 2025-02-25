@@ -93,9 +93,9 @@ void	movement_key(t_data *data)
 	if (data->keys[MLX_KEY_S])
 		move_player(data, -data->player->dir_x, -data->player->dir_y);
 	if (data->keys[MLX_KEY_A])
-		move_player(data, data->player->dir_y, data->player->dir_x);
+		move_player(data, data->player->dir_y, -data->player->dir_x);
 	if (data->keys[MLX_KEY_D])
-		move_player(data, -data->player->dir_y, -data->player->dir_x);
+		move_player(data, -data->player->dir_y, data->player->dir_x);
 	if (data->keys[MLX_KEY_LEFT])
 		rotate_left(data, ROTATION_SPEED);
 	if (data->keys[MLX_KEY_RIGHT])

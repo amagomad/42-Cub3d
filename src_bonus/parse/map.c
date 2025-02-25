@@ -53,8 +53,12 @@ void	validity_map_wall(t_data *data)
 		{
 			if (data->map[i][j] == 0 || data->map[i][j] == 2)
 			{
-				if ((i > 0 && data->map[i - 1][j] == 4)
-					|| (i < data->map_height - 1 && data->map[i + 1][j] == 4)
+				if ((i == 0 || i == data->map_height - 1 || j == 0
+						|| j == data->map_width - 1)
+					|| (i > 0 && (!data->map[i - 1]
+							|| data->map[i - 1][j] == 4))
+					|| (i < data->map_height - 1 && (!data->map[i + 1]
+					|| data->map[i + 1][j] == 4))
 					|| (j > 0 && data->map[i][j - 1] == 4)
 					|| (j < data->map_width - 1 && data->map[i][j + 1] == 4))
 					return_error("Invalid: not surrounded by wall", data, true);

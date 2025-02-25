@@ -53,8 +53,10 @@ char	**sep_color(const char *color)
 
 bool	validate_color(char **components, uint32_t *f_color)
 {
-	t_color	rgb;
-	int		i;
+	int	i;
+	int	r;
+	int	g;
+	int	b;
 
 	i = -1;
 	while (++i < 3)
@@ -65,15 +67,15 @@ bool	validate_color(char **components, uint32_t *f_color)
 			return (false);
 		}
 	}
-	rgb.r = ft_atoi(components[0]);
-	rgb.g = ft_atoi(components[1]);
-	rgb.b = ft_atoi(components[2]);
+	r = ft_atoi(components[0]);
+	g = ft_atoi(components[1]);
+	b = ft_atoi(components[2]);
 	ft_free_str_tab(components);
-	if (rgb.r < 0 || rgb.r > 255 || rgb.g < 0
-		|| rgb.g > 255 || rgb.b < 0 || rgb.b > 255)
+	if (r < 0 || r > 255 || g < 0
+		|| g > 255 || b < 0 || b > 255)
 		return (false);
-	*f_color = (0xFF << 24) | ((uint32_t)rgb.b << 16) | \
-		((uint32_t)rgb.g << 8) | (uint32_t)rgb.r;
+	*f_color = (0xFF << 24) | ((uint32_t)b << 16) | \
+		((uint32_t)g << 8) | (uint32_t)r;
 	return (true);
 }
 

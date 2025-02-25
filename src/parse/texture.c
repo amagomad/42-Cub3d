@@ -30,5 +30,5 @@ void	load_texture(t_data *data)
 	data->we_texture = mlx_load_png(data->parse->we_texture);
 	if (!data->no_texture || !data->so_texture
 		|| !data->ea_texture || !data->we_texture)
-		return_error("Error: Can't load textures", data, true);
+		return_error("Can't load textures", data, true);
 }

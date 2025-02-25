@@ -1,10 +1,7 @@
 # Compiler and flags
-CC              = gcc
-CFLAGS          = -Wall -Werror -Wextra -g -fsanitize=address
-OPTIM_FLAGS     = -O3 -march=native -mtune=native -flto -ffast-math -funroll-loops -fomit-frame-pointer -malign-double
+CC              = cc
+CFLAGS          = -Wall -Werror -Wextra -g -O3 -march=native -mtune=native -flto -ffast-math -funroll-loops -fomit-frame-pointer -malign-double -fsanitize=address
 INCLUDE_FLAGS   = -I$(DIR_INCS) -I$(MLX42_PATH)/include
-
-CFLAGS			+= $(OPTIM_FLAGS)
 
 # OS detection
 UNAME_S         = $(shell uname -s)

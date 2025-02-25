@@ -1,0 +1,10 @@
+NO ./src/img/N.png
+SO ./src/img/S.png
+WE ./src/img/W.png
+EA ./src/img/E.png
+F 128,128,128
+C 0,0,0
+
+00000000000
+0001111N100
+00000000000

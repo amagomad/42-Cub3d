@@ -37,13 +37,13 @@ void	set_player_starting_direction(t_data *data)
 	}
 	else if (data->player_dir == 'W')
 	{
-		init_dir(data, 0, 0, PLANE_SIZE);
+		init_dir(data, 0, 0, -PLANE_SIZE);
 		data->player->dir_x = -1;
 		data->player->dir_y = 0;
 	}
 	else if (data->player_dir == 'E')
 	{
-		init_dir(data, 180, 0, -PLANE_SIZE);
+		init_dir(data, 180, 0, PLANE_SIZE);
 		data->player->dir_x = 1;
 		data->player->dir_y = 0;
 	}
