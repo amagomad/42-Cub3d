@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 16:07:53 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/02 22:34:38 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ int	type_map(int i, int j, t_data *data)
 	}
 	else if (data->parse->map[i][j] == 'D')
 		return (2);
+	else if (data->parse->map[i][j] == 'C')
+	{
+		add_sprite(data, j, i);
+		return (0);
+	}
 	return (-2);
 }
 

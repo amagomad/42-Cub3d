@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/22 22:03:48 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/03 13:29:13 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	init_data(t_data *data, char **av)
 	data->parse->ea_texture = NULL;
 	data->player->move_speed = WALK_SPEED;
 	data->mouse_shown = false;
+	data->sprites = NULL;
+	data->z_buffer = NULL;
 	to_zero(data);
 	if (!parsing(av[1], data))
 		return_error("Parsing error", data, true);
@@ -67,6 +69,9 @@ bool	initialize_game(t_data *data)
 	}
 	if (data->icon)
 		mlx_set_icon(data->mlx, data->icon);
+	data->z_buffer = malloc(sizeof(double) * WIDTH);
+	if (!data->z_buffer)
+		return_error("Malloc error for z_buffer", data, false);
 	return (true);
 }
 
@@ -79,6 +84,7 @@ void	init(t_data *data, char **av)
 	data->mlx = NULL;
 	data->img = NULL;
 	data->icon = NULL;
+	data->num_sprites = 0;
 	init_data(data, av);
 	if (!initialize_game(data))
 		return_error("Can't initialize game", data, false);

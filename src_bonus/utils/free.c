@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 21:15:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/03 13:25:15 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void	free_all(t_data *data)
 		ft_free_str_tab(data->parse->map);
 	if (data->parse)
 		free(data->parse);
+	if (data->sprites)
+		handle_sprites(data);
 	if (data->mlx)
 	{
 		mlx_close_window(data->mlx);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:14:22 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 17:48:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/02 22:07:27 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	raycasting(t_data *data)
 	t_ray				ray;
 
 	ray.pixel_buffer = (uint32_t *)data->img->pixels;
+	data->z_buffer = malloc(sizeof(double) * WIDTH);
 	ray.x = 0;
 	draw_rect(data, 0, 0, data->ceiling_color);
 	draw_rect(data, 0, 450, data->floor_color);
@@ -111,6 +112,7 @@ void	raycasting(t_data *data)
 		calcul_texture(&ray, data);
 		calcul_wall_x(&ray, data);
 		draw_wall(&ray);
+		data->z_buffer[ray.x] = ray.perp_wall_dist;
 		ray.x++;
 	}
 }

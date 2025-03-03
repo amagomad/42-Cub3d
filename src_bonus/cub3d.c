@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/22 22:03:01 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/02 22:33:20 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	render_frame(void *param)
 	{
 		process_keys(data);
 		raycasting(data);
+		update_sprites(data);
+		render_sprites(data);
 		if (data->show_minimap)
 			draw_minimap(data);
 	}

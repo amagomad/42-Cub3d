@@ -5,11 +5,12 @@ INCLUDE_FLAGS   = -I$(DIR_INCS) -I$(MLX42_PATH)/include
 
 # OS detection
 UNAME_S         = $(shell uname -s)
-ifeq ($(UNAME_S), Linux)
-    MLX_FLAGS   = -ldl -lglfw -pthread -lm
-else ifeq ($(UNAME_S), Darwin)
-    MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
-endif
+# ifeq ($(UNAME_S), Linux)
+#    MLX_FLAGS   = -ldl -lglfw -pthread -lm
+# else ifeq ($(UNAME_S), Darwin)
+#    MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+# endif
+MLX_FLAGS  := -L/opt/homebrew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Project structure
 NAME            = cub3d
@@ -31,10 +32,11 @@ DOORS           = doors/doors.c
 KEYPRESS        = keypress/move.c keypress/handle_keypress.c
 RAYCASTING      = raycasting/raycasting.c raycasting/draw.c
 UTILS           = utils/free.c utils/utils.c utils/mlx_utils.c
+SPRITE          = sprite/sprite.c
 
 # File lists
 LST_SRCS        = $(INIT_GAME) $(PARSING) $(KEYPRESS) $(RAYCASTING) $(UTILS)
-LST_SRCS_BONUS  = $(INIT_GAME) $(PARSING) $(MENU) $(MINIMAP) $(DOORS) $(KEYPRESS) $(RAYCASTING) $(UTILS)
+LST_SRCS_BONUS  = $(INIT_GAME) $(PARSING) $(MENU) $(MINIMAP) $(DOORS) $(KEYPRESS) $(RAYCASTING) $(UTILS) $(SPRITE)
 
 OBJS            = $(addprefix $(DIR_OBJS)/,$(LST_SRCS:.c=.o))
 OBJS_BONUS      = $(addprefix $(DIR_OBJS_BONUS)/,$(LST_SRCS_BONUS:.c=.o))

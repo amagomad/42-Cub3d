@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/23 18:14:52 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:56:52 by nashxo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,17 @@
 # define LIGHT_GREY 0xFFD3D3D3
 # define GREY 0xFFAAABAB
 # define RED 0xFF0000FF
+
+typedef struct s_sprite
+{
+	int				x;
+	int				y;
+	int				current_frame;
+	int				total_frames;
+	double			frame_delay;
+	double			last_update;
+	mlx_texture_t	**frames;
+}	t_sprite;
 
 typedef struct s_parsing
 {
@@ -129,6 +140,9 @@ typedef struct s_data
 	mlx_texture_t	*we_texture;
 	mlx_texture_t	*ea_texture;
 	mlx_texture_t	*door_texture;
+	t_sprite		*sprites;
+	int				num_sprites;
+	double			*z_buffer;
 	uint32_t		floor_color;
 	uint32_t		ceiling_color;
 	mlx_image_t		*img;
@@ -220,4 +234,12 @@ void		movement_key(t_data *data);
 void		init(t_data *data, char **av);
 
 void		free_parsing(t_data *data);
+void		handle_sprites(t_data *data);
+
+// ================== SPRITE ==================
+void add_sprite(t_data *data, int map_x, int map_y);
+void update_sprites(t_data *data);
+void render_single_sprite(t_data *data, t_sprite *sprite);
+void render_sprites(t_data *data);
+
 #endif
