@@ -16,10 +16,10 @@ void	init_menu(t_data *data)
 {
 	data->state = STATE_MENU;
 	data->selected_option = 0;
-	data->img_menu[0] = mlx_load_image(data, "img/menu_start.png");
+	data->img_menu[0] = mlx_load_image(data, "src_bonus/img/menu_start.png");
 	if (!data->img_menu[0])
 		return_error("Can't load menu image", data, false);
-	data->img_menu[1] = mlx_load_image(data, "img/menu_quit.png");
+	data->img_menu[1] = mlx_load_image(data, "src_bonus/img/menu_quit.png");
 	if (!data->img_menu[1])
 		return_error("Can't load menu image", data, false);
 }

@@ -6,24 +6,11 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/23 18:00:28 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 21:15:12 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-void	free_data(t_data *data)
-{
-	if (data->parse)
-	{
-		free(data->parse->map);
-		free(data->parse->desc);
-		free(data->parse);
-	}
-	if (data->player)
-		free(data->player);
-	free(data);
-}
 
 void	free_map(t_data *data)
 {
@@ -31,14 +18,16 @@ void	free_map(t_data *data)
 
 	i = -1;
 	while (++i < data->map_height)
-	{
 		free(data->map[i]);
-	}
 	free(data->map);
 }
 
 void	free_texture(t_data *data)
 {
+	if (data->img_menu[0])
+		mlx_delete_image(data->mlx, data->img_menu[0]);
+	if (data->img_menu[1])
+		mlx_delete_image(data->mlx, data->img_menu[1]);
 	if (data->no_texture)
 		mlx_delete_texture(data->no_texture);
 	if (data->so_texture)
@@ -47,6 +36,8 @@ void	free_texture(t_data *data)
 		mlx_delete_texture(data->we_texture);
 	if (data->ea_texture)
 		mlx_delete_texture(data->ea_texture);
+	if (data->door_texture)
+		mlx_delete_texture(data->door_texture);
 	if (data->img)
 		mlx_delete_image(data->mlx, data->img);
 }

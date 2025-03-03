@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/cub3d.h"
 
 void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 {
@@ -37,4 +37,18 @@ mlx_image_t	*mlx_load_image(t_data *data, char *path)
 	if (!image)
 		return (NULL);
 	return (image);
+}
+
+void	mlx_clear_image(t_data *data)
+{
+	int	y;
+	int	x;
+
+	y = -1;
+	while (++y < (int)data->img->height)
+	{
+		x = -1;
+		while (++x < (int)data->img->width)
+			my_put_pixel(data, x, y, 0xFF000000);
+	}
 }

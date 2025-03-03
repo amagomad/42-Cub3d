@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/23 17:58:23 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 19:44:14 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,8 @@ void	movement_key(t_data *data)
 		rotate_left(data, ROTATION_SPEED);
 	if (data->keys[MLX_KEY_RIGHT])
 		rotate_right(data, ROTATION_SPEED);
+	if (data->keys[MLX_KEY_LEFT_SHIFT])
+		data->player->move_speed = SPRINT_SPEED;
+	else
+		data->player->move_speed = WALK_SPEED;
 }

@@ -6,11 +6,11 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/23 17:49:55 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/02/22 16:07:53 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d_bonus.h"
+#include "../../includes/cub3d.h"
 
 void	stock_map(t_data *data)
 {
@@ -51,7 +51,7 @@ void	validity_map_wall(t_data *data)
 		j = -1;
 		while (++j < data->map_width)
 		{
-			if (data->map[i][j] == 0)
+			if (data->map[i][j] == 0 || data->map[i][j] == 2)
 			{
 				if ((i == 0 || i == data->map_height - 1 || j == 0
 						|| j == data->map_width - 1)
@@ -85,6 +85,8 @@ int	type_map(int i, int j, t_data *data)
 		data->player_dir = data->parse->map[i][j];
 		return (0);
 	}
+	else if (data->parse->map[i][j] == 'D')
+		return (2);
 	return (-2);
 }
 
