@@ -5,12 +5,12 @@ INCLUDE_FLAGS   = -I$(DIR_INCS) -I$(MLX42_PATH)/include
 
 # OS detection
 UNAME_S         = $(shell uname -s)
-# ifeq ($(UNAME_S), Linux)
-#    MLX_FLAGS   = -ldl -lglfw -pthread -lm
-# else ifeq ($(UNAME_S), Darwin)
-#    MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
-# endif
-MLX_FLAGS  := -L/opt/homebrew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+ifeq ($(UNAME_S), Linux)
+	MLX_FLAGS   = -ldl -lglfw -pthread -lm
+else ifeq ($(UNAME_S), Darwin)
+	MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+endif
+#MLX_FLAGS  := -L/opt/homebrew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Project structure
 NAME            = cub3d
@@ -75,8 +75,8 @@ $(LIBFT_LIB):
 	$(MAKE) -C $(DIR_LIBFT) --no-print-directory
 
 mlx:
-	if [ -d "MLX42" ]; then \
-		rm -rf MLX42; \
+	if [ -d ".MLX42" ]; then \
+		rm -rf .MLX42; \
 	fi
 	if [ ! -d "$(MLX42_PATH)" ]; then \
 		git clone https://github.com/codam-coding-college/MLX42.git $(MLX42_PATH); \

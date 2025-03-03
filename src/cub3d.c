@@ -28,7 +28,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 	{
-		printf("Invalid number of arguments\n");
+		ft_fprintf(2, "Invalid number of arguments\n");
 		return (0);
 	}
 	init(&data, av);
