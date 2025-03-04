@@ -73,8 +73,8 @@ void render_single_sprite(t_data *data, t_sprite *sprite)
 	double			transform_x = inv_det * (data->player->dir_y * sprite_x - data->player->dir_x * sprite_y);
 	double			transform_y = inv_det * (-data->player->plane_y * sprite_x + data->player->plane_x * sprite_y);
 	int				sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
-	int				sprite_height = abs((int)(HEIGHT / transform_y) * 5);
-	int				sprite_width = abs((int)(HEIGHT / transform_y) * 5);
+	int				sprite_height = abs((int)(HEIGHT / transform_y) * 15);
+	int				sprite_width = abs((int)(HEIGHT / transform_y) * 15);
 	int				draw_start_x = -sprite_width / 2 + sprite_screen_x;
 	int				draw_end_x = sprite_width / 2 + sprite_screen_x;
 	int				draw_start_y = -sprite_height / 2 + (HEIGHT / 2 - 100);
