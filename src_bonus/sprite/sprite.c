@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d.h"
 
-void add_sprite(t_data *data, int map_x, int map_y)
+void	add_sprite(t_data *data, int map_x, int map_y)
 {
 	t_sprite	*new_sprites;
 	t_sprite	*sprite;
@@ -45,7 +45,7 @@ void add_sprite(t_data *data, int map_x, int map_y)
 	data->num_sprites++;
 }
 
-void update_sprites(t_data *data)
+void	update_sprites(t_data *data)
 {
 	t_sprite	*sprite;
 	double		current_time;
@@ -65,7 +65,7 @@ void update_sprites(t_data *data)
 	}
 }
 
-void render_single_sprite(t_data *data, t_sprite *sprite)
+void	render_single_sprite(t_data *data, t_sprite *sprite)
 {
 	double			sprite_x = sprite->x - data->player->pos_x;
 	double			sprite_y = sprite->y - data->player->pos_y;
@@ -111,7 +111,7 @@ void render_single_sprite(t_data *data, t_sprite *sprite)
 	}
 }
 
-void render_sprites(t_data *data)
+void	render_sprites(t_data *data)
 {
 	int		*order;
 	double	*dist;

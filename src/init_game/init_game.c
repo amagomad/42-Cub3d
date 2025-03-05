@@ -27,10 +27,6 @@ void	init_data(t_data *data, char **av)
 	data->so_texture = NULL;
 	data->we_texture = NULL;
 	data->ea_texture = NULL;
-	//data->img_menu[0] = NULL;
-	//data->img_menu[1] = NULL;
-	//data->door_texture = NULL;
-	//data->minimap_t_size = T_SIZE / 4;
 	data->map = NULL;
 	data->parse->map = NULL;
 	data->parse->line = NULL;
@@ -42,7 +38,6 @@ void	init_data(t_data *data, char **av)
 	data->parse->we_texture = NULL;
 	data->parse->ea_texture = NULL;
 	data->player->move_speed = WALK_SPEED;
-	//data->mouse_shown = false;
 	data->state = STATE_GAME;
 	to_zero(data);
 	if (!parsing(av[1], data))
@@ -61,6 +56,12 @@ bool	initialize_game(t_data *data)
 		return_error((char *)mlx_strerror(mlx_errno), data, false);
 	}
 	if (mlx_image_to_window(data->mlx, data->img, 0, 0) == -1)
+	{
+		mlx_close_window(data->mlx);
+		return_error((char *)mlx_strerror(mlx_errno), data, false);
+	}
+	data->img_buffer = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	if (!data->img_buffer)
 	{
 		mlx_close_window(data->mlx);
 		return_error((char *)mlx_strerror(mlx_errno), data, false);

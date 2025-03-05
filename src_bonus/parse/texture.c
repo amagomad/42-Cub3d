@@ -24,9 +24,6 @@ void	delete_texture(mlx_texture_t **texture)
 
 void	load_texture(t_data *data)
 {
-	data->icon = mlx_load_png("src_bonus/img/icon.png");
-	if (!data->icon)
-		return_error("Error: Can't load icon", data, true);
 	data->no_texture = mlx_load_png(data->parse->no_texture);
 	data->so_texture = mlx_load_png(data->parse->so_texture);
 	data->ea_texture = mlx_load_png(data->parse->ea_texture);

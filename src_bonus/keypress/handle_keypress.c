@@ -27,9 +27,9 @@ void	handle_mouse_move(double xpos, double ypos, void *param)
 		return ;
 	}
 	if (last_x < xpos)
-		rotate_right(data, MOUSE_SENSITIVITY);
+		rotate(data, MOUSE_SENSITIVITY /* * data->delta_time */);
 	else if (last_x > xpos)
-		rotate_left(data, MOUSE_SENSITIVITY);
+		rotate(data, -MOUSE_SENSITIVITY/*  * data->delta_time */);
 	last_x = xpos;
 }
 

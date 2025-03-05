@@ -21,7 +21,7 @@ void	my_put_pixel(t_data *data, int x, int y, uint32_t color)
 	if (data->img->pixels == NULL)
 		return ;
 	pixels = (uint32_t *)data->img->pixels;
-	pixels[y * data->img->width + x] = color;
+	pixels[y * data->img_buffer->width + x] = color;
 }
 
 mlx_image_t	*mlx_load_image(t_data *data, char *path)

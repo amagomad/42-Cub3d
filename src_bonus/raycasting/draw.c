@@ -28,10 +28,8 @@ void	draw_rect(t_data *data, int x, int y, uint32_t color)
 
 void	calcul_texture(t_ray *ray, t_data *data)
 {
-	int		cell;
-
-	cell = data->map[ray->map_y][ray->map_x];
-	if (cell == 2)
+	
+	if (data->map[ray->map_y][ray->map_x] == 2)
 		ray->texture = data->door_texture;
 	else if (ray->side == 0)
 	{
@@ -89,7 +87,7 @@ void	draw_wall(t_ray *ray)
 	y = ray->draw_start - 1;
 	while (++y < ray->draw_end)
 	{
-		tex_pos = (y - ((HEIGHT / 2 - 100) - ray->line_height / 2))
+		tex_pos = (y - (SEMI_HEIGHT - ray->line_height / 2))
 			* (ray->texture->height / (float)ray->line_height);
 		tex_y = (int)tex_pos % ray->texture->height;
 		if (tex_y < 0)

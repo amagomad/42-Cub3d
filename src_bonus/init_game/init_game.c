@@ -67,8 +67,12 @@ bool	initialize_game(t_data *data)
 		mlx_close_window(data->mlx);
 		return_error((char *)mlx_strerror(mlx_errno), data, false);
 	}
-	if (data->icon)
-		mlx_set_icon(data->mlx, data->icon);
+	data->img_buffer = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	if (!data->img_buffer)
+	{
+		mlx_close_window(data->mlx);
+		return_error((char *)mlx_strerror(mlx_errno), data, false);
+	}
 	data->z_buffer = malloc(sizeof(double) * WIDTH);
 	if (!data->z_buffer)
 		return_error("Malloc error for z_buffer", data, false);
@@ -83,7 +87,6 @@ void	init(t_data *data, char **av)
 		return_error("Malloc error", data, true);
 	data->mlx = NULL;
 	data->img = NULL;
-	data->icon = NULL;
 	data->num_sprites = 0;
 	init_data(data, av);
 	if (!initialize_game(data))

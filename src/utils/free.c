@@ -24,10 +24,6 @@ void	free_map(t_data *data)
 
 void	free_texture(t_data *data)
 {
-	if (data->img_menu[0])
-		mlx_delete_image(data->mlx, data->img_menu[0]);
-	if (data->img_menu[1])
-		mlx_delete_image(data->mlx, data->img_menu[1]);
 	if (data->no_texture)
 		mlx_delete_texture(data->no_texture);
 	if (data->so_texture)
@@ -79,5 +75,6 @@ void	free_all(t_data *data)
 		mlx_close_window(data->mlx);
 		mlx_terminate(data->mlx);
 	}
+	free(data);
 	exit(EXIT_SUCCESS);
 }

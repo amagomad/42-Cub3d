@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"cub3d.h": "c",
+		"unistd.h": "c",
+		"fcntl.h": "c",
+		"stdio.h": "c",
+		"stdlib.h": "c",
+		"stdbool.h": "c"
+	}
+}

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/03/03 00:56:52 by nashxo           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:56:52 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_BONUS_H
-# define CUB3D_BONUS_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -20,20 +20,21 @@
 # include <stdbool.h>
 # include <math.h>
 # include <sys/stat.h>
-# include "../.MLX42/include/MLX42/MLX42.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 # include "../libft/includes/libft.h"
 
 # define WIDTH 1920
 # define HEIGHT 1080
+# define SEMI_HEIGHT 440
 
 # define PLANE_SIZE 0.66
 
 # define T_SIZE 30
 
-# define WALK_SPEED 1.5
-# define SPRINT_SPEED 4.0
-# define ROTATION_SPEED 0.018
-# define MOUSE_SENSITIVITY 0.004
+# define WALK_SPEED 60
+# define SPRINT_SPEED 120
+# define ROTATION_SPEED 0.75
+# define MOUSE_SENSITIVITY 0.009
 
 # define PLAYER_RADIUS 5
 # define MAP_OFFSET_X 20
@@ -134,7 +135,7 @@ typedef struct s_data
 	t_player		*player;
 	t_parsing		*parse;
 	mlx_t			*mlx;
-	mlx_texture_t	*icon;
+	//mlx_texture_t	*icon;
 	mlx_texture_t	*no_texture;
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
@@ -146,6 +147,7 @@ typedef struct s_data
 	uint32_t		floor_color;
 	uint32_t		ceiling_color;
 	mlx_image_t		*img;
+	mlx_image_t		*img_buffer;
 	int				**map;
 	int				map_width;
 	int				map_height;
@@ -158,8 +160,15 @@ typedef struct s_data
 	int				selected_option;
 	mlx_image_t		*img_menu[2];
 	bool			mouse_shown;
+	double delta_time;
+    double last_frame;
 	bool			keys[MLX_TOTAL_KEYS];
 }	t_data;
+
+typedef struct s_vec2 {
+    float x;
+    float y;
+} t_vec2;
 
 typedef struct s_minimap
 {
@@ -198,9 +207,8 @@ void		init(t_data *data, char **av);
 // ================== MOUVEMENT ==================
 void		handle_keypress(mlx_key_data_t keydata, void *param);
 void		handle_mouse_move(double xpos, double ypos, void *param);
-void		move_player(t_data *data, float move_x, float move_y);
-void		rotate_right(t_data *data, double rotation_speed);
-void		rotate_left(t_data *data, double rotation_speed);
+void		move_player(t_data *data, float move_x, float move_y, float speed);
+void		rotate(t_data *data, double angle);
 
 // ================== MINIMAP & AFFICHAGE ==================
 void		draw_player(t_data *data, t_minimap minimap);
@@ -236,12 +244,11 @@ void		process_keys(t_data *data);
 void		menu_key(t_data *data);
 void		movement_key(t_data *data);
 
-void		handle_sprites(t_data *data);
-
 // ================== SPRITE ==================
-void add_sprite(t_data *data, int map_x, int map_y);
-void update_sprites(t_data *data);
-void render_single_sprite(t_data *data, t_sprite *sprite);
-void render_sprites(t_data *data);
+void		handle_sprites(t_data *data);
+void		add_sprite(t_data *data, int map_x, int map_y);
+void		update_sprites(t_data *data);
+void		render_single_sprite(t_data *data, t_sprite *sprite);
+void		render_sprites(t_data *data);
 
 #endif

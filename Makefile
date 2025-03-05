@@ -6,15 +6,17 @@ INCLUDE_FLAGS   = -I$(DIR_INCS) -I$(MLX42_PATH)/include
 # OS detection
 UNAME_S         = $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
-	MLX_FLAGS   = -ldl -lglfw -pthread -lm
+	MLX_FLAGS   = -L$(MLX42_BUILD_PATH) -lmlx42 -ldl -lglfw -lm -pthread
+	CFLAGS      += -D LINUX
+	GLFW_DEPS   = glfw_linux
 else ifeq ($(UNAME_S), Darwin)
 	MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
-# MLX_FLAGS  := -L/opt/homebrew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Project structure
 NAME            = cub3d
-MLX42_PATH      = .MLX42
+MLX42_PATH      = MLX42
+MLX42_BUILD_PATH = $(MLX42_PATH)/build
 DIR_LIBFT       = libft
 LIBFT_LIB       = $(DIR_LIBFT)/libft.a
 DIR_SRCS        = src
@@ -52,11 +54,11 @@ END             = \033[0m
 all: $(LIBFT_LIB) $(NAME)
 
 bonus: $(LIBFT_LIB) $(OBJS_BONUS)
-	$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(NAME) $(LIBFT_LIB) $(MLX42_PATH)/build/libmlx42.a $(MLX_FLAGS)
+	$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(NAME) $(LIBFT_LIB) $(MLX42_BUILD_PATH)/libmlx42.a $(MLX_FLAGS)
 	printf "$(ERASE)$(GREEN)Bonus version built\n$(END)"
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@ $(LIBFT_LIB) $(MLX42_PATH)/build/libmlx42.a $(MLX_FLAGS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBFT_LIB) $(MLX42_BUILD_PATH)/libmlx42.a $(MLX_FLAGS)
 	printf "$(ERASE)$(GREEN)Main version built\n$(END)"
 
 # Compilation rules
@@ -75,14 +77,12 @@ $(LIBFT_LIB):
 	$(MAKE) -C $(DIR_LIBFT) --no-print-directory
 
 mlx:
-	if [ -d ".MLX42" ]; then \
-		rm -rf .MLX42; \
+	@if [ -d "$(MLX42_PATH)" ]; then \
+		rm -rf $(MLX42_PATH); \
 	fi
-	if [ ! -d "$(MLX42_PATH)" ]; then \
-		git clone https://github.com/codam-coding-college/MLX42.git $(MLX42_PATH); \
-	fi
-	cmake -S $(MLX42_PATH) -B $(MLX42_PATH)/build
-	cmake --build $(MLX42_PATH)/build -j4
+	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX42_PATH)
+	@cmake -S $(MLX42_PATH) -B $(MLX42_BUILD_PATH) -DCMAKE_BUILD_TYPE=Release
+	@cmake --build $(MLX42_BUILD_PATH) -j4
 
 # Clean rules
 clean:

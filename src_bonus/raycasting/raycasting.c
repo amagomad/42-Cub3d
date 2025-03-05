@@ -86,20 +86,19 @@ void	calcul_wall_distance(t_ray *ray)
 	else
 		ray->perp_wall_dist = ray->side_dist_y - ray->delta_dist_y;
 	ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
-	ray->draw_start = (-(ray->line_height) / 2) + (HEIGHT / 2 - 100);
+	ray->draw_start = (-(ray->line_height) / 2) + SEMI_HEIGHT;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = (ray->line_height / 2) + (HEIGHT / 2 - 100);
+	ray->draw_end = (ray->line_height / 2) + SEMI_HEIGHT;
 	if (ray->draw_end >= HEIGHT)
 		ray->draw_end = HEIGHT - 1;
 }
 
 void	raycasting(t_data *data)
 {
-	t_ray				ray;
+	t_ray	ray;
 
 	ray.pixel_buffer = (uint32_t *)data->img->pixels;
-	data->z_buffer = malloc(sizeof(double) * WIDTH);
 	ray.x = 0;
 	draw_rect(data, 0, 0, data->ceiling_color);
 	draw_rect(data, 0, 450, data->floor_color);

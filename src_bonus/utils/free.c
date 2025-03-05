@@ -51,8 +51,6 @@ void	free_texture(t_data *data)
 		mlx_delete_texture(data->we_texture);
 	if (data->ea_texture)
 		mlx_delete_texture(data->ea_texture);
-	if (data->icon)
-		mlx_delete_texture(data->icon);
 	if (data->door_texture)
 		mlx_delete_texture(data->door_texture);
 	if (data->img)

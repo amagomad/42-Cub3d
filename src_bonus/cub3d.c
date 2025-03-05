@@ -15,8 +15,12 @@
 void	render_frame(void *param)
 {
 	t_data	*data;
+	double	current;
 
 	data = (t_data *)param;
+	current = mlx_get_time();
+	data->delta_time = current - data->last_frame;
+	data->last_frame = current;
 	if (data->mouse_shown)
 		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
 	else

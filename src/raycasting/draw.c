@@ -15,22 +15,22 @@
 void	draw_rect(t_data *data, int x, int y, uint32_t color)
 {
 	int	i;
-	int	j;
+	int	*pixel;
 
-	i = -1;
-	while (++i < WIDTH)
+	i = 0;
+	pixel = (int *)data->img->pixels;
+	while (i < WIDTH * HEIGHT)
 	{
-		j = -1;
-		while (++j < HEIGHT)
-			my_put_pixel(data, x + i, y + j, color);
+		if ((i % WIDTH >= x && i % WIDTH < x + WIDTH)
+			&& (i / WIDTH >= y && i / WIDTH < y + HEIGHT))
+			pixel[i] = color;
+		i++;
 	}
 }
 
 void	calcul_texture(t_ray *ray, t_data *data)
 {
-	if (data->map[ray->map_y][ray->map_x] > 1)
-		ray->texture = data->door_texture;
-	else if (ray->side == 0)
+	if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
 			ray->texture = data->ea_texture;
@@ -86,7 +86,7 @@ void	draw_wall(t_ray *ray)
 	y = ray->draw_start - 1;
 	while (++y < ray->draw_end)
 	{
-		tex_pos = (y - ((HEIGHT / 2 - 100) - ray->line_height / 2))
+		tex_pos = (y - (SEMI_HEIGHT - ray->line_height / 2))
 			* (ray->texture->height / (float)ray->line_height);
 		tex_y = (int)tex_pos % ray->texture->height;
 		if (tex_y < 0)
