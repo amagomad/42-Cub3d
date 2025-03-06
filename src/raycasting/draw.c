@@ -15,14 +15,16 @@
 void	draw_rect(t_data *data, int x, int y, uint32_t color)
 {
 	int	i;
-	int	j;
+	int	*pixel;
 
-	i = -1;
-	while (++i < WIDTH)
+	i = 0;
+	pixel = (int *)data->img->pixels;
+	while (i < WIDTH * HEIGHT)
 	{
-		j = -1;
-		while (++j < HEIGHT)
-			my_put_pixel(data, x + i, y + j, color);
+		if ((i % WIDTH >= x && i % WIDTH < x + WIDTH)
+			&& (i / WIDTH >= y && i / WIDTH < y + HEIGHT))
+			pixel[i] = color;
+		i++;
 	}
 }
 

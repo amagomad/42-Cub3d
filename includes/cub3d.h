@@ -28,9 +28,9 @@
 
 # define PLANE_SIZE 0.66
 
-# define T_SIZE 30
+# define T_SIZE 64
 
-# define WALK_SPEED 1.5
+# define WALK_SPEED 3.2
 # define SPRINT_SPEED 4.0
 # define ROTATION_SPEED 0.018
 # define MOUSE_SENSITIVITY 0.004
@@ -221,7 +221,7 @@ void		init(t_data *data, char **av);
 // ================== MOUVEMENT ==================
 void		handle_keypress(mlx_key_data_t keydata, void *param);
 void		handle_mouse_move(double xpos, double ypos, void *param);
-void		move_player(t_data *data, float move_x, float move_y);
+void		move_player(t_data *data, float move_x, float move_y, float speed);
 void		rotate_right(t_data *data, double rotation_speed);
 void		rotate_left(t_data *data, double rotation_speed);
 

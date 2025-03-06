@@ -27,10 +27,6 @@ void	init_data(t_data *data, char **av)
 	data->so_texture = NULL;
 	data->we_texture = NULL;
 	data->ea_texture = NULL;
-	//data->img_menu[0] = NULL;
-	//data->img_menu[1] = NULL;
-	//data->door_texture = NULL;
-	//data->minimap_t_size = T_SIZE / 4;
 	data->map = NULL;
 	data->parse->map = NULL;
 	data->parse->line = NULL;
@@ -42,7 +38,6 @@ void	init_data(t_data *data, char **av)
 	data->parse->we_texture = NULL;
 	data->parse->ea_texture = NULL;
 	data->player->move_speed = WALK_SPEED;
-	//data->mouse_shown = false;
 	data->state = STATE_GAME;
 	to_zero(data);
 	if (!parsing(av[1], data))
