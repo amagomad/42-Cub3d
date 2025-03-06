@@ -6,7 +6,7 @@
 /*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/03/06 05:26:44 by amagomad         ###   ########.fr       */
+/*   Updated: 2025/03/06 06:27:39 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,38 +67,44 @@ void update_sprites(t_data *data)
 
 void render_single_sprite(t_data *data, t_sprite *sprite)
 {
-	double			sprite_x = sprite->x - data->player->pos_x;
-	double			sprite_y = sprite->y - data->player->pos_y;
-	double			inv_det = 1.0 / (data->player->plane_x * data->player->dir_y - data->player->dir_x * data->player->plane_y);
-	double			transform_x = inv_det * (data->player->dir_y * sprite_x - data->player->dir_x * sprite_y);
-	double			transform_y = inv_det * (-data->player->plane_y * sprite_x + data->player->plane_x * sprite_y);
-	int				sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
-	int				sprite_height = abs((int)(HEIGHT / transform_y) * 15);
-	int				sprite_width = abs((int)(HEIGHT / transform_y) * 15);
-	int				draw_start_x = -sprite_width / 2 + sprite_screen_x;
-	int				draw_end_x = sprite_width / 2 + sprite_screen_x;
-	int				draw_start_y = -sprite_height / 2 + (HEIGHT / 2 - 100);
-	int				draw_end_y = sprite_height / 2 + (HEIGHT / 2 - 90);
-	double			float_offset = sin(mlx_get_time() * 2.0) * 10;
-	mlx_texture_t	*tex = sprite->frames[sprite->current_frame];
-
+	double sprite_x = ((double)sprite->x - data->player->pos_x) / T_SIZE;
+	double sprite_y = ((double)sprite->y - data->player->pos_y) / T_SIZE;
+	double inv_det = 1.0 / (data->player->plane_x * data->player->dir_y -
+							data->player->dir_x * data->player->plane_y);
+	double transform_x = inv_det * (data->player->dir_y * sprite_x -
+									data->player->dir_x * sprite_y);
+	double transform_y = inv_det * (-data->player->plane_y * sprite_x +
+									data->player->plane_x * sprite_y);
+	int sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
+	int sprite_height = abs((int)(HEIGHT / transform_y) / 3);
+	int draw_start_y = -sprite_height / 2 + (HEIGHT / 2 - 100);
+	if (draw_start_y < 0)
+		draw_start_y = 0;
+	int draw_end_y = sprite_height / 2 + (HEIGHT / 2 - 100);
+	if (draw_end_y >= HEIGHT)
+		draw_end_y = HEIGHT - 1;
+	int sprite_width = abs((int)(HEIGHT / transform_y));
+	int draw_start_x = -sprite_width / 2 + sprite_screen_x;
 	if (draw_start_x < 0)
 		draw_start_x = 0;
+	int draw_end_x = sprite_width / 2 + sprite_screen_x;
 	if (draw_end_x >= WIDTH)
 		draw_end_x = WIDTH - 1;
-	draw_start_y += (int)float_offset;
-	draw_end_y += (int)float_offset;
+	int float_offset = (int)(sin(mlx_get_time() * 2.0) * 10);
+	draw_start_y += float_offset;
+	draw_end_y += float_offset;
+	mlx_texture_t *tex = sprite->frames[sprite->current_frame];
 	for (int stripe = draw_start_x; stripe < draw_end_x; stripe++)
 	{
-		int tex_x = (int)((stripe - (-sprite_width / 2 + sprite_screen_x)) * tex->width / sprite_width);
-		if (transform_y > 0 && stripe >= 0 && stripe < WIDTH)
+		int tex_x = (int)((stripe - (-sprite_width / 2 + sprite_screen_x)) * tex->width / (double)sprite_width);
+		if (transform_y > 0 && stripe >= 0 && stripe < WIDTH && transform_y < data->z_buffer[stripe])
 		{
 			for (int y = draw_start_y; y < draw_end_y; y++)
 			{
 				int d = (y - draw_start_y) * 256 - (draw_end_y - draw_start_y) * 128;
 				int tex_y = ((d * tex->height) / (draw_end_y - draw_start_y)) / 256;
 				if (tex_y < 0 || tex_y >= (int)tex->height)
-					continue ;
+					continue;
 				uint8_t *pixel = &tex->pixels[(tex_y * tex->width + tex_x) * 4];
 				uint8_t a = pixel[3];
 				if (a > 0)
@@ -110,6 +116,7 @@ void render_single_sprite(t_data *data, t_sprite *sprite)
 		}
 	}
 }
+
 
 void render_sprites(t_data *data)
 {
