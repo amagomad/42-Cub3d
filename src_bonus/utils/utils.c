@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:50:21 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 21:07:47 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/06 07:27:01 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,27 @@ void	ft_free_str_tab(char **tab_str)
 	while (tab_str[++i])
 		free(tab_str[i]);
 	free(tab_str);
+}
+
+void	handle_sprites(t_data *data)
+{
+	t_sprite	*sprite;
+	int			i;
+	int			j;
+
+	i = 0;
+	while (i < data->num_sprites)
+	{
+		sprite = &data->sprites[i];
+		j = 0;
+		while (j < sprite->total_frames)
+		{
+			mlx_delete_texture(sprite->frames[j]);
+			j = j + 1;
+		}
+		free(sprite->frames);
+		i = i + 1;
+	}
+	free(data->sprites);
+	free(data->z_buffer);
 }

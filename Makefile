@@ -32,7 +32,7 @@ DOORS           = doors/doors.c
 KEYPRESS        = keypress/move.c keypress/handle_keypress.c
 RAYCASTING      = raycasting/raycasting.c raycasting/draw.c
 UTILS           = utils/free.c utils/utils.c utils/mlx_utils.c
-SPRITE          = sprite/sprite.c
+SPRITE          = sprite/sprite.c sprite/sprite_utils.c sprite/sprite_utils_2.c sprite/sprite_utils_3.c
 
 # File lists
 LST_SRCS        = $(INIT_GAME) $(PARSING) $(KEYPRESS) $(RAYCASTING) $(UTILS)

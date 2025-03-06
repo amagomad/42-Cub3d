@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:27:19 by amagomad          #+#    #+#             */
-/*   Updated: 2025/03/03 00:56:52 by nashxo           ###   ########.fr       */
+/*   Updated: 2025/03/06 07:38:10 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_BONUS_H
-# define CUB3D_BONUS_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -51,6 +51,20 @@
 # define LIGHT_GREY 0xFFD3D3D3
 # define GREY 0xFFAAABAB
 # define RED 0xFF0000FF
+
+typedef struct s_proj
+{
+	double		transform_x;
+	double		transform_y;
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			draw_start_y;
+	int			draw_end_y;
+	int			sprite_width;
+	int			draw_start_x;
+	int			draw_end_x;
+	int			float_offset;
+}	t_proj;
 
 typedef struct s_sprite
 {
@@ -161,6 +175,14 @@ typedef struct s_data
 	bool			keys[MLX_TOTAL_KEYS];
 }	t_data;
 
+typedef struct s_draw_ctx
+{
+	t_data			*data;
+	int				stripe;
+	t_proj			*proj;
+	mlx_texture_t	*tex;
+}	t_draw_ctx;
+
 typedef struct s_minimap
 {
 	int			map_width_px;
@@ -178,6 +200,7 @@ typedef struct s_minimap
 	int			e2;
 	int			err;
 }	t_minimap;
+
 // ================== PARSING ==================
 bool		parsing(char *file, t_data *data);
 bool		stock_desc(t_parsing *parse);
@@ -235,13 +258,17 @@ void		draw_menu(t_data *data);
 void		process_keys(t_data *data);
 void		menu_key(t_data *data);
 void		movement_key(t_data *data);
-
 void		handle_sprites(t_data *data);
 
 // ================== SPRITE ==================
-void add_sprite(t_data *data, int map_x, int map_y);
-void update_sprites(t_data *data);
-void render_single_sprite(t_data *data, t_sprite *sprite);
-void render_sprites(t_data *data);
+void		add_sprite(t_data *data, int map_x, int map_y);
+void		update_sprites(t_data *data);
+void		render_single_sprite(t_data *data, t_sprite *sprite);
+void		render_sprites(t_data *data);
+void		handle_sprites(t_data *data);
+int			compute_tex_y(int y, t_proj *proj, int tex_height);
+int			compute_tex_x(int stripe, t_proj *proj, mlx_texture_t *tex);
+void		draw_sprite_stripe(t_data *data, int stripe, t_proj *proj, \
+			mlx_texture_t *tex);
 
 #endif
