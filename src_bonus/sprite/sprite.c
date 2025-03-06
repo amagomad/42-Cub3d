@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprite.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nashxo <nashxo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/03/03 13:42:40 by nashxo           ###   ########.fr       */
+/*   Updated: 2025/03/06 05:25:46 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,10 @@ void	handle_sprites(t_data *data)
 	int			j;
 
 	i = 0;
-	j = 0;
 	while (i < data->num_sprites)
 	{
 		sprite = &data->sprites[i];
+		j = 0;
 		while (j < sprite->total_frames)
 		{
 			mlx_delete_texture(sprite->frames[j]);
