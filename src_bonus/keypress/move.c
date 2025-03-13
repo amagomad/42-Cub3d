@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/03/13 17:04:50 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:36:26 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ void	movement_key(t_data *data)
 {
 	float		move_speed;
 	const float	moves[4][2] = {
-		{data->player->dir_x, data->player->dir_y},
-		{-data->player->dir_x, -data->player->dir_y},
-		{data->player->dir_y, -data->player->dir_x},
-		{-data->player->dir_y, data->player->dir_x}
-		};
+	{data->player->dir_x, data->player->dir_y},
+	{-data->player->dir_x, -data->player->dir_y},
+	{data->player->dir_y, -data->player->dir_x},
+	{-data->player->dir_y, data->player->dir_x}
+	};
 
 	if (data->keys[MLX_KEY_LEFT_SHIFT])
 		move_speed = (data->player->move_speed * 2.5f);

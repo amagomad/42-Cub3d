@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 14:28:34 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 19:44:14 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:35:40 by amagomad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ bool	is_valid_position(t_data *data, float x, float y)
 	return (map_x - r >= 0 && map_x + r < data->map_width
 		&& map_y - r >= 0 && map_y + r < data->map_height
 		&& data->map[map_y][map_x] == 0);
-
 }
 
 void	move_player(t_data *data, float move_x, float move_y, float move_speed)
