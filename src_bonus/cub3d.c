@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/03/13 17:38:39 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:43:03 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,13 @@ void	render_frame(void *param)
 		if (data->show_minimap)
 			draw_minimap(data);
 	}
+	if (data->state == STATE_GAME && data->selected_option == 0)
+	{
+		mlx_image_to_window(data->mlx, data->img, 0, 0);
+		data->selected_option = -1;
+	}
 	else if (data->state == STATE_MENU)
 		draw_menu(data);
-	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }
 
 int	main(int ac, char **av)

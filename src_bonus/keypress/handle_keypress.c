@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:35:11 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/23 17:42:12 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:42:11 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	menu_key(t_data *data)
 		{
 			data->state = STATE_GAME;
 			data->show_minimap = true;
+			data->selected_option = 0;
 		}
 		else if (data->selected_option == 1)
 			mlx_close_window(data->mlx);
