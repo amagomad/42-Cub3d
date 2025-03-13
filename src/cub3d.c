@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:29:12 by amagomad          #+#    #+#             */
-/*   Updated: 2025/02/22 22:03:01 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:38:42 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	render_frame(void *param)
 		process_keys(data);
 		raycasting(data);
 	}
-	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }
 
 int	main(int ac, char **av)
