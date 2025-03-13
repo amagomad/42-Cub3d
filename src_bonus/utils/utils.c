@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amagomad <amagomad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 18:50:21 by cgorin            #+#    #+#             */
-/*   Updated: 2025/03/06 07:27:01 by amagomad         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:56:32 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	return_error(char *str, t_data *data, bool free_parse)
 	ft_fprintf(2, "Error: %s\n", str);
 	if (free_parse)
 		free_parsing(data);
-	free_all(data);
+	if (!free_parse)
+		free_all(data);
 	exit(EXIT_FAILURE);
 }
 

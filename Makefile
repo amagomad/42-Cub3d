@@ -10,7 +10,6 @@ ifeq ($(UNAME_S), Linux)
 else ifeq ($(UNAME_S), Darwin)
 	MLX_FLAGS   = -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 endif
-# MLX_FLAGS  := -L/opt/homebrew/opt/glfw/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Project structure
 NAME            = cub3d
