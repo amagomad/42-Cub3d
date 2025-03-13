@@ -6,7 +6,7 @@
 /*   By: cgorin <cgorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:25:16 by cgorin            #+#    #+#             */
-/*   Updated: 2025/02/22 17:57:25 by cgorin           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:00:59 by cgorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ void	draw_rect(t_data *data, int x, int y, uint32_t color)
 
 void	calcul_texture(t_ray *ray, t_data *data)
 {
-	if (data->map[ray->map_y][ray->map_x] > 1)
-		ray->texture = data->door_texture;
-	else if (ray->side == 0)
+	if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
 			ray->texture = data->ea_texture;
